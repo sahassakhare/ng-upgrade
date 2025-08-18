@@ -195,6 +195,11 @@ export interface UpgradeOptions {
      * @example '/Users/dev/project-backups/my-app'
      */
     backupPath?: string;
+    /**
+     * Optional progress reporter instance for tracking upgrade progress.
+     * If not provided, a default progress reporter will be created.
+     */
+    progressReporter?: any;
 }
 export interface UpgradeResult {
     success: boolean;

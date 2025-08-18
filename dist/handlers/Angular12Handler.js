@@ -49,7 +49,7 @@ class Angular12Handler extends BaseVersionHandler_1.BaseVersionHandler {
         return '>=4.2.3 <4.4.0';
     }
     async applyVersionSpecificChanges(projectPath, options) {
-        console.log('Applying Angular 12 specific changes...');
+        this.progressReporter?.updateMessage('Applying Angular 12 specific changes...');
         // 1. Enable Ivy renderer (should already be default in v12)
         await this.ensureIvyRenderer(projectPath);
         // 2. Update to Webpack 5 support
@@ -71,17 +71,17 @@ class Angular12Handler extends BaseVersionHandler_1.BaseVersionHandler {
             if (tsconfig.angularCompilerOptions?.enableIvy === false) {
                 delete tsconfig.angularCompilerOptions.enableIvy;
                 await fs.writeJson(tsconfigPath, tsconfig, { spaces: 2 });
-                console.log('✓ Removed explicit Ivy renderer configuration (default in Angular 12)');
+                this.progressReporter?.success('✓ Removed explicit Ivy renderer configuration (default in Angular 12)');
             }
         }
     }
-    async updateWebpackConfiguration(projectPath) {
+    async updateWebpackConfiguration(_projectPath) {
         // Angular 12 includes Webpack 5 support
-        console.log('✓ Webpack 5 support enabled');
+        this.progressReporter?.info('✓ Webpack 5 support enabled');
     }
-    async updatePackageFormat(projectPath) {
+    async updatePackageFormat(_projectPath) {
         // Update to Angular Package Format v12
-        console.log('✓ Angular Package Format v12 support enabled');
+        this.progressReporter?.info('✓ Angular Package Format v12 support enabled');
     }
     async enableStrictMode(projectPath) {
         const tsconfigPath = path.join(projectPath, 'tsconfig.json');
@@ -94,12 +94,12 @@ class Angular12Handler extends BaseVersionHandler_1.BaseVersionHandler {
             tsconfig.compilerOptions.noImplicitReturns = true;
             tsconfig.compilerOptions.noFallthroughCasesInSwitch = true;
             await fs.writeJson(tsconfigPath, tsconfig, { spaces: 2 });
-            console.log('✓ Enabled TypeScript strict mode');
+            this.progressReporter?.success('✓ Enabled TypeScript strict mode');
         }
     }
-    async updateHMRSupport(projectPath) {
+    async updateHMRSupport(_projectPath) {
         // Angular 12 improved HMR support
-        console.log('✓ Hot Module Replacement support updated');
+        this.progressReporter?.info('✓ Hot Module Replacement support updated');
     }
     getBreakingChanges() {
         return [

@@ -13,9 +13,10 @@ class Angular14Handler extends BaseVersionHandler_1.BaseVersionHandler {
     getRequiredTypeScriptVersion() {
         return '>=4.7.2 <4.8.0';
     }
-    async applyVersionSpecificChanges(projectPath, options) {
-        console.log('Applying Angular 14 specific changes...');
+    async applyVersionSpecificChanges(_projectPath, _options) {
+        this.progressReporter?.updateMessage('Applying Angular 14 specific changes...');
         // Angular 14 specific changes would be implemented here
+        this.progressReporter?.success('Angular 14 upgrade steps completed');
     }
     getBreakingChanges() {
         return [

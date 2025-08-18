@@ -1,0 +1,2185 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular Multi-Version Upgrade Orchestrator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Angular Multi-Version Upgrade Orchestrator</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >UpgradeOrchestrator</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/core/UpgradeOrchestrator.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Main orchestrator class for Angular multi-version upgrades.</p>
+<p>The UpgradeOrchestrator is the central coordination engine that manages the entire
+upgrade process from planning to execution to validation. It orchestrates multiple
+subsystems to provide a safe, reliable, and comprehensive upgrade experience.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const orchestrator = new UpgradeOrchestrator(&#39;/path/to/angular/project&#39;);</code></pre></div><p>// Set up event listeners
+orchestrator.on(&#39;progress&#39;, (report) =&gt; console.log(report.message));
+orchestrator.on(&#39;step-complete&#39;, (step) =&gt; console.log(<code>✅ ${step.toVersion}</code>));</p>
+<p>// Execute upgrade
+const result = await orchestrator.orchestrateUpgrade({
+  targetVersion: &#39;17&#39;,
+  strategy: &#39;balanced&#39;,
+  checkpointFrequency: &#39;major-versions&#39;,
+  validationLevel: &#39;comprehensive&#39;
+});</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div>
+            </p>
+
+            <p class="comment">
+                <h3>Extends</h3>
+            </p>
+            <p class="comment">
+                        <code>EventEmitter</code>
+            </p>
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkpointManager" >checkpointManager</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#currentCheckpoint" >currentCheckpoint</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#pathCalculator" >pathCalculator</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#projectAnalyzer" >projectAnalyzer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#rollbackEngine" >rollbackEngine</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#validator" >validator</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#versionHandlers" >versionHandlers</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#applyBreakingChanges" >applyBreakingChanges</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#executePrerequisites" >executePrerequisites</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#executeUpgradeStep" >executeUpgradeStep</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getCheckpoints" >getCheckpoints</a>
+                            </li>
+                            <li>
+                                <a href="#getProgress" >getProgress</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#handleFailureRollback" >handleFailureRollback</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#orchestrateUpgrade" >orchestrateUpgrade</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseVersion" >parseVersion</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#performFinalValidation" >performFinalValidation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#rollbackToCheckpoint" >rollbackToCheckpoint</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runStepValidations" >runStepValidations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#shouldCreateCheckpoint" >shouldCreateCheckpoint</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#validatePrerequisites" >validatePrerequisites</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/core/UpgradeOrchestrator.ts:67</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Creates a new UpgradeOrchestrator instance.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const orchestrator = new UpgradeOrchestrator(&#39;/Users/dev/my-angular-app&#39;);</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                                    <td>Description</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>projectPath</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>Absolute path to the Angular project root directory</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                    <b>Example :</b>
+                                        <div>
+                                            <b>Example :</b><div><pre class="line-numbers"><code class="language-typescript">const orchestrator = new UpgradeOrchestrator(&#39;/Users/dev/my-angular-app&#39;);</code></pre></div>
+                                        </div>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkpointManager"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>checkpointManager</b></span>
+                        <a href="#checkpointManager"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/CheckpointManager.html" target="_self" >CheckpointManager</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/core/UpgradeOrchestrator.ts:62</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentCheckpoint"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>currentCheckpoint</b></span>
+                        <a href="#currentCheckpoint"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Checkpoint.html" target="_self" >Checkpoint</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/core/UpgradeOrchestrator.ts:67</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pathCalculator"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>pathCalculator</b></span>
+                        <a href="#pathCalculator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/UpgradePathCalculator.html" target="_self" >UpgradePathCalculator</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/core/UpgradeOrchestrator.ts:63</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="projectAnalyzer"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>projectAnalyzer</b></span>
+                        <a href="#projectAnalyzer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/ProjectAnalyzer.html" target="_self" >ProjectAnalyzer</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/core/UpgradeOrchestrator.ts:64</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rollbackEngine"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>rollbackEngine</b></span>
+                        <a href="#rollbackEngine"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/RollbackEngine.html" target="_self" >RollbackEngine</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/core/UpgradeOrchestrator.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validator"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>validator</b></span>
+                        <a href="#validator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/ValidatorFramework.html" target="_self" >ValidatorFramework</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/core/UpgradeOrchestrator.ts:65</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="versionHandlers"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>versionHandlers</b></span>
+                        <a href="#versionHandlers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/VersionHandlerRegistry.html" target="_self" >VersionHandlerRegistry</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/core/UpgradeOrchestrator.ts:61</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyBreakingChanges"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>applyBreakingChanges</b></span>
+                        <a href="#applyBreakingChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyBreakingChanges(step: <a href="../interfaces/UpgradeStep.html" target="_self">UpgradeStep</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="326"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:326</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Apply breaking changes for a step</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>step</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeStep.html" target="_self" >UpgradeStep</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="executePrerequisites"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>executePrerequisites</b></span>
+                        <a href="#executePrerequisites"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>executePrerequisites(step: <a href="../interfaces/UpgradeStep.html" target="_self">UpgradeStep</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="314"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:314</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Execute prerequisites for a single step</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>step</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeStep.html" target="_self" >UpgradeStep</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="executeUpgradeStep"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>executeUpgradeStep</b></span>
+                        <a href="#executeUpgradeStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>executeUpgradeStep(step: <a href="../interfaces/UpgradeStep.html" target="_self">UpgradeStep</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>, analysis: <a href="../interfaces/ProjectAnalysis.html" target="_self">ProjectAnalysis</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="262"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:262</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Execute a single upgrade step within the upgrade journey.</p>
+<p>This method handles the execution of one version-to-version upgrade step,
+including prerequisite validation, breaking change application, version-specific
+transformations, and step validation.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+// Internal usage - executes Angular 16 -&gt; 17 upgrade
+await this.executeUpgradeStep(
+  { fromVersion: &#39;16&#39;, toVersion: &#39;17&#39;, ... },
+  options,
+  analysis
+);</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>step</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeStep.html" target="_self" >UpgradeStep</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The upgrade step configuration to execute</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Overall upgrade options</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>analysis</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ProjectAnalysis.html" target="_self" >ProjectAnalysis</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Current project analysis results</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCheckpoints"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getCheckpoints</b></span>
+                        <a href="#getCheckpoints"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getCheckpoints()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="434"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:434</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get list of available checkpoints for this project.</p>
+<p>Returns all checkpoints that have been created during upgrade processes,
+sorted by creation time. Each checkpoint represents a complete snapshot
+of the project at a specific point in the upgrade journey.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const checkpoints = await orchestrator.getCheckpoints();
+checkpoints.forEach(cp =&gt; {
+  console.log(`${cp.id}: ${cp.description} (${cp.version})`);
+});</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/Checkpoint.html" target="_self" >Promise&lt;Checkpoint[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Array of available checkpoints</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getProgress"></a>
+                    <span class="name">
+                        <span ><b>getProgress</b></span>
+                        <a href="#getProgress"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getProgress()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="482"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:482</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get current upgrade progress information.</p>
+<p>Returns real-time progress information about an ongoing upgrade process,
+including current step, completion percentage, and estimated time remaining.
+Returns null if no upgrade is currently in progress.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const progress = orchestrator.getProgress();
+if (progress) {
+  console.log(`Progress: ${progress.completedSteps}/${progress.totalSteps}`);
+  console.log(`Current: ${progress.currentStep.description}`);
+}</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/ProgressReport.html" target="_self" >ProgressReport | null</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Current progress information or null</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleFailureRollback"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>handleFailureRollback</b></span>
+                        <a href="#handleFailureRollback"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleFailureRollback(error: Error, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="380"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:380</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handle failure rollback</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>error</td>
+                                            <td>
+                                                        <code>Error</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="orchestrateUpgrade"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>orchestrateUpgrade</b></span>
+                        <a href="#orchestrateUpgrade"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>orchestrateUpgrade(options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="140"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:140</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Main orchestration method for multi-version Angular upgrades.</p>
+<p>This is the primary entry point for executing an Angular upgrade. It coordinates
+all aspects of the upgrade process including analysis, path calculation, checkpoint
+creation, step-by-step execution, validation, and rollback on failure.</p>
+<p>The method follows this high-level flow:</p>
+<ol>
+<li>Analyze the current project state and dependencies</li>
+<li>Calculate the optimal upgrade path from current to target version</li>
+<li>Validate prerequisites for the entire upgrade journey</li>
+<li>Create initial checkpoint for rollback safety</li>
+<li>Execute each upgrade step sequentially with validation</li>
+<li>Create checkpoints at configurable intervals</li>
+<li>Perform final validation of the upgraded application</li>
+<li>Handle failures with automatic rollback if configured</li>
+</ol>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+// Basic upgrade to Angular 17
+const result = await orchestrator.orchestrateUpgrade({
+  targetVersion: &#39;17&#39;,
+  strategy: &#39;balanced&#39;
+});</code></pre></div><p>// Conservative upgrade with comprehensive validation
+const result = await orchestrator.orchestrateUpgrade({
+  targetVersion: &#39;16&#39;,
+  strategy: &#39;conservative&#39;,
+  checkpointFrequency: &#39;every-step&#39;,
+  validationLevel: &#39;comprehensive&#39;,
+  rollbackPolicy: &#39;auto-on-failure&#39;
+});</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Configuration options for the upgrade process</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/UpgradeResult.html" target="_self" >Promise&lt;UpgradeResult&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Result object containing success status, timing, and details</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseVersion"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>parseVersion</b></span>
+                        <a href="#parseVersion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseVersion(versionString: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="407"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:407</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Parse version string to AngularVersion object</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>versionString</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/AngularVersion.html" target="_self" >AngularVersion</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="performFinalValidation"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>performFinalValidation</b></span>
+                        <a href="#performFinalValidation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>performFinalValidation(options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="359"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:359</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Perform final validation after all steps</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rollbackToCheckpoint"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>rollbackToCheckpoint</b></span>
+                        <a href="#rollbackToCheckpoint"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>rollbackToCheckpoint(checkpointId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="458"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:458</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Rollback project to a specific checkpoint.</p>
+<p>This method safely restores the project to a previous state by rolling back
+all changes made since the specified checkpoint was created. This includes
+code changes, configuration updates, and dependency modifications.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+// Rollback to checkpoint created before Angular 17 upgrade
+await orchestrator.rollbackToCheckpoint(&#39;pre-angular-17&#39;);</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>checkpointId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Unique identifier of the checkpoint to restore</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runStepValidations"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runStepValidations</b></span>
+                        <a href="#runStepValidations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runStepValidations(step: <a href="../interfaces/UpgradeStep.html" target="_self">UpgradeStep</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="345"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:345</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run validations for a single step</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>step</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeStep.html" target="_self" >UpgradeStep</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="shouldCreateCheckpoint"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>shouldCreateCheckpoint</b></span>
+                        <a href="#shouldCreateCheckpoint"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>shouldCreateCheckpoint(step: <a href="../interfaces/UpgradeStep.html" target="_self">UpgradeStep</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="391"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:391</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determine if checkpoint should be created after step</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>step</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeStep.html" target="_self" >UpgradeStep</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validatePrerequisites"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>validatePrerequisites</b></span>
+                        <a href="#validatePrerequisites"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>validatePrerequisites(path: <a href="../interfaces/UpgradePath.html" target="_self">UpgradePath</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="296"
+                                    class="link-to-prism">src/core/UpgradeOrchestrator.ts:296</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Validate prerequisites for entire upgrade path</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>path</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradePath.html" target="_self" >UpgradePath</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { EventEmitter } from &#x27;events&#x27;;
+import * as fs from &#x27;fs-extra&#x27;;
+import * as path from &#x27;path&#x27;;
+import { 
+  UpgradeOptions, 
+  UpgradeResult, 
+  UpgradePath, 
+  UpgradeStep, 
+  Checkpoint,
+  ProjectAnalysis,
+  ProgressReport,
+  AngularVersion
+} from &#x27;../types&#x27;;
+import { VersionHandlerRegistry } from &#x27;./VersionHandlerRegistry&#x27;;
+import { CheckpointManager } from &#x27;./CheckpointManager&#x27;;
+import { UpgradePathCalculator } from &#x27;./UpgradePathCalculator&#x27;;
+import { ProjectAnalyzer } from &#x27;./ProjectAnalyzer&#x27;;
+import { ValidatorFramework } from &#x27;./ValidatorFramework&#x27;;
+import { RollbackEngine } from &#x27;./RollbackEngine&#x27;;
+
+/**
+ * Main orchestrator class for Angular multi-version upgrades.
+ * 
+ * The UpgradeOrchestrator is the central coordination engine that manages the entire
+ * upgrade process from planning to execution to validation. It orchestrates multiple
+ * subsystems to provide a safe, reliable, and comprehensive upgrade experience.
+ * 
+ * @class UpgradeOrchestrator
+ * @extends EventEmitter
+ * 
+ * @example
+ * &#x60;&#x60;&#x60;typescript
+ * const orchestrator &#x3D; new UpgradeOrchestrator(&#x27;/path/to/angular/project&#x27;);
+ * 
+ * // Set up event listeners
+ * orchestrator.on(&#x27;progress&#x27;, (report) &#x3D;&gt; console.log(report.message));
+ * orchestrator.on(&#x27;step-complete&#x27;, (step) &#x3D;&gt; console.log(&#x60;✅ ${step.toVersion}&#x60;));
+ * 
+ * // Execute upgrade
+ * const result &#x3D; await orchestrator.orchestrateUpgrade({
+ *   targetVersion: &#x27;17&#x27;,
+ *   strategy: &#x27;balanced&#x27;,
+ *   checkpointFrequency: &#x27;major-versions&#x27;,
+ *   validationLevel: &#x27;comprehensive&#x27;
+ * });
+ * &#x60;&#x60;&#x60;
+ * 
+ * @emits progress - Emitted during upgrade progress with status updates
+ * @emits analysis-complete - Emitted when project analysis is finished
+ * @emits path-calculated - Emitted when upgrade path has been calculated
+ * @emits step-start - Emitted when starting an individual upgrade step
+ * @emits step-complete - Emitted when completing an individual upgrade step
+ * @emits step-failed - Emitted when an upgrade step fails
+ * @emits manual-intervention - Emitted when manual user intervention is required
+ * @emits upgrade-complete - Emitted when entire upgrade process succeeds
+ * @emits upgrade-failed - Emitted when upgrade process fails
+ * @emits rollback-start - Emitted when rollback process begins
+ * @emits rollback-complete - Emitted when rollback process completes
+ */
+export class UpgradeOrchestrator extends EventEmitter {
+  private versionHandlers: VersionHandlerRegistry;
+  private checkpointManager: CheckpointManager;
+  private pathCalculator: UpgradePathCalculator;
+  private projectAnalyzer: ProjectAnalyzer;
+  private validator: ValidatorFramework;
+  private rollbackEngine: RollbackEngine;
+  private currentCheckpoint?: Checkpoint;
+
+  /**
+   * Creates a new UpgradeOrchestrator instance.
+   * 
+   * @param {string} projectPath - Absolute path to the Angular project root directory
+   * 
+   * @throws {Error} If projectPath is not a valid directory
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const orchestrator &#x3D; new UpgradeOrchestrator(&#x27;/Users/dev/my-angular-app&#x27;);
+   * &#x60;&#x60;&#x60;
+   */
+  constructor(private projectPath: string) {
+    super();
+    this.versionHandlers &#x3D; new VersionHandlerRegistry();
+    this.checkpointManager &#x3D; new CheckpointManager(projectPath);
+    this.pathCalculator &#x3D; new UpgradePathCalculator();
+    this.projectAnalyzer &#x3D; new ProjectAnalyzer(projectPath);
+    this.validator &#x3D; new ValidatorFramework(projectPath);
+    this.rollbackEngine &#x3D; new RollbackEngine(this.checkpointManager);
+  }
+
+  /**
+   * Main orchestration method for multi-version Angular upgrades.
+   * 
+   * This is the primary entry point for executing an Angular upgrade. It coordinates
+   * all aspects of the upgrade process including analysis, path calculation, checkpoint
+   * creation, step-by-step execution, validation, and rollback on failure.
+   * 
+   * The method follows this high-level flow:
+   * 1. Analyze the current project state and dependencies
+   * 2. Calculate the optimal upgrade path from current to target version
+   * 3. Validate prerequisites for the entire upgrade journey
+   * 4. Create initial checkpoint for rollback safety
+   * 5. Execute each upgrade step sequentially with validation
+   * 6. Create checkpoints at configurable intervals
+   * 7. Perform final validation of the upgraded application
+   * 8. Handle failures with automatic rollback if configured
+   * 
+   * @param {UpgradeOptions} options - Configuration options for the upgrade process
+   * @param {string} options.targetVersion - Target Angular version (e.g., &#x27;17&#x27;, &#x27;18&#x27;)
+   * @param {&#x27;conservative&#x27;|&#x27;balanced&#x27;|&#x27;progressive&#x27;} options.strategy - Upgrade strategy
+   * @param {&#x27;every-step&#x27;|&#x27;major-versions&#x27;|&#x27;custom&#x27;} options.checkpointFrequency - When to create checkpoints
+   * @param {&#x27;basic&#x27;|&#x27;comprehensive&#x27;} options.validationLevel - Depth of validation testing
+   * @param {&#x27;automatic&#x27;|&#x27;manual&#x27;|&#x27;prompt&#x27;} options.thirdPartyHandling - How to handle third-party deps
+   * @param {&#x27;auto-on-failure&#x27;|&#x27;manual&#x27;|&#x27;never&#x27;} options.rollbackPolicy - Rollback behavior
+   * @param {boolean} options.parallelProcessing - Enable parallel processing where safe
+   * @param {string} [options.backupPath] - Custom backup location
+   * 
+   * @returns {Promise&lt;UpgradeResult&gt;} Result object containing success status, timing, and details
+   * 
+   * @throws {Error} If project analysis fails or invalid configuration provided
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * // Basic upgrade to Angular 17
+   * const result &#x3D; await orchestrator.orchestrateUpgrade({
+   *   targetVersion: &#x27;17&#x27;,
+   *   strategy: &#x27;balanced&#x27;
+   * });
+   * 
+   * // Conservative upgrade with comprehensive validation
+   * const result &#x3D; await orchestrator.orchestrateUpgrade({
+   *   targetVersion: &#x27;16&#x27;,
+   *   strategy: &#x27;conservative&#x27;,
+   *   checkpointFrequency: &#x27;every-step&#x27;,
+   *   validationLevel: &#x27;comprehensive&#x27;,
+   *   rollbackPolicy: &#x27;auto-on-failure&#x27;
+   * });
+   * &#x60;&#x60;&#x60;
+   */
+  async orchestrateUpgrade(options: UpgradeOptions): Promise&lt;UpgradeResult&gt; {
+    const startTime &#x3D; Date.now();
+    let completedSteps: UpgradeStep[] &#x3D; [];
+    let checkpoints: Checkpoint[] &#x3D; [];
+
+    try {
+      this.emit(&#x27;progress&#x27;, { message: &#x27;Starting upgrade orchestration&#x27;, phase: &#x27;initialization&#x27; });
+
+      // 1. Analyze current project
+      const analysis &#x3D; await this.projectAnalyzer.analyze();
+      this.emit(&#x27;analysis-complete&#x27;, analysis);
+
+      // 2. Calculate upgrade path
+      const upgradePath &#x3D; await this.pathCalculator.calculatePath(
+        analysis.currentVersion,
+        this.parseVersion(options.targetVersion),
+        options
+      );
+      this.emit(&#x27;path-calculated&#x27;, upgradePath);
+
+      // 3. Validate prerequisites for entire path
+      await this.validatePrerequisites(upgradePath, options);
+
+      // 4. Create initial checkpoint
+      const initialCheckpoint &#x3D; await this.checkpointManager.createCheckpoint(
+        &#x27;initial&#x27;,
+        &#x60;Before upgrade from ${analysis.currentVersion.full} to ${options.targetVersion}&#x60;
+      );
+      checkpoints.push(initialCheckpoint);
+      this.currentCheckpoint &#x3D; initialCheckpoint;
+
+      // 5. Execute upgrade steps
+      for (const step of upgradePath.steps) {
+        this.emit(&#x27;step-start&#x27;, step);
+        
+        try {
+          await this.executeUpgradeStep(step, options, analysis);
+          completedSteps.push(step);
+
+          // Create checkpoint after each step if configured
+          if (this.shouldCreateCheckpoint(step, options)) {
+            const checkpoint &#x3D; await this.checkpointManager.createCheckpoint(
+              &#x60;step-${step.toVersion}&#x60;,
+              &#x60;After upgrade to Angular ${step.toVersion}&#x60;
+            );
+            checkpoints.push(checkpoint);
+            this.currentCheckpoint &#x3D; checkpoint;
+          }
+
+          this.emit(&#x27;step-complete&#x27;, step);
+        } catch (error) {
+          this.emit(&#x27;step-failed&#x27;, { step, error });
+          
+          if (options.rollbackPolicy &#x3D;&#x3D;&#x3D; &#x27;auto-on-failure&#x27;) {
+            await this.handleFailureRollback(error as Error, options);
+          }
+
+          throw new Error(&#x60;Upgrade step failed: ${step.fromVersion} -&gt; ${step.toVersion}: ${error}&#x60;);
+        }
+      }
+
+      // 6. Final validation
+      await this.performFinalValidation(options);
+
+      const duration &#x3D; Date.now() - startTime;
+      const result: UpgradeResult &#x3D; {
+        success: true,
+        fromVersion: analysis.currentVersion.full,
+        toVersion: options.targetVersion,
+        completedSteps,
+        warnings: [],
+        checkpoints,
+        duration,
+        rollbackAvailable: checkpoints.length &gt; 0
+      };
+
+      this.emit(&#x27;upgrade-complete&#x27;, result);
+      return result;
+
+    } catch (error) {
+      const duration &#x3D; Date.now() - startTime;
+      const result: UpgradeResult &#x3D; {
+        success: false,
+        fromVersion: &#x27;&#x27;,
+        toVersion: options.targetVersion,
+        completedSteps,
+        error: error as Error,
+        warnings: [],
+        checkpoints,
+        duration,
+        rollbackAvailable: checkpoints.length &gt; 0
+      };
+
+      this.emit(&#x27;upgrade-failed&#x27;, result);
+      return result;
+    }
+  }
+
+  /**
+   * Execute a single upgrade step within the upgrade journey.
+   * 
+   * This method handles the execution of one version-to-version upgrade step,
+   * including prerequisite validation, breaking change application, version-specific
+   * transformations, and step validation.
+   * 
+   * @private
+   * @param {UpgradeStep} step - The upgrade step configuration to execute
+   * @param {UpgradeOptions} options - Overall upgrade options
+   * @param {ProjectAnalysis} analysis - Current project analysis results
+   * 
+   * @throws {Error} If any part of the step execution fails
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * // Internal usage - executes Angular 16 -&gt; 17 upgrade
+   * await this.executeUpgradeStep(
+   *   { fromVersion: &#x27;16&#x27;, toVersion: &#x27;17&#x27;, ... },
+   *   options,
+   *   analysis
+   * );
+   * &#x60;&#x60;&#x60;
+   */
+  private async executeUpgradeStep(
+    step: UpgradeStep, 
+    options: UpgradeOptions, 
+    analysis: ProjectAnalysis
+  ): Promise&lt;void&gt; {
+    // Get version-specific handler
+    const handler &#x3D; this.versionHandlers.getHandler(step.toVersion);
+    if (!handler) {
+      throw new Error(&#x60;No handler found for Angular version ${step.toVersion}&#x60;);
+    }
+
+    // Update progress
+    this.emit(&#x27;progress&#x27;, {
+      message: &#x60;Executing upgrade: ${step.fromVersion} -&gt; ${step.toVersion}&#x60;,
+      phase: &#x27;execution&#x27;,
+      step
+    });
+
+    // Execute prerequisites
+    await this.executePrerequisites(step, options);
+
+    // Apply breaking changes
+    await this.applyBreakingChanges(step, options);
+
+    // Run version-specific handler
+    await handler.execute(this.projectPath, step, options);
+
+    // Run validations
+    await this.runStepValidations(step, options);
+  }
+
+  /**
+   * Validate prerequisites for entire upgrade path
+   */
+  private async validatePrerequisites(path: UpgradePath, options: UpgradeOptions): Promise&lt;void&gt; {
+    this.emit(&#x27;progress&#x27;, { message: &#x27;Validating prerequisites&#x27;, phase: &#x27;validation&#x27; });
+    
+    for (const step of path.steps) {
+      for (const prereq of step.prerequisites) {
+        if (prereq.critical) {
+          const isValid &#x3D; await this.validator.validatePrerequisite(prereq);
+          if (!isValid) {
+            throw new Error(&#x60;Critical prerequisite not met: ${prereq.name} ${prereq.requiredVersion}&#x60;);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Execute prerequisites for a single step
+   */
+  private async executePrerequisites(step: UpgradeStep, options: UpgradeOptions): Promise&lt;void&gt; {
+    for (const prereq of step.prerequisites) {
+      const isValid &#x3D; await this.validator.validatePrerequisite(prereq);
+      if (!isValid &amp;&amp; prereq.critical) {
+        throw new Error(&#x60;Prerequisite validation failed: ${prereq.name}&#x60;);
+      }
+    }
+  }
+
+  /**
+   * Apply breaking changes for a step
+   */
+  private async applyBreakingChanges(step: UpgradeStep, options: UpgradeOptions): Promise&lt;void&gt; {
+    for (const change of step.breakingChanges) {
+      if (change.migration.type &#x3D;&#x3D;&#x3D; &#x27;automatic&#x27;) {
+        // Apply automatic transformation
+        const transformer &#x3D; this.versionHandlers.getTransformer(change.type);
+        await transformer?.apply(this.projectPath, change);
+      } else if (change.migration.type &#x3D;&#x3D;&#x3D; &#x27;manual&#x27;) {
+        // Emit manual intervention required
+        this.emit(&#x27;manual-intervention&#x27;, {
+          change,
+          instructions: change.migration.instructions
+        });
+      }
+    }
+  }
+
+  /**
+   * Run validations for a single step
+   */
+  private async runStepValidations(step: UpgradeStep, options: UpgradeOptions): Promise&lt;void&gt; {
+    for (const validation of step.validations) {
+      if (validation.required || options.validationLevel &#x3D;&#x3D;&#x3D; &#x27;comprehensive&#x27;) {
+        const result &#x3D; await this.validator.runValidation(validation);
+        if (!result.success &amp;&amp; validation.required) {
+          throw new Error(&#x60;Validation failed: ${validation.description} - ${result.error}&#x60;);
+        }
+      }
+    }
+  }
+
+  /**
+   * Perform final validation after all steps
+   */
+  private async performFinalValidation(options: UpgradeOptions): Promise&lt;void&gt; {
+    this.emit(&#x27;progress&#x27;, { message: &#x27;Performing final validation&#x27;, phase: &#x27;final-validation&#x27; });
+    
+    const validations &#x3D; [
+      { type: &#x27;build&#x27; as const, description: &#x27;Final build validation&#x27;, required: true },
+      { type: &#x27;test&#x27; as const, description: &#x27;Final test validation&#x27;, required: options.validationLevel &#x3D;&#x3D;&#x3D; &#x27;comprehensive&#x27; }
+    ];
+
+    for (const validation of validations) {
+      if (validation.required) {
+        const result &#x3D; await this.validator.runValidation(validation);
+        if (!result.success) {
+          throw new Error(&#x60;Final validation failed: ${validation.description}&#x60;);
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle failure rollback
+   */
+  private async handleFailureRollback(error: Error, options: UpgradeOptions): Promise&lt;void&gt; {
+    if (this.currentCheckpoint) {
+      this.emit(&#x27;rollback-start&#x27;, { checkpoint: this.currentCheckpoint, reason: error.message });
+      await this.rollbackEngine.rollbackToCheckpoint(this.currentCheckpoint.id);
+      this.emit(&#x27;rollback-complete&#x27;, { checkpoint: this.currentCheckpoint });
+    }
+  }
+
+  /**
+   * Determine if checkpoint should be created after step
+   */
+  private shouldCreateCheckpoint(step: UpgradeStep, options: UpgradeOptions): boolean {
+    switch (options.checkpointFrequency) {
+      case &#x27;every-step&#x27;:
+        return true;
+      case &#x27;major-versions&#x27;:
+        return step.required;
+      case &#x27;custom&#x27;:
+        return step.required; // Could be customized further
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Parse version string to AngularVersion object
+   */
+  private parseVersion(versionString: string): AngularVersion {
+    const [major, minor &#x3D; 0, patch &#x3D; 0] &#x3D; versionString.split(&#x27;.&#x27;).map(Number);
+    return {
+      major,
+      minor,
+      patch,
+      full: &#x60;${major}.${minor}.${patch}&#x60;
+    };
+  }
+
+  /**
+   * Get list of available checkpoints for this project.
+   * 
+   * Returns all checkpoints that have been created during upgrade processes,
+   * sorted by creation time. Each checkpoint represents a complete snapshot
+   * of the project at a specific point in the upgrade journey.
+   * 
+   * @returns {Promise&lt;Checkpoint[]&gt;} Array of available checkpoints
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const checkpoints &#x3D; await orchestrator.getCheckpoints();
+   * checkpoints.forEach(cp &#x3D;&gt; {
+   *   console.log(&#x60;${cp.id}: ${cp.description} (${cp.version})&#x60;);
+   * });
+   * &#x60;&#x60;&#x60;
+   */
+  async getCheckpoints(): Promise&lt;Checkpoint[]&gt; {
+    return this.checkpointManager.listCheckpoints();
+  }
+
+  /**
+   * Rollback project to a specific checkpoint.
+   * 
+   * This method safely restores the project to a previous state by rolling back
+   * all changes made since the specified checkpoint was created. This includes
+   * code changes, configuration updates, and dependency modifications.
+   * 
+   * @param {string} checkpointId - Unique identifier of the checkpoint to restore
+   * 
+   * @throws {Error} If checkpoint doesn&#x27;t exist or rollback fails
+   * 
+   * @emits rollback-start - When rollback process begins
+   * @emits rollback-complete - When rollback process completes successfully
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * // Rollback to checkpoint created before Angular 17 upgrade
+   * await orchestrator.rollbackToCheckpoint(&#x27;pre-angular-17&#x27;);
+   * &#x60;&#x60;&#x60;
+   */
+  async rollbackToCheckpoint(checkpointId: string): Promise&lt;void&gt; {
+    this.emit(&#x27;rollback-start&#x27;, { checkpointId });
+    await this.rollbackEngine.rollbackToCheckpoint(checkpointId);
+    this.emit(&#x27;rollback-complete&#x27;, { checkpointId });
+  }
+
+  /**
+   * Get current upgrade progress information.
+   * 
+   * Returns real-time progress information about an ongoing upgrade process,
+   * including current step, completion percentage, and estimated time remaining.
+   * Returns null if no upgrade is currently in progress.
+   * 
+   * @returns {ProgressReport | null} Current progress information or null
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const progress &#x3D; orchestrator.getProgress();
+   * if (progress) {
+   *   console.log(&#x60;Progress: ${progress.completedSteps}/${progress.totalSteps}&#x60;);
+   *   console.log(&#x60;Current: ${progress.currentStep.description}&#x60;);
+   * }
+   * &#x60;&#x60;&#x60;
+   */
+  getProgress(): ProgressReport | null {
+    // Implementation would track current progress
+    return null;
+  }
+}</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'UpgradeOrchestrator.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

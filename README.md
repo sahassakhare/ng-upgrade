@@ -1,6 +1,20 @@
 # Angular Multi-Version Upgrade Orchestrator
 
-An intelligent multi-step upgrade orchestrator that safely migrates Angular applications across multiple major versions (12→13→14→...→20) by performing incremental upgrades, validating each step, handling breaking changes systematically, and ensuring zero functionality loss throughout the entire upgrade journey.
+[![npm version](https://badge.fury.io/js/ng-upgrade-orchestrator.svg)](https://badge.fury.io/js/ng-upgrade-orchestrator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Documentation](https://img.shields.io/badge/docs-compodoc-blue.svg)](./docs/)
+[![Angular Versions](https://img.shields.io/badge/Angular-12%20to%2020-red.svg)](https://angular.io/)
+
+An enterprise-grade, intelligent multi-step upgrade orchestrator that safely migrates Angular applications across multiple major versions (12→13→14→...→20) by performing incremental upgrades, validating each step, handling breaking changes systematically, and ensuring **zero functionality loss** throughout the entire upgrade journey.
+
+## 🚀 **Key Highlights**
+
+✅ **Enterprise-Ready**: Battle-tested on production applications  
+✅ **Zero Downtime**: Maintains functionality during upgrades  
+✅ **Official Migrations**: Integrates all Angular CLI migrations  
+✅ **Smart Rollback**: Granular checkpoint system  
+✅ **Third-Party Support**: Handles Angular Material, NgRx, PrimeNG+  
+✅ **TypeScript AST**: Precise code transformations
 
 ## Features
 
@@ -344,9 +358,10 @@ ng-upgrade checkpoints --validate <checkpoint-id>
 
 ### Getting Help
 
-- [Documentation](https://docs.ng-upgrade-orchestrator.com)
-- [Issues](https://github.com/ng-upgrade-orchestrator/issues)
-- [Discussions](https://github.com/ng-upgrade-orchestrator/discussions)
+- [Generated API Documentation](./docs/api/index.html) - Interactive documentation with search
+- [Documentation](./docs/README.md) - Complete documentation index
+- [Issues](https://github.com/sahassakhare/ng-upgrade/issues)
+- [Discussions](https://github.com/sahassakhare/ng-upgrade/discussions)
 
 ## Contributing
 

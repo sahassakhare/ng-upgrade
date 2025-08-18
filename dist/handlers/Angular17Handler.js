@@ -37,6 +37,7 @@ exports.Angular17Handler = void 0;
 const BaseVersionHandler_1 = require("./BaseVersionHandler");
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
+const FileContentPreserver_1 = require("../utils/FileContentPreserver");
 class Angular17Handler extends BaseVersionHandler_1.BaseVersionHandler {
     constructor() {
         super(...arguments);
@@ -71,45 +72,19 @@ class Angular17Handler extends BaseVersionHandler_1.BaseVersionHandler {
         await this.updateAngularMaterial(projectPath);
     }
     /**
-     * Update to new application bootstrap
+     * Update to new application bootstrap while preserving existing code
      */
     async updateApplicationBootstrap(projectPath) {
         const mainTsPath = path.join(projectPath, 'src', 'main.ts');
+        // Use FileContentPreserver to update main.ts while preserving custom code
+        await FileContentPreserver_1.FileContentPreserver.updateMainTsFile(mainTsPath, 17);
         if (await fs.pathExists(mainTsPath)) {
-            const mainTsContent = await fs.readFile(mainTsPath, 'utf-8');
-            // Check if already using new bootstrap
-            if (mainTsContent.includes('bootstrapApplication')) {
-                return;
-            }
-            // Create backup
-            await this.backupFile(mainTsPath);
-            // Update to new bootstrap pattern
-            const newMainTs = this.generateNewBootstrapCode(mainTsContent);
-            await fs.writeFile(mainTsPath, newMainTs);
-            console.log('✓ Updated to new application bootstrap');
+            this.progressReporter?.success('✓ Updated to new application bootstrap (preserving custom code)');
         }
     }
     /**
-     * Generate new bootstrap code
-     */
-    generateNewBootstrapCode(oldContent) {
-        // This is a simplified transformation
-        // In production, this would use AST transformations
-        return `import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
-import { importProvidersFrom } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    importProvidersFrom(BrowserModule),
-    // Add your providers here
-  ]
-}).catch(err => console.error(err));
-`;
-    }
-    /**
      * Migrate assets folder to public folder (Angular 17+)
+     * This preserves the existing assets while adding the new public folder
      */
     async migrateAssetsToPublic(projectPath) {
         const assetsPath = path.join(projectPath, 'src', 'assets');
@@ -121,7 +96,7 @@ bootstrapApplication(AppComponent, {
             await fs.copy(assetsPath, publicPath);
             // Update angular.json to use both asset configurations
             await this.updateAssetConfiguration(projectPath);
-            console.log('✓ Migrated assets to public folder (maintaining backward compatibility)');
+            this.progressReporter?.success('✓ Migrated assets to public folder (maintaining backward compatibility)');
         }
     }
     /**
@@ -132,7 +107,7 @@ bootstrapApplication(AppComponent, {
         if (await fs.pathExists(angularJsonPath)) {
             const angularJson = await fs.readJson(angularJsonPath);
             // Update each project's asset configuration
-            for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+            for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
                 const config = projectConfig;
                 if (config.architect?.build?.options?.assets) {
                     // Add public folder to assets while keeping src/assets
@@ -153,11 +128,11 @@ bootstrapApplication(AppComponent, {
     /**
      * Enable new control flow syntax
      */
-    async enableNewControlFlow(projectPath) {
+    async enableNewControlFlow(_projectPath) {
         // This would enable the new @if, @for, @switch syntax
         // For now, just log that it's available
-        console.log('✓ New control flow syntax (@if, @for, @switch) is available');
-        console.log('  Use "ng generate @angular/core:control-flow" to migrate templates');
+        this.progressReporter?.success('✓ New control flow syntax (@if, @for, @switch) is available');
+        this.progressReporter?.info('  Use "ng generate @angular/core:control-flow" to migrate templates');
     }
     /**
      * Update SSR configuration
@@ -168,14 +143,14 @@ bootstrapApplication(AppComponent, {
             const angularJson = await fs.readJson(angularJsonPath);
             let hasSSR = false;
             // Check if SSR is configured
-            for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+            for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
                 const config = projectConfig;
                 if (config.architect?.['serve-ssr'] || config.architect?.['build-ssr']) {
                     hasSSR = true;
                 }
             }
             if (hasSSR) {
-                console.log('✓ SSR configuration detected - Angular 17 SSR improvements enabled');
+                this.progressReporter?.success('✓ SSR configuration detected - Angular 17 SSR improvements enabled');
                 // Would update SSR configuration for Angular 17 improvements
             }
         }
@@ -188,7 +163,7 @@ bootstrapApplication(AppComponent, {
         if (await fs.pathExists(angularJsonPath)) {
             const angularJson = await fs.readJson(angularJsonPath);
             // Update build configurations for Angular 17
-            for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+            for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
                 const config = projectConfig;
                 if (config.architect?.build?.options) {
                     // Enable new build features
@@ -202,23 +177,26 @@ bootstrapApplication(AppComponent, {
     }
     /**
      * Update Angular Material for Angular 17
+     * Uses DependencyInstaller for automatic installation
      */
     async updateAngularMaterial(projectPath) {
         const packageJsonPath = path.join(projectPath, 'package.json');
         const packageJson = await fs.readJson(packageJsonPath);
         if (packageJson.dependencies?.['@angular/material']) {
-            // Update Angular Material to version 17
-            packageJson.dependencies['@angular/material'] = '^17.0.0';
-            packageJson.dependencies['@angular/cdk'] = '^17.0.0';
-            await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
-            console.log('✓ Updated Angular Material to version 17');
+            // Use DependencyInstaller to update Angular Material
+            const materialDeps = [
+                { name: '@angular/material', version: '^17.0.0', type: 'dependencies' },
+                { name: '@angular/cdk', version: '^17.0.0', type: 'dependencies' }
+            ];
+            await this.dependencyInstaller.installDependencies(materialDeps, 'Updating Angular Material to version 17...');
+            this.progressReporter?.success('✓ Updated Angular Material to version 17');
         }
     }
     /**
      * Update builder configurations for Angular 17
      */
     updateBuilderConfigurations(angularJson) {
-        for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+        for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
             const config = projectConfig;
             if (config.architect?.build) {
                 // Update build configurations

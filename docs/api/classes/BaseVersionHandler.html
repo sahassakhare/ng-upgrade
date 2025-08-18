@@ -1,0 +1,3530 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular Multi-Version Upgrade Orchestrator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Angular Multi-Version Upgrade Orchestrator</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >BaseVersionHandler</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/handlers/BaseVersionHandler.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Base class for all Angular version handlers providing common upgrade functionality</p>
+<p>This abstract class serves as the foundation for all version-specific upgrade handlers,
+providing shared infrastructure for dependency management, configuration updates,
+migration execution, and progress reporting. Each concrete handler extends this class
+to implement version-specific transformations.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+export class Angular16Handler extends BaseVersionHandler {
+  readonly version = &#39;16&#39;;</code></pre></div><p>  protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
+    // Implementation specific to Angular 16
+  }
+}</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div>
+            </p>
+
+
+            <p class="comment">
+                <h3>Implements</h3>
+            </p>
+            <p class="comment">
+                            <code><a href="../interfaces/VersionHandler.html" target="_self" >VersionHandler</a></code>
+            </p>
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#dependencyInstaller" >dependencyInstaller</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#progressReporter" >progressReporter</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Abstract</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#version" >version</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Abstract</span>
+                                <a href="#applyVersionSpecificChanges" >applyVersionSpecificChanges</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#backupFile" >backupFile</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#createBreakingChange" >createBreakingChange</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#execute" >execute</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#findComponentFiles" >findComponentFiles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#findTemplateFiles" >findTemplateFiles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#getAvailableMigrations" >getAvailableMigrations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Abstract</span>
+                                <a href="#getBreakingChanges" >getBreakingChanges</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Abstract</span>
+                                <a href="#getRequiredNodeVersion" >getRequiredNodeVersion</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Abstract</span>
+                                <a href="#getRequiredTypeScriptVersion" >getRequiredTypeScriptVersion</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#installDependencies" >installDependencies</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#isVersionCompatible" >isVersionCompatible</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runAngularUpdateSchematics" >runAngularUpdateSchematics</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runCommand" >runCommand</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runSpecificMigration" >runSpecificMigration</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runVersionSpecificMigrations" >runVersionSpecificMigrations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateAngularCli" >updateAngularCli</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateAngularDependencies" >updateAngularDependencies</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateAngularJson" >updateAngularJson</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateBrowsersList" >updateBrowsersList</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#updateBuilderConfigurations" >updateBuilderConfigurations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateComponentFiles" >updateComponentFiles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateConfigurationFiles" >updateConfigurationFiles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateKarmaConfig" >updateKarmaConfig</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateOptionalConfigs" >updateOptionalConfigs</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateTemplateFiles" >updateTemplateFiles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateTsConfig" >updateTsConfig</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateTypeScript" >updateTypeScript</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#updateTypeScriptConfig" >updateTypeScriptConfig</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#validatePrerequisites" >validatePrerequisites</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dependencyInstaller"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>dependencyInstaller</b></span>
+                        <a href="#dependencyInstaller"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/DependencyInstaller.html" target="_self" >DependencyInstaller</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/handlers/BaseVersionHandler.ts:40</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Utility for managing dependency installations and updates</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="progressReporter"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>progressReporter</b></span>
+                        <a href="#progressReporter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/ProgressReporter.html" target="_self" >ProgressReporter</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/handlers/BaseVersionHandler.ts:43</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Utility for reporting upgrade progress and status messages</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="version"></a>
+                    <span class="name">
+                            <span class="modifier">Abstract</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>version</b></span>
+                        <a href="#version"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/handlers/BaseVersionHandler.ts:37</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>The Angular version this handler manages - must be implemented by concrete classes</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyVersionSpecificChanges"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Abstract</span>
+                        <span ><b>applyVersionSpecificChanges</b></span>
+                        <a href="#applyVersionSpecificChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyVersionSpecificChanges(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="200"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:200</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Applies version-specific changes and transformations to the project</p>
+<p>This is the core method that each version handler must implement to
+perform all version-specific modifications, code transformations,
+and feature implementations required for the target Angular version.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The absolute path to the Angular project root</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Upgrade configuration options including strategy and validation level</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Promise that resolves when all version-specific changes are complete</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="backupFile"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>backupFile</b></span>
+                        <a href="#backupFile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>backupFile(filePath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="578"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:578</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Backup file before modification</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>filePath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createBreakingChange"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>createBreakingChange</b></span>
+                        <a href="#createBreakingChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createBreakingChange(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, type: <a href="../interfaces/BreakingChange.html" target="_self">BreakingChange</a>, severity: <a href="../interfaces/BreakingChange.html" target="_self">BreakingChange</a>, description: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, impact: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, migrationInstructions?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="666"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:666</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Create version-specific breaking change</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>type</td>
+                                            <td>
+                                                            <code><a href="../interfaces/BreakingChange.html" target="_self" >BreakingChange</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>severity</td>
+                                            <td>
+                                                            <code><a href="../interfaces/BreakingChange.html" target="_self" >BreakingChange</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>description</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>impact</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>migrationInstructions</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/BreakingChange.html" target="_self" >BreakingChange</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="execute"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>execute</b></span>
+                        <a href="#execute"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>execute(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, step: <a href="../interfaces/UpgradeStep.html" target="_self">UpgradeStep</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="69"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:69</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Executes the complete version-specific upgrade process</p>
+<p>Orchestrates the entire upgrade workflow including dependency updates,
+configuration changes, code transformations, and validation. This is the
+main entry point for version upgrades.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const handler = new Angular16Handler();
+await handler.execute(&#39;/path/to/project&#39;, {
+  fromVersion: &#39;15&#39;,
+  toVersion: &#39;16&#39;
+}, {
+  strategy: &#39;balanced&#39;,
+  validationLevel: &#39;comprehensive&#39;
+});</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The absolute path to the Angular project root</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>step</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeStep.html" target="_self" >UpgradeStep</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The upgrade step configuration with source and target versions</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Comprehensive upgrade options including strategy and validation level</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findComponentFiles"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>findComponentFiles</b></span>
+                        <a href="#findComponentFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findComponentFiles(dir: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="628"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:628</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Find all component files in a directory</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>dir</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string[]&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findTemplateFiles"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>findTemplateFiles</b></span>
+                        <a href="#findTemplateFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findTemplateFiles(dir: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="647"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:647</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Find all template files in a directory</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>dir</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string[]&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAvailableMigrations"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>getAvailableMigrations</b></span>
+                        <a href="#getAvailableMigrations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAvailableMigrations()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="410"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:410</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get available migrations for this Angular version
+Override in specific version handlers to provide version-specific migrations</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/Migration.html" target="_self" >Migration[]</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getBreakingChanges"></a>
+                    <span class="name">
+                            <span class="modifier">Abstract</span>
+                        <span ><b>getBreakingChanges</b></span>
+                        <a href="#getBreakingChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getBreakingChanges()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="163"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:163</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Gets all breaking changes introduced in this Angular version</p>
+<p>Each version handler must provide a comprehensive list of breaking changes
+with severity levels, descriptions, and migration guidance to help users
+understand the impact and required actions for the upgrade.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const changes = handler.getBreakingChanges();
+changes.forEach(change =&gt; {
+  console.log(`${change.severity}: ${change.description}`);
+});</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/BreakingChange.html" target="_self" >BreakingChange[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Array of breaking change objects with detailed information</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getRequiredNodeVersion"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Abstract</span>
+                        <span ><b>getRequiredNodeVersion</b></span>
+                        <a href="#getRequiredNodeVersion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getRequiredNodeVersion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="174"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:174</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Gets the minimum required Node.js version for this Angular version</p>
+<p>Each version handler must specify the minimum Node.js version required
+for successful operation of the target Angular version.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The minimum Node.js version requirement (e.g., &quot;&gt;=16.14.0&quot;)</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getRequiredTypeScriptVersion"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Abstract</span>
+                        <span ><b>getRequiredTypeScriptVersion</b></span>
+                        <a href="#getRequiredTypeScriptVersion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getRequiredTypeScriptVersion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="185"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:185</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Gets the required TypeScript version range for this Angular version</p>
+<p>Each version handler must specify the compatible TypeScript version range
+that works with the target Angular version.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The TypeScript version requirement (e.g., &quot;&gt;=4.9.3 &lt;5.1.0&quot;)</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="installDependencies"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>installDependencies</b></span>
+                        <a href="#installDependencies"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>installDependencies(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="526"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:526</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Install dependencies</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isVersionCompatible"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>isVersionCompatible</b></span>
+                        <a href="#isVersionCompatible"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isVersionCompatible(currentVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, requiredVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="541"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:541</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Check version compatibility</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>currentVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>requiredVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runAngularUpdateSchematics"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runAngularUpdateSchematics</b></span>
+                        <a href="#runAngularUpdateSchematics"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runAngularUpdateSchematics(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="362"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:362</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run Angular update schematics and official migrations</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runCommand"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runCommand</b></span>
+                        <a href="#runCommand"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runCommand(command: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="563"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:563</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run command safely</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>command</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runSpecificMigration"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runSpecificMigration</b></span>
+                        <a href="#runSpecificMigration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runSpecificMigration(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, migrationName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, interactive: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="498"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:498</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run specific migration by name</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>migrationName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>interactive</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>false</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runVersionSpecificMigrations"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runVersionSpecificMigrations</b></span>
+                        <a href="#runVersionSpecificMigrations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runVersionSpecificMigrations(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="390"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:390</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run version-specific official Angular migrations</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateAngularCli"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateAngularCli</b></span>
+                        <a href="#updateAngularCli"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateAngularCli(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="235"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:235</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update Angular CLI with automatic installation</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateAngularDependencies"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateAngularDependencies</b></span>
+                        <a href="#updateAngularDependencies"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateAngularDependencies(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="205"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:205</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update Angular dependencies to target version with automatic installation</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateAngularJson"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateAngularJson</b></span>
+                        <a href="#updateAngularJson"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateAngularJson(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="272"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:272</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update angular.json configuration</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateBrowsersList"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateBrowsersList</b></span>
+                        <a href="#updateBrowsersList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateBrowsersList(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="338"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:338</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update browserslist configuration</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateBuilderConfigurations"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>updateBuilderConfigurations</b></span>
+                        <a href="#updateBuilderConfigurations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateBuilderConfigurations(angularJson: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="288"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:288</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update builder configurations in angular.json</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>angularJson</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateComponentFiles"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateComponentFiles</b></span>
+                        <a href="#updateComponentFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateComponentFiles(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, transformations: any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="587"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:587</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update component files using FileContentPreserver</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>transformations</td>
+                                            <td>
+                                                        <code>any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateConfigurationFiles"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateConfigurationFiles</b></span>
+                        <a href="#updateConfigurationFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateConfigurationFiles(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: <a href="../interfaces/UpgradeOptions.html" target="_self">UpgradeOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="244"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:244</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update configuration files while preserving existing content</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UpgradeOptions.html" target="_self" >UpgradeOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateKarmaConfig"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateKarmaConfig</b></span>
+                        <a href="#updateKarmaConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateKarmaConfig(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="350"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:350</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update Karma configuration</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateOptionalConfigs"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateOptionalConfigs</b></span>
+                        <a href="#updateOptionalConfigs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateOptionalConfigs(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="327"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:327</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update optional configuration files</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateTemplateFiles"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateTemplateFiles</b></span>
+                        <a href="#updateTemplateFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateTemplateFiles(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="607"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:607</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update template files using FileContentPreserver</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateTsConfig"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateTsConfig</b></span>
+                        <a href="#updateTsConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateTsConfig(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="296"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:296</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update tsconfig.json</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateTypeScript"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateTypeScript</b></span>
+                        <a href="#updateTypeScript"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateTypeScript(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="219"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:219</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update TypeScript version with automatic installation</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateTypeScriptConfig"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>updateTypeScriptConfig</b></span>
+                        <a href="#updateTypeScriptConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateTypeScriptConfig(tsconfig: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="312"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:312</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Update TypeScript configuration</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>tsconfig</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validatePrerequisites"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>validatePrerequisites</b></span>
+                        <a href="#validatePrerequisites"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>validatePrerequisites(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="115"
+                                    class="link-to-prism">src/handlers/BaseVersionHandler.ts:115</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Validates all prerequisites required for this Angular version upgrade</p>
+<p>Checks Node.js version, TypeScript compatibility, and project structure
+to ensure the upgrade can proceed safely. Each version handler can override
+this method to add version-specific validation requirements.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const isReady = await handler.validatePrerequisites(&#39;/path/to/project&#39;);
+if (!isReady) {
+  throw new Error(&#39;Prerequisites not met for Angular 16 upgrade&#39;);
+}</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectPath</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The absolute path to the Angular project root</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Promise resolving to true if all prerequisites are met</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { UpgradeStep, UpgradeOptions, BreakingChange, Migration } from &#x27;../types&#x27;;
+import { VersionHandler } from &#x27;../core/VersionHandlerRegistry&#x27;;
+import * as fs from &#x27;fs-extra&#x27;;
+import * as path from &#x27;path&#x27;;
+import { execSync } from &#x27;child_process&#x27;;
+import { DependencyInstaller } from &#x27;../utils/DependencyInstaller&#x27;;
+import { FileContentPreserver } from &#x27;../utils/FileContentPreserver&#x27;;
+import { ProgressReporter } from &#x27;../utils/ProgressReporter&#x27;;
+
+/**
+ * Base class for all Angular version handlers providing common upgrade functionality
+ * 
+ * This abstract class serves as the foundation for all version-specific upgrade handlers,
+ * providing shared infrastructure for dependency management, configuration updates,
+ * migration execution, and progress reporting. Each concrete handler extends this class
+ * to implement version-specific transformations.
+ * 
+ * @abstract
+ * @implements {VersionHandler}
+ * 
+ * @example
+ * &#x60;&#x60;&#x60;typescript
+ * export class Angular16Handler extends BaseVersionHandler {
+ *   readonly version &#x3D; &#x27;16&#x27;;
+ *   
+ *   protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise&lt;void&gt; {
+ *     // Implementation specific to Angular 16
+ *   }
+ * }
+ * &#x60;&#x60;&#x60;
+ * 
+ * @since 1.0.0
+ * @author Angular Multi-Version Upgrade Orchestrator
+ */
+export abstract class BaseVersionHandler implements VersionHandler {
+  /** The Angular version this handler manages - must be implemented by concrete classes */
+  abstract readonly version: string;
+  
+  /** Utility for managing dependency installations and updates */
+  protected dependencyInstaller!: DependencyInstaller;
+  
+  /** Utility for reporting upgrade progress and status messages */
+  protected progressReporter!: ProgressReporter;
+
+  /**
+   * Executes the complete version-specific upgrade process
+   * 
+   * Orchestrates the entire upgrade workflow including dependency updates,
+   * configuration changes, code transformations, and validation. This is the
+   * main entry point for version upgrades.
+   * 
+   * @param projectPath - The absolute path to the Angular project root
+   * @param step - The upgrade step configuration with source and target versions
+   * @param options - Comprehensive upgrade options including strategy and validation level
+   * @throws {Error} When critical upgrade operations fail
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const handler &#x3D; new Angular16Handler();
+   * await handler.execute(&#x27;/path/to/project&#x27;, {
+   *   fromVersion: &#x27;15&#x27;,
+   *   toVersion: &#x27;16&#x27;
+   * }, {
+   *   strategy: &#x27;balanced&#x27;,
+   *   validationLevel: &#x27;comprehensive&#x27;
+   * });
+   * &#x60;&#x60;&#x60;
+   */
+  async execute(projectPath: string, step: UpgradeStep, options: UpgradeOptions): Promise&lt;void&gt; {
+    this.dependencyInstaller &#x3D; new DependencyInstaller(projectPath);
+    this.progressReporter &#x3D; options.progressReporter || new ProgressReporter();
+    
+    this.progressReporter.startStep(&#x60;Angular ${this.version} Upgrade&#x60;, &#x60;Starting Angular ${this.version} upgrade...&#x60;);
+
+    // Update Angular dependencies with automatic installation
+    this.progressReporter.updateMessage(&#x27;Updating Angular dependencies...&#x27;);
+    await this.updateAngularDependencies(projectPath);
+
+    // Update TypeScript if needed
+    await this.updateTypeScript(projectPath);
+
+    // Update Angular CLI
+    await this.updateAngularCli(projectPath);
+
+    // Apply version-specific transformations
+    await this.applyVersionSpecificChanges(projectPath, options);
+
+    // Update configuration files
+    await this.updateConfigurationFiles(projectPath, options);
+
+    // Run Angular update schematics
+    await this.runAngularUpdateSchematics(projectPath);
+
+    this.progressReporter.completeStep(&#x60;Angular ${this.version} Upgrade&#x60;, &#x60;Angular ${this.version} upgrade completed successfully&#x60;);
+  }
+
+  /**
+   * Validates all prerequisites required for this Angular version upgrade
+   * 
+   * Checks Node.js version, TypeScript compatibility, and project structure
+   * to ensure the upgrade can proceed safely. Each version handler can override
+   * this method to add version-specific validation requirements.
+   * 
+   * @param projectPath - The absolute path to the Angular project root
+   * @returns Promise resolving to true if all prerequisites are met
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const isReady &#x3D; await handler.validatePrerequisites(&#x27;/path/to/project&#x27;);
+   * if (!isReady) {
+   *   throw new Error(&#x27;Prerequisites not met for Angular 16 upgrade&#x27;);
+   * }
+   * &#x60;&#x60;&#x60;
+   */
+  async validatePrerequisites(projectPath: string): Promise&lt;boolean&gt; {
+    try {
+      // Check Node.js version
+      const nodeVersion &#x3D; process.version;
+      const requiredNode &#x3D; this.getRequiredNodeVersion();
+      if (!this.isVersionCompatible(nodeVersion, requiredNode)) {
+        this.progressReporter?.error(&#x60;Node.js ${requiredNode} required, found ${nodeVersion}&#x60;);
+        return false;
+      }
+
+      // Check if project is an Angular project
+      const packageJsonPath &#x3D; path.join(projectPath, &#x27;package.json&#x27;);
+      if (!await fs.pathExists(packageJsonPath)) {
+        this.progressReporter?.error(&#x27;package.json not found&#x27;);
+        return false;
+      }
+
+      const packageJson &#x3D; await fs.readJson(packageJsonPath);
+      if (!packageJson.dependencies?.[&#x27;@angular/core&#x27;]) {
+        this.progressReporter?.error(&#x27;Not an Angular project&#x27;);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      this.progressReporter?.error(&#x60;Prerequisite validation failed: ${error}&#x60;);
+      return false;
+    }
+  }
+
+  /**
+   * Gets all breaking changes introduced in this Angular version
+   * 
+   * Each version handler must provide a comprehensive list of breaking changes
+   * with severity levels, descriptions, and migration guidance to help users
+   * understand the impact and required actions for the upgrade.
+   * 
+   * @returns Array of breaking change objects with detailed information
+   * @abstract
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const changes &#x3D; handler.getBreakingChanges();
+   * changes.forEach(change &#x3D;&gt; {
+   *   console.log(&#x60;${change.severity}: ${change.description}&#x60;);
+   * });
+   * &#x60;&#x60;&#x60;
+   */
+  abstract getBreakingChanges(): BreakingChange[];
+
+  /**
+   * Gets the minimum required Node.js version for this Angular version
+   * 
+   * Each version handler must specify the minimum Node.js version required
+   * for successful operation of the target Angular version.
+   * 
+   * @returns The minimum Node.js version requirement (e.g., &quot;&gt;&#x3D;16.14.0&quot;)
+   * @abstract
+   */
+  protected abstract getRequiredNodeVersion(): string;
+  
+  /**
+   * Gets the required TypeScript version range for this Angular version
+   * 
+   * Each version handler must specify the compatible TypeScript version range
+   * that works with the target Angular version.
+   * 
+   * @returns The TypeScript version requirement (e.g., &quot;&gt;&#x3D;4.9.3 &lt;5.1.0&quot;)
+   * @abstract
+   */
+  protected abstract getRequiredTypeScriptVersion(): string;
+  
+  /**
+   * Applies version-specific changes and transformations to the project
+   * 
+   * This is the core method that each version handler must implement to
+   * perform all version-specific modifications, code transformations,
+   * and feature implementations required for the target Angular version.
+   * 
+   * @param projectPath - The absolute path to the Angular project root
+   * @param options - Upgrade configuration options including strategy and validation level
+   * @returns Promise that resolves when all version-specific changes are complete
+   * @throws {Error} When critical transformations fail
+   * @abstract
+   */
+  protected abstract applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise&lt;void&gt;;
+
+  /**
+   * Update Angular dependencies to target version with automatic installation
+   */
+  protected async updateAngularDependencies(projectPath: string): Promise&lt;void&gt; {
+    // Use the DependencyInstaller for automatic installation
+    const success &#x3D; await this.dependencyInstaller.updateAngularPackages(this.version);
+    
+    if (!success) {
+      this.progressReporter.warn(&#x27;Angular dependencies updated in package.json. Manual npm install may be required.&#x27;);
+    } else {
+      this.progressReporter.success(&#x27;Angular dependencies installed successfully&#x27;);
+    }
+  }
+
+  /**
+   * Update TypeScript version with automatic installation
+   */
+  protected async updateTypeScript(projectPath: string): Promise&lt;void&gt; {
+    const requiredTsVersion &#x3D; this.getRequiredTypeScriptVersion();
+    
+    this.progressReporter.updateMessage(&#x60;Installing TypeScript ${requiredTsVersion}...&#x60;);
+    const success &#x3D; await this.dependencyInstaller.updateTypeScript(requiredTsVersion);
+    
+    if (!success) {
+      this.progressReporter.warn(&#x27;TypeScript version updated in package.json. Manual npm install may be required.&#x27;);
+    } else {
+      this.progressReporter.success(&#x60;TypeScript ${requiredTsVersion} installed successfully&#x60;);
+    }
+  }
+
+  /**
+   * Update Angular CLI with automatic installation
+   */
+  protected async updateAngularCli(projectPath: string): Promise&lt;void&gt; {
+    // Angular CLI is already updated as part of updateAngularDependencies
+    // This method is kept for compatibility but the work is done above
+    this.progressReporter.info(&#x27;Angular CLI updated with other Angular packages&#x27;);
+  }
+
+  /**
+   * Update configuration files while preserving existing content
+   */
+  protected async updateConfigurationFiles(projectPath: string, options: UpgradeOptions): Promise&lt;void&gt; {
+    // Update main.ts using FileContentPreserver if needed for Angular 14+
+    const mainTsPath &#x3D; path.join(projectPath, &#x27;src&#x27;, &#x27;main.ts&#x27;);
+    if (await fs.pathExists(mainTsPath)) {
+      const targetVersion &#x3D; parseInt(this.version);
+      if (targetVersion &gt;&#x3D; 14 &amp;&amp; options.strategy !&#x3D;&#x3D; &#x27;conservative&#x27;) {
+        // Use FileContentPreserver to update main.ts while preserving custom code
+        await FileContentPreserver.updateMainTsFile(mainTsPath, targetVersion);
+        this.progressReporter?.success(&#x27;Updated main.ts while preserving custom code&#x27;);
+      }
+    }
+    
+    await this.updateAngularJson(projectPath);
+    await this.updateTsConfig(projectPath);
+    
+    if (options.strategy !&#x3D;&#x3D; &#x27;conservative&#x27;) {
+      await this.updateOptionalConfigs(projectPath);
+      
+      // Update template files for Angular 17+ (optional)
+      if (parseInt(this.version) &gt;&#x3D; 17) {
+        await this.updateTemplateFiles(projectPath);
+      }
+    }
+  }
+
+  /**
+   * Update angular.json configuration
+   */
+  protected async updateAngularJson(projectPath: string): Promise&lt;void&gt; {
+    const angularJsonPath &#x3D; path.join(projectPath, &#x27;angular.json&#x27;);
+    
+    if (await fs.pathExists(angularJsonPath)) {
+      const angularJson &#x3D; await fs.readJson(angularJsonPath);
+      
+      // Update builder versions and configurations
+      this.updateBuilderConfigurations(angularJson);
+      
+      await fs.writeJson(angularJsonPath, angularJson, { spaces: 2 });
+    }
+  }
+
+  /**
+   * Update builder configurations in angular.json
+   */
+  protected updateBuilderConfigurations(angularJson: any): void {
+    // This would be implemented by specific version handlers
+    // to update builder configurations as needed
+  }
+
+  /**
+   * Update tsconfig.json
+   */
+  protected async updateTsConfig(projectPath: string): Promise&lt;void&gt; {
+    const tsconfigPath &#x3D; path.join(projectPath, &#x27;tsconfig.json&#x27;);
+    
+    if (await fs.pathExists(tsconfigPath)) {
+      const tsconfig &#x3D; await fs.readJson(tsconfigPath);
+      
+      // Update TypeScript configuration for this Angular version
+      this.updateTypeScriptConfig(tsconfig);
+      
+      await fs.writeJson(tsconfigPath, tsconfig, { spaces: 2 });
+    }
+  }
+
+  /**
+   * Update TypeScript configuration
+   */
+  protected updateTypeScriptConfig(tsconfig: any): void {
+    // Default TypeScript updates that apply to most versions
+    if (!tsconfig.compilerOptions) {
+      tsconfig.compilerOptions &#x3D; {};
+    }
+
+    // Enable strict mode by default for newer versions
+    if (Number(this.version) &gt;&#x3D; 15) {
+      tsconfig.compilerOptions.strict &#x3D; true;
+    }
+  }
+
+  /**
+   * Update optional configuration files
+   */
+  protected async updateOptionalConfigs(projectPath: string): Promise&lt;void&gt; {
+    // Update browserslist if it exists
+    await this.updateBrowsersList(projectPath);
+    
+    // Update karma.conf.js if it exists
+    await this.updateKarmaConfig(projectPath);
+  }
+
+  /**
+   * Update browserslist configuration
+   */
+  protected async updateBrowsersList(projectPath: string): Promise&lt;void&gt; {
+    const browserslistPath &#x3D; path.join(projectPath, &#x27;.browserslistrc&#x27;);
+    
+    if (await fs.pathExists(browserslistPath)) {
+      // Update browser support configuration
+      // This would contain version-specific browser requirements
+    }
+  }
+
+  /**
+   * Update Karma configuration
+   */
+  protected async updateKarmaConfig(projectPath: string): Promise&lt;void&gt; {
+    const karmaConfigPath &#x3D; path.join(projectPath, &#x27;karma.conf.js&#x27;);
+    
+    if (await fs.pathExists(karmaConfigPath)) {
+      // Update Karma configuration for new Angular version
+      // This would contain version-specific Karma updates
+    }
+  }
+
+  /**
+   * Run Angular update schematics and official migrations
+   */
+  protected async runAngularUpdateSchematics(projectPath: string): Promise&lt;void&gt; {
+    try {
+      this.progressReporter?.updateMessage(&#x27;Running Angular update schematics...&#x27;);
+      
+      // Run ng update for Angular core
+      execSync(&#x60;npx ng update @angular/core@${this.version} --migrate-only --allow-dirty&#x60;, {
+        cwd: projectPath,
+        stdio: &#x27;inherit&#x27;
+      });
+
+      // Run ng update for Angular CLI
+      execSync(&#x60;npx ng update @angular/cli@${this.version} --migrate-only --allow-dirty&#x60;, {
+        cwd: projectPath,
+        stdio: &#x27;inherit&#x27;
+      });
+      
+      // Run version-specific official migrations
+      await this.runVersionSpecificMigrations(projectPath);
+      
+      this.progressReporter?.success(&#x27;✓ Angular update schematics completed&#x27;);
+    } catch (error) {
+      this.progressReporter?.warn(&#x27;Angular schematics migration completed with warnings&#x27;);
+    }
+  }
+
+  /**
+   * Run version-specific official Angular migrations
+   */
+  protected async runVersionSpecificMigrations(projectPath: string): Promise&lt;void&gt; {
+    const migrations &#x3D; this.getAvailableMigrations();
+    
+    for (const migration of migrations) {
+      try {
+        this.progressReporter?.updateMessage(&#x60;Running ${migration.name} migration...&#x60;);
+        
+        await this.runCommand(migration.command, projectPath);
+        
+        this.progressReporter?.info(&#x60;✓ ${migration.name} migration completed&#x60;);
+      } catch (error) {
+        this.progressReporter?.warn(&#x60;${migration.name} migration completed with warnings: ${error instanceof Error ? error.message : String(error)}&#x60;);
+      }
+    }
+  }
+
+  /**
+   * Get available migrations for this Angular version
+   * Override in specific version handlers to provide version-specific migrations
+   */
+  protected getAvailableMigrations(): Migration[] {
+    const version &#x3D; parseInt(this.version);
+    const migrations: Migration[] &#x3D; [];
+
+    // Standalone Components (Angular 14+)
+    if (version &gt;&#x3D; 14) {
+      migrations.push({
+        name: &#x27;Standalone Components&#x27;,
+        command: &#x27;npx ng generate @angular/core:standalone&#x27;,
+        description: &#x27;Convert components to standalone components&#x27;,
+        optional: true
+      });
+    }
+
+    // Control Flow Syntax (Angular 17+)
+    if (version &gt;&#x3D; 17) {
+      migrations.push({
+        name: &#x27;Control Flow Syntax&#x27;,
+        command: &#x27;npx ng generate @angular/core:control-flow&#x27;,
+        description: &#x27;Convert structural directives to built-in control flow&#x27;,
+        optional: true
+      });
+    }
+
+    // inject() Function (Angular 14+)
+    if (version &gt;&#x3D; 14) {
+      migrations.push({
+        name: &#x27;inject() Function&#x27;,
+        command: &#x27;npx ng generate @angular/core:inject-function&#x27;,
+        description: &#x27;Convert constructor injection to inject() function&#x27;,
+        optional: true
+      });
+    }
+
+    // Signal Inputs (Angular 17.1+)
+    if (version &gt;&#x3D; 17) {
+      migrations.push({
+        name: &#x27;Signal Inputs&#x27;,
+        command: &#x27;npx ng generate @angular/core:signal-inputs&#x27;,
+        description: &#x27;Convert @Input fields to signal inputs&#x27;,
+        optional: true
+      });
+    }
+
+    // Signal Outputs (Angular 17.3+)
+    if (version &gt;&#x3D; 17) {
+      migrations.push({
+        name: &#x27;Signal Outputs&#x27;,
+        command: &#x27;npx ng generate @angular/core:signal-outputs&#x27;,
+        description: &#x27;Convert @Output fields to signal outputs&#x27;,
+        optional: true
+      });
+    }
+
+    // Signal Queries (Angular 17.2+)
+    if (version &gt;&#x3D; 17) {
+      migrations.push({
+        name: &#x27;Signal Queries&#x27;,
+        command: &#x27;npx ng generate @angular/core:signal-queries&#x27;,
+        description: &#x27;Convert decorator queries to signal queries&#x27;,
+        optional: true
+      });
+    }
+
+    // Self-closing Tags (Angular 16+)
+    if (version &gt;&#x3D; 16) {
+      migrations.push({
+        name: &#x27;Self-closing Tags&#x27;,
+        command: &#x27;npx ng generate @angular/core:self-closing-tags&#x27;,
+        description: &#x27;Convert templates to use self-closing tags&#x27;,
+        optional: true
+      });
+    }
+
+    // Cleanup Unused Imports (All versions)
+    migrations.push({
+      name: &#x27;Cleanup Unused Imports&#x27;,
+      command: &#x27;npx ng generate @angular/core:cleanup-unused-imports&#x27;,
+      description: &#x27;Remove unused imports from project files&#x27;,
+      optional: true
+    });
+
+    return migrations;
+  }
+
+  /**
+   * Run specific migration by name
+   */
+  protected async runSpecificMigration(projectPath: string, migrationName: string, interactive: boolean &#x3D; false): Promise&lt;void&gt; {
+    const migrations &#x3D; this.getAvailableMigrations();
+    const migration &#x3D; migrations.find(m &#x3D;&gt; m.name &#x3D;&#x3D;&#x3D; migrationName);
+    
+    if (!migration) {
+      throw new Error(&#x60;Migration &#x27;${migrationName}&#x27; not found for Angular ${this.version}&#x60;);
+    }
+
+    try {
+      this.progressReporter?.updateMessage(&#x60;Running ${migration.name} migration...&#x60;);
+      
+      let command &#x3D; migration.command;
+      if (!interactive) {
+        command +&#x3D; &#x27; --interactive&#x3D;false --defaults&#x27;;
+      }
+      
+      await this.runCommand(command, projectPath);
+      
+      this.progressReporter?.success(&#x60;✓ ${migration.name} migration completed&#x60;);
+    } catch (error) {
+      this.progressReporter?.warn(&#x60;${migration.name} migration failed: ${error instanceof Error ? error.message : String(error)}&#x60;);
+      throw error;
+    }
+  }
+
+  /**
+   * Install dependencies
+   */
+  protected async installDependencies(projectPath: string): Promise&lt;void&gt; {
+    try {
+      console.log(&#x27;Installing dependencies...&#x27;);
+      execSync(&#x27;npm install&#x27;, {
+        cwd: projectPath,
+        stdio: &#x27;inherit&#x27;
+      });
+    } catch (error) {
+      throw new Error(&#x27;Failed to install dependencies&#x27;);
+    }
+  }
+
+  /**
+   * Check version compatibility
+   */
+  protected isVersionCompatible(currentVersion: string, requiredVersion: string): boolean {
+    // Simple version comparison - in production this would use semver
+    const current &#x3D; currentVersion.replace(/[^\d.]/g, &#x27;&#x27;);
+    const required &#x3D; requiredVersion.replace(/[^\d.]/g, &#x27;&#x27;);
+    
+    const currentParts &#x3D; current.split(&#x27;.&#x27;).map(Number);
+    const requiredParts &#x3D; required.split(&#x27;.&#x27;).map(Number);
+    
+    for (let i &#x3D; 0; i &lt; Math.max(currentParts.length, requiredParts.length); i++) {
+      const currentPart &#x3D; currentParts[i] || 0;
+      const requiredPart &#x3D; requiredParts[i] || 0;
+      
+      if (currentPart &gt; requiredPart) return true;
+      if (currentPart &lt; requiredPart) return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * Run command safely
+   */
+  protected async runCommand(command: string, projectPath: string): Promise&lt;string&gt; {
+    try {
+      return execSync(command, {
+        cwd: projectPath,
+        encoding: &#x27;utf-8&#x27;,
+        stdio: &#x27;pipe&#x27;
+      });
+    } catch (error: any) {
+      throw new Error(&#x60;Command failed: ${command}\n${error.stdout || error.stderr || error.message}&#x60;);
+    }
+  }
+
+  /**
+   * Backup file before modification
+   */
+  protected async backupFile(filePath: string): Promise&lt;void&gt; {
+    if (await fs.pathExists(filePath)) {
+      await fs.copy(filePath, &#x60;${filePath}.backup&#x60;);
+    }
+  }
+  
+  /**
+   * Update component files using FileContentPreserver
+   */
+  protected async updateComponentFiles(projectPath: string, transformations: any[]): Promise&lt;void&gt; {
+    const componentsPath &#x3D; path.join(projectPath, &#x27;src&#x27;, &#x27;app&#x27;);
+    
+    if (await fs.pathExists(componentsPath)) {
+      // Find all component files
+      const componentFiles &#x3D; await this.findComponentFiles(componentsPath);
+      
+      for (const file of componentFiles) {
+        await FileContentPreserver.updateComponentFile(file, transformations);
+      }
+      
+      if (componentFiles.length &gt; 0) {
+        this.progressReporter?.success(&#x60;Updated ${componentFiles.length} component files while preserving custom code&#x60;);
+      }
+    }
+  }
+  
+  /**
+   * Update template files using FileContentPreserver
+   */
+  protected async updateTemplateFiles(projectPath: string): Promise&lt;void&gt; {
+    const targetVersion &#x3D; parseInt(this.version);
+    const templatesPath &#x3D; path.join(projectPath, &#x27;src&#x27;, &#x27;app&#x27;);
+    
+    if (await fs.pathExists(templatesPath)) {
+      // Find all template files
+      const templateFiles &#x3D; await this.findTemplateFiles(templatesPath);
+      
+      for (const file of templateFiles) {
+        await FileContentPreserver.updateTemplateFile(file, targetVersion);
+      }
+      
+      if (templateFiles.length &gt; 0) {
+        this.progressReporter?.info(&#x60;Template files preserved - migration to new syntax is optional&#x60;);
+      }
+    }
+  }
+  
+  /**
+   * Find all component files in a directory
+   */
+  private async findComponentFiles(dir: string): Promise&lt;string[]&gt; {
+    const files: string[] &#x3D; [];
+    const entries &#x3D; await fs.readdir(dir, { withFileTypes: true });
+    
+    for (const entry of entries) {
+      const fullPath &#x3D; path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        files.push(...await this.findComponentFiles(fullPath));
+      } else if (entry.name.endsWith(&#x27;.component.ts&#x27;)) {
+        files.push(fullPath);
+      }
+    }
+    
+    return files;
+  }
+  
+  /**
+   * Find all template files in a directory
+   */
+  private async findTemplateFiles(dir: string): Promise&lt;string[]&gt; {
+    const files: string[] &#x3D; [];
+    const entries &#x3D; await fs.readdir(dir, { withFileTypes: true });
+    
+    for (const entry of entries) {
+      const fullPath &#x3D; path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        files.push(...await this.findTemplateFiles(fullPath));
+      } else if (entry.name.endsWith(&#x27;.component.html&#x27;)) {
+        files.push(fullPath);
+      }
+    }
+    
+    return files;
+  }
+
+  /**
+   * Create version-specific breaking change
+   */
+  protected createBreakingChange(
+    id: string,
+    type: BreakingChange[&#x27;type&#x27;],
+    severity: BreakingChange[&#x27;severity&#x27;],
+    description: string,
+    impact: string,
+    migrationInstructions?: string
+  ): BreakingChange {
+    return {
+      id,
+      version: this.version,
+      type,
+      severity,
+      description,
+      impact,
+      migration: {
+        type: migrationInstructions ? &#x27;manual&#x27; : &#x27;automatic&#x27;,
+        instructions: migrationInstructions
+      }
+    };
+  }
+}</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'BaseVersionHandler.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

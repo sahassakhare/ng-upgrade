@@ -9,15 +9,12 @@ export declare class Angular17Handler extends BaseVersionHandler {
      */
     protected applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void>;
     /**
-     * Update to new application bootstrap
+     * Update to new application bootstrap while preserving existing code
      */
     private updateApplicationBootstrap;
     /**
-     * Generate new bootstrap code
-     */
-    private generateNewBootstrapCode;
-    /**
      * Migrate assets folder to public folder (Angular 17+)
+     * This preserves the existing assets while adding the new public folder
      */
     private migrateAssetsToPublic;
     /**
@@ -38,6 +35,7 @@ export declare class Angular17Handler extends BaseVersionHandler {
     private updateBuildConfiguration;
     /**
      * Update Angular Material for Angular 17
+     * Uses DependencyInstaller for automatic installation
      */
     private updateAngularMaterial;
     /**

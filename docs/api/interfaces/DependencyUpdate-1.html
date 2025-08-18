@@ -1,0 +1,563 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular Multi-Version Upgrade Orchestrator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Angular Multi-Version Upgrade Orchestrator</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  DependencyUpdate</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/utils/DependencyInstaller.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#name" 
+>
+                                            name
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#type" 
+>
+                                            type
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#version" 
+>
+                                            version
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="name"></a>
+                                        <span class="name "><b>name</b>
+                                            <a href="#name">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>name:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="type"></a>
+                                        <span class="name "><b>type</b>
+                                            <a href="#type">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>type:     <code>&quot;dependencies&quot; | &quot;devDependencies&quot;</code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>    <code>&quot;dependencies&quot; | &quot;devDependencies&quot;</code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="version"></a>
+                                        <span class="name "><b>version</b>
+                                            <a href="#version">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>version:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { execSync } from &#x27;child_process&#x27;;
+import * as fs from &#x27;fs-extra&#x27;;
+import * as path from &#x27;path&#x27;;
+import * as chalk from &#x27;chalk&#x27;;
+import ora from &#x27;ora&#x27;;
+
+export interface DependencyUpdate {
+  name: string;
+  version: string;
+  type: &#x27;dependencies&#x27; | &#x27;devDependencies&#x27;;
+}
+
+export class DependencyInstaller {
+  private spinner: ora.Ora;
+
+  constructor(private projectPath: string) {
+    this.spinner &#x3D; ora();
+  }
+
+  /**
+   * Install or update multiple dependencies automatically
+   */
+  async installDependencies(dependencies: DependencyUpdate[], message?: string): Promise&lt;boolean&gt; {
+    try {
+      this.spinner.start(message || &#x27;Installing dependencies...&#x27;);
+      
+      // Group dependencies by type
+      const deps &#x3D; dependencies.filter(d &#x3D;&gt; d.type &#x3D;&#x3D;&#x3D; &#x27;dependencies&#x27;);
+      const devDeps &#x3D; dependencies.filter(d &#x3D;&gt; d.type &#x3D;&#x3D;&#x3D; &#x27;devDependencies&#x27;);
+
+      // Prepare install commands
+      const commands: string[] &#x3D; [];
+      
+      if (deps.length &gt; 0) {
+        const depsStr &#x3D; deps.map(d &#x3D;&gt; &#x60;${d.name}@${d.version}&#x60;).join(&#x27; &#x27;);
+        commands.push(&#x60;npm install ${depsStr} --save&#x60;);
+      }
+      
+      if (devDeps.length &gt; 0) {
+        const devDepsStr &#x3D; devDeps.map(d &#x3D;&gt; &#x60;${d.name}@${d.version}&#x60;).join(&#x27; &#x27;);
+        commands.push(&#x60;npm install ${devDepsStr} --save-dev&#x60;);
+      }
+
+      // Execute install commands
+      for (const command of commands) {
+        this.spinner.text &#x3D; &#x60;Running: ${command}&#x60;;
+        execSync(command, {
+          cwd: this.projectPath,
+          stdio: &#x27;pipe&#x27;, // Use pipe to capture output
+          encoding: &#x27;utf-8&#x27;
+        });
+      }
+
+      this.spinner.succeed(chalk.green(&#x27;✓ Dependencies installed successfully&#x27;));
+      return true;
+    } catch (error) {
+      this.spinner.fail(chalk.red(&#x27;✗ Failed to install dependencies&#x27;));
+      console.error(chalk.yellow(&#x27;Error details:&#x27;), error instanceof Error ? error.message : String(error));
+      
+      // Attempt fallback: update package.json and suggest manual install
+      const fallbackSuccess &#x3D; await this.fallbackUpdatePackageJson(dependencies);
+      
+      if (fallbackSuccess) {
+        console.log(chalk.yellow(&#x27;\n⚠ Dependencies were added to package.json.&#x27;));
+        console.log(chalk.yellow(&#x27;Please run &quot;npm install&quot; manually to complete the installation.\n&#x27;));
+      }
+      
+      return fallbackSuccess;
+    }
+  }
+
+  /**
+   * Update Angular core packages to specific version
+   */
+  async updateAngularPackages(version: string): Promise&lt;boolean&gt; {
+    const angularPackages: DependencyUpdate[] &#x3D; [
+      // Core Angular packages
+      { name: &#x27;@angular/animations&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      { name: &#x27;@angular/common&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      { name: &#x27;@angular/compiler&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      { name: &#x27;@angular/core&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      { name: &#x27;@angular/forms&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      { name: &#x27;@angular/platform-browser&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      { name: &#x27;@angular/platform-browser-dynamic&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      { name: &#x27;@angular/router&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;dependencies&#x27; },
+      // Dev dependencies
+      { name: &#x27;@angular/cli&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;devDependencies&#x27; },
+      { name: &#x27;@angular/compiler-cli&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;devDependencies&#x27; },
+      { name: &#x27;@angular-devkit/build-angular&#x27;, version: &#x60;^${version}.0.0&#x60;, type: &#x27;devDependencies&#x27; }
+    ];
+
+    // Filter to only include packages that exist in the project
+    const packageJsonPath &#x3D; path.join(this.projectPath, &#x27;package.json&#x27;);
+    const packageJson &#x3D; await fs.readJson(packageJsonPath);
+    
+    const existingPackages &#x3D; angularPackages.filter(pkg &#x3D;&gt; 
+      packageJson.dependencies?.[pkg.name] || packageJson.devDependencies?.[pkg.name]
+    );
+
+    return await this.installDependencies(
+      existingPackages,
+      &#x60;Updating Angular packages to version ${version}...&#x60;
+    );
+  }
+
+  /**
+   * Update TypeScript to compatible version
+   */
+  async updateTypeScript(version: string): Promise&lt;boolean&gt; {
+    return await this.installDependencies(
+      [{ name: &#x27;typescript&#x27;, version, type: &#x27;devDependencies&#x27; }],
+      &#x27;Updating TypeScript...&#x27;
+    );
+  }
+
+  /**
+   * Install additional required packages
+   */
+  async installRequiredPackages(packages: DependencyUpdate[]): Promise&lt;boolean&gt; {
+    return await this.installDependencies(
+      packages,
+      &#x27;Installing required packages...&#x27;
+    );
+  }
+
+  /**
+   * Check if a package is installed
+   */
+  async isPackageInstalled(packageName: string): Promise&lt;boolean&gt; {
+    try {
+      const packageJsonPath &#x3D; path.join(this.projectPath, &#x27;package.json&#x27;);
+      const packageJson &#x3D; await fs.readJson(packageJsonPath);
+      
+      return !!(
+        packageJson.dependencies?.[packageName] || 
+        packageJson.devDependencies?.[packageName]
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get installed version of a package
+   */
+  async getInstalledVersion(packageName: string): Promise&lt;string | null&gt; {
+    try {
+      const packageJsonPath &#x3D; path.join(this.projectPath, &#x27;package.json&#x27;);
+      const packageJson &#x3D; await fs.readJson(packageJsonPath);
+      
+      return packageJson.dependencies?.[packageName] || 
+             packageJson.devDependencies?.[packageName] || 
+             null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Fallback: Update package.json directly if npm install fails
+   */
+  private async fallbackUpdatePackageJson(dependencies: DependencyUpdate[]): Promise&lt;boolean&gt; {
+    try {
+      const packageJsonPath &#x3D; path.join(this.projectPath, &#x27;package.json&#x27;);
+      const packageJson &#x3D; await fs.readJson(packageJsonPath);
+
+      for (const dep of dependencies) {
+        if (dep.type &#x3D;&#x3D;&#x3D; &#x27;dependencies&#x27;) {
+          if (!packageJson.dependencies) packageJson.dependencies &#x3D; {};
+          packageJson.dependencies[dep.name] &#x3D; dep.version;
+        } else {
+          if (!packageJson.devDependencies) packageJson.devDependencies &#x3D; {};
+          packageJson.devDependencies[dep.name] &#x3D; dep.version;
+        }
+      }
+
+      await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+      return true;
+    } catch (error) {
+      console.error(chalk.red(&#x27;Failed to update package.json:&#x27;), error instanceof Error ? error.message : String(error));
+      return false;
+    }
+  }
+
+  /**
+   * Run npm install to ensure all dependencies are installed
+   */
+  async runNpmInstall(): Promise&lt;boolean&gt; {
+    try {
+      this.spinner.start(&#x27;Running npm install...&#x27;);
+      
+      execSync(&#x27;npm install&#x27;, {
+        cwd: this.projectPath,
+        stdio: &#x27;pipe&#x27;,
+        encoding: &#x27;utf-8&#x27;
+      });
+      
+      this.spinner.succeed(chalk.green(&#x27;✓ npm install completed successfully&#x27;));
+      return true;
+    } catch (error) {
+      this.spinner.fail(chalk.red(&#x27;✗ npm install failed&#x27;));
+      console.error(chalk.yellow(&#x27;You may need to run &quot;npm install&quot; manually&#x27;));
+      return false;
+    }
+  }
+}</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'DependencyUpdate-1.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

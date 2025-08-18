@@ -1,0 +1,1821 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular Multi-Version Upgrade Orchestrator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css">
+        <link rel="stylesheet" href="./styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="./" class="navbar-brand">Angular Multi-Version Upgrade Orchestrator</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content coverage">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Documentation coverage</li>
+</ol>
+
+<div>
+    <img src="./images/coverage-badge-documentation.svg">
+</div>
+
+<table class="table table-bordered coverage" id="coverage-table">
+    <thead class="coverage-header">
+        <tr>
+            <th>File</th>
+            <th>Type</th>
+            <th>Identifier</th>
+            <th style="text-align:right" class="statements" data-sort-default>Statements</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#analyzeProject">src/cli.ts</a>
+            </td>
+            <td>function</td>
+            <td>analyzeProject</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#manageCheckpoints">src/cli.ts</a>
+            </td>
+            <td>function</td>
+            <td>manageCheckpoints</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#runUpgrade">src/cli.ts</a>
+            </td>
+            <td>function</td>
+            <td>runUpgrade</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#setupProgressReporting">src/cli.ts</a>
+            </td>
+            <td>function</td>
+            <td>setupProgressReporting</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#showUpgradePlan">src/cli.ts</a>
+            </td>
+            <td>function</td>
+            <td>showUpgradePlan</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#program">src/cli.ts</a>
+            </td>
+            <td>variable</td>
+            <td>program</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CheckpointManager.html">src/core/CheckpointManager.ts</a>
+            </td>
+            <td>class</td>
+            <td>CheckpointManager</td>
+            <td align="right" data-sort="83">
+                <span class="coverage-percent">83 %</span>
+                <span class="coverage-count">(20/24)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnhancedUpgradeOrchestrator.html">src/core/EnhancedUpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnhancedUpgradeOrchestrator</td>
+            <td align="right" data-sort="44">
+                <span class="coverage-percent">44 %</span>
+                <span class="coverage-count">(8/18)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ProjectAnalyzer.html">src/core/ProjectAnalyzer.ts</a>
+            </td>
+            <td>class</td>
+            <td>ProjectAnalyzer</td>
+            <td align="right" data-sort="90">
+                <span class="coverage-percent">90 %</span>
+                <span class="coverage-count">(20/22)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/RollbackEngine.html">src/core/RollbackEngine.ts</a>
+            </td>
+            <td>class</td>
+            <td>RollbackEngine</td>
+            <td align="right" data-sort="85">
+                <span class="coverage-percent">85 %</span>
+                <span class="coverage-count">(12/14)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/RollbackOptions.html">src/core/RollbackEngine.ts</a>
+            </td>
+            <td>interface</td>
+            <td>RollbackOptions</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/RollbackResult.html">src/core/RollbackEngine.ts</a>
+            </td>
+            <td>interface</td>
+            <td>RollbackResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpgradeOrchestrator.html">src/core/UpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpgradeOrchestrator</td>
+            <td align="right" data-sort="68">
+                <span class="coverage-percent">68 %</span>
+                <span class="coverage-count">(15/22)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpgradePathCalculator.html">src/core/UpgradePathCalculator.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpgradePathCalculator</td>
+            <td align="right" data-sort="73">
+                <span class="coverage-percent">73 %</span>
+                <span class="coverage-count">(11/15)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ValidatorFramework.html">src/core/ValidatorFramework.ts</a>
+            </td>
+            <td>class</td>
+            <td>ValidatorFramework</td>
+            <td align="right" data-sort="90">
+                <span class="coverage-percent">90 %</span>
+                <span class="coverage-count">(18/20)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ValidationResult.html">src/core/ValidatorFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/VersionHandlerRegistry.html">src/core/VersionHandlerRegistry.ts</a>
+            </td>
+            <td>class</td>
+            <td>VersionHandlerRegistry</td>
+            <td align="right" data-sort="82">
+                <span class="coverage-percent">82 %</span>
+                <span class="coverage-count">(14/17)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/TransformationHandler.html">src/core/VersionHandlerRegistry.ts</a>
+            </td>
+            <td>interface</td>
+            <td>TransformationHandler</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(3/3)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/VersionHandler.html">src/core/VersionHandlerRegistry.ts</a>
+            </td>
+            <td>interface</td>
+            <td>VersionHandler</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(5/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnterpriseMonitoringSystem.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnterpriseMonitoringSystem</td>
+            <td align="right" data-sort="10">
+                <span class="coverage-percent">10 %</span>
+                <span class="coverage-count">(9/85)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/Alert.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>Alert</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/AlertingConfig.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>AlertingConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/Dashboard.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>Dashboard</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/DashboardSection.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>DashboardSection</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ErrorPattern.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ErrorPattern</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/HealthScore.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>HealthScore</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/HealthStatus.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>HealthStatus</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IncidentResponseConfig.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IncidentResponseConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MetricValue.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MetricValue</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MonitoringConfig.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MonitoringConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MonitoringReport.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MonitoringReport</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/12)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MonitoringSession.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MonitoringSession</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PerformanceMetrics.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PerformanceMetrics</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/15)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/SLAValidation.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>SLAValidation</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/TimeRange.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>TimeRange</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/UpgradeMonitoringConfig.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>UpgradeMonitoringConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/UserExperienceMetrics.html">src/enterprise/EnterpriseMonitoringSystem.ts</a>
+            </td>
+            <td>interface</td>
+            <td>UserExperienceMetrics</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/11)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ApprovalEngine.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>ApprovalEngine</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ComplianceEngine.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>ComplianceEngine</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnterpriseMonitoringEngine.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnterpriseMonitoringEngine</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnterpriseRollbackEngine.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnterpriseRollbackEngine</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnterpriseSecurityValidator.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnterpriseSecurityValidator</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnterpriseUpgradeOrchestrator.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnterpriseUpgradeOrchestrator</td>
+            <td align="right" data-sort="56">
+                <span class="coverage-percent">56 %</span>
+                <span class="coverage-count">(18/32)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ApprovalConfig.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ApprovalConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ApprovalRequest.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ApprovalRequest</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ApprovalResult.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ApprovalResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/AuditTrail.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>AuditTrail</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ComplianceConfig.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ComplianceConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ComplianceReport.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ComplianceReport</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ComplianceRequirement.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ComplianceRequirement</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/EnterpriseConfig.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>EnterpriseConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/EnterpriseUpgradeOptions.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>EnterpriseUpgradeOptions</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/EnterpriseUpgradeResult.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>EnterpriseUpgradeResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/EnvironmentConfig.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>EnvironmentConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/EnvironmentResult.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>EnvironmentResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MonitoringConfig.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MonitoringConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MonitoringDashboard.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MonitoringDashboard</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PerformanceThreshold.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PerformanceThreshold</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ProductionResult.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ProductionResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/RollbackConfig.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>RollbackConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/SecurityConfig.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>SecurityConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/SecurityReport.html">src/enterprise/EnterpriseUpgradeOrchestrator.ts</a>
+            </td>
+            <td>interface</td>
+            <td>SecurityReport</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnterpriseValidationFramework.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnterpriseValidationFramework</td>
+            <td align="right" data-sort="16">
+                <span class="coverage-percent">16 %</span>
+                <span class="coverage-count">(10/62)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/AccessibilityCheck.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>AccessibilityCheck</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/AccessibilityValidationResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>AccessibilityValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/BrowserResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>BrowserResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/BundleSizeAnalysis.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>BundleSizeAnalysis</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/CodeSecurityReport.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>CodeSecurityReport</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ComplianceCheck.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ComplianceCheck</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ComplianceRequirement.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ComplianceRequirement</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ComplianceValidationResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ComplianceValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/CrossBrowserValidationResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>CrossBrowserValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/EnterpriseValidationConfig.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>EnterpriseValidationConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/FunctionalValidationResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>FunctionalValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IntegrationCheck.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IntegrationCheck</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IntegrationValidationResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IntegrationValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/LoadMetric.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>LoadMetric</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/LoadTestingConfig.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>LoadTestingConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/LoadTestResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>LoadTestResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/11)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/LoadTimeMetrics.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>LoadTimeMetrics</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PerformanceBaseline.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PerformanceBaseline</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PerformanceThreshold.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PerformanceThreshold</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PerformanceValidationResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PerformanceValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/RegressionAnalysis.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>RegressionAnalysis</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/SecurityStandard.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>SecurityStandard</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/SecurityValidationResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>SecurityValidationResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/SLACompliance.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>SLACompliance</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/TestResult.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>TestResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ValidationSuite.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ValidationSuite</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/12)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/VulnerabilityReport.html">src/enterprise/EnterpriseValidationFramework.ts</a>
+            </td>
+            <td>interface</td>
+            <td>VulnerabilityReport</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular12Handler.html">src/handlers/Angular12Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular12Handler</td>
+            <td align="right" data-sort="71">
+                <span class="coverage-percent">71 %</span>
+                <span class="coverage-count">(28/39)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular13Handler.html">src/handlers/Angular13Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular13Handler</td>
+            <td align="right" data-sort="88">
+                <span class="coverage-percent">88 %</span>
+                <span class="coverage-count">(40/45)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular14Handler.html">src/handlers/Angular14Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular14Handler</td>
+            <td align="right" data-sort="97">
+                <span class="coverage-percent">97 %</span>
+                <span class="coverage-count">(45/46)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular15Handler.html">src/handlers/Angular15Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular15Handler</td>
+            <td align="right" data-sort="89">
+                <span class="coverage-percent">89 %</span>
+                <span class="coverage-count">(41/46)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular16Handler.html">src/handlers/Angular16Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular16Handler</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(47/47)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular17Handler.html">src/handlers/Angular17Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular17Handler</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(41/41)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular18Handler.html">src/handlers/Angular18Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular18Handler</td>
+            <td align="right" data-sort="84">
+                <span class="coverage-percent">84 %</span>
+                <span class="coverage-count">(32/38)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#lifecyclePath">src/handlers/Angular18Handler.ts</a>
+            </td>
+            <td>variable</td>
+            <td>lifecyclePath</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular19Handler.html">src/handlers/Angular19Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular19Handler</td>
+            <td align="right" data-sort="83">
+                <span class="coverage-percent">83 %</span>
+                <span class="coverage-count">(31/37)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#hydrationPath">src/handlers/Angular19Handler.ts</a>
+            </td>
+            <td>variable</td>
+            <td>hydrationPath</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Angular20Handler.html">src/handlers/Angular20Handler.ts</a>
+            </td>
+            <td>class</td>
+            <td>Angular20Handler</td>
+            <td align="right" data-sort="93">
+                <span class="coverage-percent">93 %</span>
+                <span class="coverage-count">(42/45)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/BaseVersionHandler.html">src/handlers/BaseVersionHandler.ts</a>
+            </td>
+            <td>class</td>
+            <td>BaseVersionHandler</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(34/34)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/HybridVersionHandler.html">src/handlers/HybridVersionHandler.ts</a>
+            </td>
+            <td>class</td>
+            <td>HybridVersionHandler</td>
+            <td align="right" data-sort="73">
+                <span class="coverage-percent">73 %</span>
+                <span class="coverage-count">(41/56)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MigrationPlan.html">src/handlers/HybridVersionHandler.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MigrationPlan</td>
+            <td align="right" data-sort="16">
+                <span class="coverage-percent">16 %</span>
+                <span class="coverage-count">(1/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CodeTransformer.html">src/transformers/CodeTransformer.ts</a>
+            </td>
+            <td>class</td>
+            <td>CodeTransformer</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/17)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/AngularVersion.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>AngularVersion</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(5/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/BreakingChange.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>BreakingChange</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/Checkpoint.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>Checkpoint</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/CheckpointMetadata.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>CheckpointMetadata</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/CodeMetrics.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>CodeMetrics</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/CodeTransformation.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>CodeTransformation</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/DependencyAnalysis.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>DependencyAnalysis</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/DependencyConflict.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>DependencyConflict</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/DependencyUpdate.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>DependencyUpdate</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/Migration.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>Migration</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/MigrationAction.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>MigrationAction</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/Prerequisite.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>Prerequisite</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ProgressIssue.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ProgressIssue</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ProgressReport.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ProgressReport</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ProjectAnalysis.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ProjectAnalysis</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/RiskAssessment.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>RiskAssessment</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/RiskFactor.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>RiskFactor</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ThirdPartyLibrary.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ThirdPartyLibrary</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/UpgradeOptions.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>UpgradeOptions</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(11/11)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/UpgradePath.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>UpgradePath</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(4/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/UpgradeResult.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>UpgradeResult</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/11)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/UpgradeStep.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>UpgradeStep</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ValidationStep.html">src/types/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ValidationStep</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AngularSchematicsRunner.html">src/utils/AngularSchematicsRunner.ts</a>
+            </td>
+            <td>class</td>
+            <td>AngularSchematicsRunner</td>
+            <td align="right" data-sort="87">
+                <span class="coverage-percent">87 %</span>
+                <span class="coverage-count">(14/16)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/DependencyInstaller.html">src/utils/DependencyInstaller.ts</a>
+            </td>
+            <td>class</td>
+            <td>DependencyInstaller</td>
+            <td align="right" data-sort="72">
+                <span class="coverage-percent">72 %</span>
+                <span class="coverage-count">(8/11)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/DependencyUpdate.html">src/utils/DependencyInstaller.ts</a>
+            </td>
+            <td>interface</td>
+            <td>DependencyUpdate</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/FileContentPreserver.html">src/utils/FileContentPreserver.ts</a>
+            </td>
+            <td>class</td>
+            <td>FileContentPreserver</td>
+            <td align="right" data-sort="92">
+                <span class="coverage-percent">92 %</span>
+                <span class="coverage-count">(12/13)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ProgressReporter.html">src/utils/ProgressReporter.ts</a>
+            </td>
+            <td>class</td>
+            <td>ProgressReporter</td>
+            <td align="right" data-sort="76">
+                <span class="coverage-percent">76 %</span>
+                <span class="coverage-count">(20/26)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ProgressStep.html">src/utils/ProgressReporter.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ProgressStep</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/UpgradeProgress.html">src/utils/ProgressReporter.ts</a>
+            </td>
+            <td>interface</td>
+            <td>UpgradeProgress</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script src="js/libs/tablesort.min.js"></script>
+<script src="js/libs/tablesort.number.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('coverage-table'));
+</script>
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'coverage';
+            var COMPODOC_CURRENT_PAGE_URL = 'coverage.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+
+       <script src="./js/menu-wc.js" defer></script>
+       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -5,7 +5,7 @@ import * as inquirer from 'inquirer';
 import chalk from 'chalk';
 import * as ora from 'ora';
 import * as path from 'path';
-import { UpgradeOrchestrator } from './core/UpgradeOrchestrator';
+import { EnhancedUpgradeOrchestrator } from './core/EnhancedUpgradeOrchestrator';
 import { UpgradeOptions, ProgressReport } from './types';
 
 const program = new Command();
@@ -67,7 +67,7 @@ async function runUpgrade(options: any) {
   console.log(chalk.blue.bold('Angular Multi-Version Upgrade Orchestrator\n'));
 
   const projectPath = path.resolve(options.path);
-  const orchestrator = new UpgradeOrchestrator(projectPath);
+  const orchestrator = new EnhancedUpgradeOrchestrator(projectPath);
 
   // Interactive prompts if target version not provided
   let targetVersion = options.target;
@@ -167,7 +167,7 @@ async function runUpgrade(options: any) {
 async function analyzeProject(projectPath: string) {
   console.log(chalk.blue.bold('Analyzing Angular project\n'));
   
-  const orchestrator = new UpgradeOrchestrator(projectPath);
+  const orchestrator = new EnhancedUpgradeOrchestrator(projectPath);
   const spinner = ora.default('Analyzing project...').start();
   
   try {
@@ -212,7 +212,7 @@ async function analyzeProject(projectPath: string) {
 
 async function manageCheckpoints(options: any) {
   const projectPath = path.resolve(options.path);
-  const orchestrator = new UpgradeOrchestrator(projectPath);
+  const orchestrator = new EnhancedUpgradeOrchestrator(projectPath);
   
   if (options.list) {
     console.log(chalk.blue.bold('Available Checkpoints\n'));
@@ -224,7 +224,7 @@ async function manageCheckpoints(options: any) {
       return;
     }
     
-    checkpoints.forEach((checkpoint, index) => {
+    checkpoints.forEach((checkpoint: any, index: number) => {
       console.log(chalk.white(`${index + 1}. ${checkpoint.id}`));
       console.log(chalk.gray(`   Version: ${checkpoint.version}`));
       console.log(chalk.gray(`   Created: ${checkpoint.timestamp}`));
@@ -294,7 +294,7 @@ async function manageCheckpoints(options: any) {
   }
 }
 
-async function showUpgradePlan(orchestrator: UpgradeOrchestrator, options: UpgradeOptions) {
+async function showUpgradePlan(orchestrator: EnhancedUpgradeOrchestrator, options: UpgradeOptions) {
   console.log(chalk.blue.bold('Upgrade Plan (Dry Run)\n'));
   
   // This would show the calculated upgrade path
@@ -317,7 +317,7 @@ async function showUpgradePlan(orchestrator: UpgradeOrchestrator, options: Upgra
   console.log(chalk.white.bold('Rollback:'), chalk.cyan('Available at each checkpoint'));
 }
 
-function setupProgressReporting(orchestrator: UpgradeOrchestrator) {
+function setupProgressReporting(orchestrator: EnhancedUpgradeOrchestrator) {
   orchestrator.on('progress', (report: any) => {
     console.log(chalk.blue(`${report.message}`));
   });

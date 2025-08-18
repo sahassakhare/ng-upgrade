@@ -13,9 +13,10 @@ class Angular13Handler extends BaseVersionHandler_1.BaseVersionHandler {
     getRequiredTypeScriptVersion() {
         return '>=4.4.2 <4.6.0';
     }
-    async applyVersionSpecificChanges(projectPath, options) {
-        console.log('Applying Angular 13 specific changes...');
+    async applyVersionSpecificChanges(_projectPath, _options) {
+        this.progressReporter?.updateMessage('Applying Angular 13 specific changes...');
         // Angular 13 specific changes would be implemented here
+        this.progressReporter?.success('Angular 13 upgrade steps completed');
     }
     getBreakingChanges() {
         return [

@@ -1,0 +1,1460 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular Multi-Version Upgrade Orchestrator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Angular Multi-Version Upgrade Orchestrator</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >VersionHandlerRegistry</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/core/VersionHandlerRegistry.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Registry for managing version-specific upgrade handlers and code transformers.</p>
+<p>The VersionHandlerRegistry maintains a collection of handlers for each supported
+Angular version and provides methods to retrieve handlers, validate configurations,
+and manage breaking changes across versions.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const registry = new VersionHandlerRegistry();</code></pre></div><p>// Get handler for Angular 17
+const handler = registry.getHandler(&#39;17&#39;);
+if (handler) {
+  const breakingChanges = handler.getBreakingChanges();
+  console.log(<code>Angular 17 has ${breakingChanges.length} breaking changes</code>);
+}</p>
+<p>// Get all supported versions
+const versions = registry.getSupportedVersions();
+console.log(&#39;Supported versions:&#39;, versions.join(&#39;, &#39;));</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div>
+            </p>
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#handlers" >handlers</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#transformers" >transformers</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getAllHandlers" >getAllHandlers</a>
+                            </li>
+                            <li>
+                                <a href="#getAllTransformers" >getAllTransformers</a>
+                            </li>
+                            <li>
+                                <a href="#getBreakingChanges" >getBreakingChanges</a>
+                            </li>
+                            <li>
+                                <a href="#getBreakingChangesForRange" >getBreakingChangesForRange</a>
+                            </li>
+                            <li>
+                                <a href="#getHandler" >getHandler</a>
+                            </li>
+                            <li>
+                                <a href="#getSupportedVersions" >getSupportedVersions</a>
+                            </li>
+                            <li>
+                                <a href="#getTransformer" >getTransformer</a>
+                            </li>
+                            <li>
+                                <a href="#hasHandler" >hasHandler</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#registerDefaultHandlers" >registerDefaultHandlers</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#registerDefaultTransformers" >registerDefaultTransformers</a>
+                            </li>
+                            <li>
+                                <a href="#registerHandler" >registerHandler</a>
+                            </li>
+                            <li>
+                                <a href="#registerTransformer" >registerTransformer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#validateHandlers" >validateHandlers</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/core/VersionHandlerRegistry.ts:91</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handlers"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>handlers</b></span>
+                        <a href="#handlers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Map&lt;string, VersionHandler&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="90" class="link-to-prism">src/core/VersionHandlerRegistry.ts:90</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="transformers"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>transformers</b></span>
+                        <a href="#transformers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Map&lt;string, TransformationHandler&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/core/VersionHandlerRegistry.ts:91</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllHandlers"></a>
+                    <span class="name">
+                        <span ><b>getAllHandlers</b></span>
+                        <a href="#getAllHandlers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAllHandlers()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="183"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:183</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get all registered version handlers</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/VersionHandler.html" target="_self" >Map&lt;string, VersionHandler&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllTransformers"></a>
+                    <span class="name">
+                        <span ><b>getAllTransformers</b></span>
+                        <a href="#getAllTransformers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAllTransformers()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="190"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:190</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get all registered transformers</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/TransformationHandler.html" target="_self" >Map&lt;string, TransformationHandler&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getBreakingChanges"></a>
+                    <span class="name">
+                        <span ><b>getBreakingChanges</b></span>
+                        <a href="#getBreakingChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getBreakingChanges(version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:212</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get breaking changes for specific version</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>version</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/BreakingChange.html" target="_self" >BreakingChange[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getBreakingChangesForRange"></a>
+                    <span class="name">
+                        <span ><b>getBreakingChangesForRange</b></span>
+                        <a href="#getBreakingChangesForRange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getBreakingChangesForRange(fromVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, toVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="220"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:220</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get all breaking changes for version range</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>fromVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>toVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/BreakingChange.html" target="_self" >BreakingChange[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getHandler"></a>
+                    <span class="name">
+                        <span ><b>getHandler</b></span>
+                        <a href="#getHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getHandler(version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="156"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:156</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get handler for specific Angular version.</p>
+<p>Retrieves the version-specific upgrade handler for the given Angular version.
+The version is normalized to major version number for lookup.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const handler = registry.getHandler(&#39;17.1.0&#39;); // Returns Angular17Handler
+const handler = registry.getHandler(&#39;99&#39;);     // Returns undefined</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>version</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Angular version (e.g., &#39;17&#39;, &#39;17.1.0&#39;, &#39;17.0.0&#39;)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/VersionHandler.html" target="_self" >VersionHandler | undefined</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Handler for the version, or undefined if not found</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSupportedVersions"></a>
+                    <span class="name">
+                        <span ><b>getSupportedVersions</b></span>
+                        <a href="#getSupportedVersions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSupportedVersions()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="205"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:205</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get supported versions</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>string[]</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransformer"></a>
+                    <span class="name">
+                        <span ><b>getTransformer</b></span>
+                        <a href="#getTransformer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransformer(type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="176"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:176</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Get transformer for specific change type.</p>
+<p>Retrieves the code transformation handler for a specific type of change,
+such as &#39;api&#39;, &#39;template&#39;, &#39;config&#39;, etc.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const transformer = registry.getTransformer(&#39;api&#39;);      // Returns API transformer
+const transformer = registry.getTransformer(&#39;unknown&#39;); // Returns undefined</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>type</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Type of transformation (&#39;api&#39;, &#39;template&#39;, &#39;config&#39;, etc.)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/TransformationHandler.html" target="_self" >TransformationHandler | undefined</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Transformer for the type, or undefined if not found</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hasHandler"></a>
+                    <span class="name">
+                        <span ><b>hasHandler</b></span>
+                        <a href="#hasHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>hasHandler(version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="197"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:197</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Check if handler exists for version</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>version</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="registerDefaultHandlers"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>registerDefaultHandlers</b></span>
+                        <a href="#registerDefaultHandlers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>registerDefaultHandlers()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="101"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:101</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Register default version handlers for Angular 12-20</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="registerDefaultTransformers"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>registerDefaultTransformers</b></span>
+                        <a href="#registerDefaultTransformers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>registerDefaultTransformers()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="116"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:116</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Register default code transformers</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="registerHandler"></a>
+                    <span class="name">
+                        <span ><b>registerHandler</b></span>
+                        <a href="#registerHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>registerHandler(version: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, handler: <a href="../interfaces/VersionHandler.html" target="_self">VersionHandler</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Register a version-specific handler</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>version</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>handler</td>
+                                            <td>
+                                                            <code><a href="../interfaces/VersionHandler.html" target="_self" >VersionHandler</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="registerTransformer"></a>
+                    <span class="name">
+                        <span ><b>registerTransformer</b></span>
+                        <a href="#registerTransformer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>registerTransformer(type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, transformer: <a href="../interfaces/TransformationHandler.html" target="_self">TransformationHandler</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="137"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:137</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Register a transformation handler</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>type</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>transformer</td>
+                                            <td>
+                                                            <code><a href="../interfaces/TransformationHandler.html" target="_self" >TransformationHandler</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validateHandlers"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>validateHandlers</b></span>
+                        <a href="#validateHandlers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>validateHandlers()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="236"
+                                    class="link-to-prism">src/core/VersionHandlerRegistry.ts:236</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Validate all handlers are properly configured</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;literal type&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { UpgradeStep, UpgradeOptions, BreakingChange } from &#x27;../types&#x27;;
+import { Angular12Handler } from &#x27;../handlers/Angular12Handler&#x27;;
+import { Angular13Handler } from &#x27;../handlers/Angular13Handler&#x27;;
+import { Angular14Handler } from &#x27;../handlers/Angular14Handler&#x27;;
+import { Angular15Handler } from &#x27;../handlers/Angular15Handler&#x27;;
+import { Angular16Handler } from &#x27;../handlers/Angular16Handler&#x27;;
+import { Angular17Handler } from &#x27;../handlers/Angular17Handler&#x27;;
+import { Angular18Handler } from &#x27;../handlers/Angular18Handler&#x27;;
+import { Angular19Handler } from &#x27;../handlers/Angular19Handler&#x27;;
+import { Angular20Handler } from &#x27;../handlers/Angular20Handler&#x27;;
+import { CodeTransformer } from &#x27;../transformers/CodeTransformer&#x27;;
+
+/**
+ * Interface for version-specific upgrade handlers.
+ * 
+ * Each Angular version has a corresponding handler that implements this interface
+ * to provide version-specific upgrade logic, prerequisite validation, and breaking
+ * change information.
+ */
+export interface VersionHandler {
+  /** Angular version this handler manages (e.g., &#x27;17&#x27;, &#x27;18&#x27;) */
+  version: string;
+  
+  /**
+   * Execute the version-specific upgrade logic.
+   * @param projectPath - Path to the Angular project
+   * @param step - Upgrade step configuration
+   * @param options - Overall upgrade options
+   */
+  execute(projectPath: string, step: UpgradeStep, options: UpgradeOptions): Promise&lt;void&gt;;
+  
+  /**
+   * Validate that all prerequisites are met for this version upgrade.
+   * @param projectPath - Path to the Angular project
+   * @returns Promise resolving to true if prerequisites are met
+   */
+  validatePrerequisites(projectPath: string): Promise&lt;boolean&gt;;
+  
+  /**
+   * Get list of breaking changes introduced in this version.
+   * @returns Array of breaking changes for this version
+   */
+  getBreakingChanges(): BreakingChange[];
+}
+
+/**
+ * Interface for code transformation handlers.
+ * 
+ * These handlers apply specific types of code transformations during upgrades,
+ * such as API changes, template updates, or configuration modifications.
+ */
+export interface TransformationHandler {
+  /** Type of transformation this handler manages */
+  type: string;
+  
+  /**
+   * Apply the transformation for a specific breaking change.
+   * @param projectPath - Path to the Angular project
+   * @param change - Breaking change to apply transformation for
+   */
+  apply(projectPath: string, change: BreakingChange): Promise&lt;void&gt;;
+}
+
+/**
+ * Registry for managing version-specific upgrade handlers and code transformers.
+ * 
+ * The VersionHandlerRegistry maintains a collection of handlers for each supported
+ * Angular version and provides methods to retrieve handlers, validate configurations,
+ * and manage breaking changes across versions.
+ * 
+ * @class VersionHandlerRegistry
+ * 
+ * @example
+ * &#x60;&#x60;&#x60;typescript
+ * const registry &#x3D; new VersionHandlerRegistry();
+ * 
+ * // Get handler for Angular 17
+ * const handler &#x3D; registry.getHandler(&#x27;17&#x27;);
+ * if (handler) {
+ *   const breakingChanges &#x3D; handler.getBreakingChanges();
+ *   console.log(&#x60;Angular 17 has ${breakingChanges.length} breaking changes&#x60;);
+ * }
+ * 
+ * // Get all supported versions
+ * const versions &#x3D; registry.getSupportedVersions();
+ * console.log(&#x27;Supported versions:&#x27;, versions.join(&#x27;, &#x27;));
+ * &#x60;&#x60;&#x60;
+ */
+export class VersionHandlerRegistry {
+  private handlers &#x3D; new Map&lt;string, VersionHandler&gt;();
+  private transformers &#x3D; new Map&lt;string, TransformationHandler&gt;();
+
+  constructor() {
+    this.registerDefaultHandlers();
+    this.registerDefaultTransformers();
+  }
+
+  /**
+   * Register default version handlers for Angular 12-20
+   */
+  private registerDefaultHandlers(): void {
+    this.registerHandler(&#x27;12&#x27;, new Angular12Handler());
+    this.registerHandler(&#x27;13&#x27;, new Angular13Handler());
+    this.registerHandler(&#x27;14&#x27;, new Angular14Handler());
+    this.registerHandler(&#x27;15&#x27;, new Angular15Handler());
+    this.registerHandler(&#x27;16&#x27;, new Angular16Handler());
+    this.registerHandler(&#x27;17&#x27;, new Angular17Handler());
+    this.registerHandler(&#x27;18&#x27;, new Angular18Handler());
+    this.registerHandler(&#x27;19&#x27;, new Angular19Handler());
+    this.registerHandler(&#x27;20&#x27;, new Angular20Handler());
+  }
+
+  /**
+   * Register default code transformers
+   */
+  private registerDefaultTransformers(): void {
+    const codeTransformer &#x3D; new CodeTransformer();
+    
+    this.registerTransformer(&#x27;api&#x27;, codeTransformer);
+    this.registerTransformer(&#x27;template&#x27;, codeTransformer);
+    this.registerTransformer(&#x27;config&#x27;, codeTransformer);
+    this.registerTransformer(&#x27;style&#x27;, codeTransformer);
+    this.registerTransformer(&#x27;build&#x27;, codeTransformer);
+    this.registerTransformer(&#x27;dependency&#x27;, codeTransformer);
+  }
+
+  /**
+   * Register a version-specific handler
+   */
+  registerHandler(version: string, handler: VersionHandler): void {
+    this.handlers.set(version, handler);
+  }
+
+  /**
+   * Register a transformation handler
+   */
+  registerTransformer(type: string, transformer: TransformationHandler): void {
+    this.transformers.set(type, transformer);
+  }
+
+  /**
+   * Get handler for specific Angular version.
+   * 
+   * Retrieves the version-specific upgrade handler for the given Angular version.
+   * The version is normalized to major version number for lookup.
+   * 
+   * @param {string} version - Angular version (e.g., &#x27;17&#x27;, &#x27;17.1.0&#x27;, &#x27;17.0.0&#x27;)
+   * @returns {VersionHandler | undefined} Handler for the version, or undefined if not found
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const handler &#x3D; registry.getHandler(&#x27;17.1.0&#x27;); // Returns Angular17Handler
+   * const handler &#x3D; registry.getHandler(&#x27;99&#x27;);     // Returns undefined
+   * &#x60;&#x60;&#x60;
+   */
+  getHandler(version: string): VersionHandler | undefined {
+    const majorVersion &#x3D; version.split(&#x27;.&#x27;)[0];
+    return this.handlers.get(majorVersion);
+  }
+
+  /**
+   * Get transformer for specific change type.
+   * 
+   * Retrieves the code transformation handler for a specific type of change,
+   * such as &#x27;api&#x27;, &#x27;template&#x27;, &#x27;config&#x27;, etc.
+   * 
+   * @param {string} type - Type of transformation (&#x27;api&#x27;, &#x27;template&#x27;, &#x27;config&#x27;, etc.)
+   * @returns {TransformationHandler | undefined} Transformer for the type, or undefined if not found
+   * 
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const transformer &#x3D; registry.getTransformer(&#x27;api&#x27;);      // Returns API transformer
+   * const transformer &#x3D; registry.getTransformer(&#x27;unknown&#x27;); // Returns undefined
+   * &#x60;&#x60;&#x60;
+   */
+  getTransformer(type: string): TransformationHandler | undefined {
+    return this.transformers.get(type);
+  }
+
+  /**
+   * Get all registered version handlers
+   */
+  getAllHandlers(): Map&lt;string, VersionHandler&gt; {
+    return new Map(this.handlers);
+  }
+
+  /**
+   * Get all registered transformers
+   */
+  getAllTransformers(): Map&lt;string, TransformationHandler&gt; {
+    return new Map(this.transformers);
+  }
+
+  /**
+   * Check if handler exists for version
+   */
+  hasHandler(version: string): boolean {
+    const majorVersion &#x3D; version.split(&#x27;.&#x27;)[0];
+    return this.handlers.has(majorVersion);
+  }
+
+  /**
+   * Get supported versions
+   */
+  getSupportedVersions(): string[] {
+    return Array.from(this.handlers.keys()).sort((a, b) &#x3D;&gt; Number(a) - Number(b));
+  }
+
+  /**
+   * Get breaking changes for specific version
+   */
+  getBreakingChanges(version: string): BreakingChange[] {
+    const handler &#x3D; this.getHandler(version);
+    return handler ? handler.getBreakingChanges() : [];
+  }
+
+  /**
+   * Get all breaking changes for version range
+   */
+  getBreakingChangesForRange(fromVersion: string, toVersion: string): BreakingChange[] {
+    const fromMajor &#x3D; Number(fromVersion.split(&#x27;.&#x27;)[0]);
+    const toMajor &#x3D; Number(toVersion.split(&#x27;.&#x27;)[0]);
+    const changes: BreakingChange[] &#x3D; [];
+
+    for (let version &#x3D; fromMajor + 1; version &lt;&#x3D; toMajor; version++) {
+      const versionChanges &#x3D; this.getBreakingChanges(version.toString());
+      changes.push(...versionChanges);
+    }
+
+    return changes;
+  }
+
+  /**
+   * Validate all handlers are properly configured
+   */
+  async validateHandlers(): Promise&lt;{ valid: boolean; errors: string[] }&gt; {
+    const errors: string[] &#x3D; [];
+    
+    for (const [version, handler] of this.handlers) {
+      try {
+        if (!handler.version) {
+          errors.push(&#x60;Handler for version ${version} missing version property&#x60;);
+        }
+        
+        if (typeof handler.execute !&#x3D;&#x3D; &#x27;function&#x27;) {
+          errors.push(&#x60;Handler for version ${version} missing execute method&#x60;);
+        }
+        
+        if (typeof handler.validatePrerequisites !&#x3D;&#x3D; &#x27;function&#x27;) {
+          errors.push(&#x60;Handler for version ${version} missing validatePrerequisites method&#x60;);
+        }
+        
+        if (typeof handler.getBreakingChanges !&#x3D;&#x3D; &#x27;function&#x27;) {
+          errors.push(&#x60;Handler for version ${version} missing getBreakingChanges method&#x60;);
+        }
+      } catch (error) {
+        errors.push(&#x60;Handler validation failed for version ${version}: ${error}&#x60;);
+      }
+    }
+
+    return {
+      valid: errors.length &#x3D;&#x3D;&#x3D; 0,
+      errors
+    };
+  }
+}</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'VersionHandlerRegistry.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

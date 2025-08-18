@@ -37,13 +37,19 @@ exports.BaseVersionHandler = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const child_process_1 = require("child_process");
+const DependencyInstaller_1 = require("../utils/DependencyInstaller");
+const FileContentPreserver_1 = require("../utils/FileContentPreserver");
+const ProgressReporter_1 = require("../utils/ProgressReporter");
 class BaseVersionHandler {
     /**
      * Execute version-specific upgrade logic
      */
     async execute(projectPath, step, options) {
-        console.log(`Starting Angular ${this.version} upgrade...`);
-        // Update Angular dependencies
+        this.dependencyInstaller = new DependencyInstaller_1.DependencyInstaller(projectPath);
+        this.progressReporter = options.progressReporter || new ProgressReporter_1.ProgressReporter();
+        this.progressReporter.startStep(`Angular ${this.version} Upgrade`, `Starting Angular ${this.version} upgrade...`);
+        // Update Angular dependencies with automatic installation
+        this.progressReporter.updateMessage('Updating Angular dependencies...');
         await this.updateAngularDependencies(projectPath);
         // Update TypeScript if needed
         await this.updateTypeScript(projectPath);
@@ -55,7 +61,7 @@ class BaseVersionHandler {
         await this.updateConfigurationFiles(projectPath, options);
         // Run Angular update schematics
         await this.runAngularUpdateSchematics(projectPath);
-        console.log(`Angular ${this.version} upgrade completed successfully`);
+        this.progressReporter.completeStep(`Angular ${this.version} Upgrade`, `Angular ${this.version} upgrade completed successfully`);
     }
     /**
      * Validate prerequisites for this version
@@ -66,96 +72,84 @@ class BaseVersionHandler {
             const nodeVersion = process.version;
             const requiredNode = this.getRequiredNodeVersion();
             if (!this.isVersionCompatible(nodeVersion, requiredNode)) {
-                console.error(`Node.js ${requiredNode} required, found ${nodeVersion}`);
+                this.progressReporter?.error(`Node.js ${requiredNode} required, found ${nodeVersion}`);
                 return false;
             }
             // Check if project is an Angular project
             const packageJsonPath = path.join(projectPath, 'package.json');
             if (!await fs.pathExists(packageJsonPath)) {
-                console.error('package.json not found');
+                this.progressReporter?.error('package.json not found');
                 return false;
             }
             const packageJson = await fs.readJson(packageJsonPath);
             if (!packageJson.dependencies?.['@angular/core']) {
-                console.error('Not an Angular project');
+                this.progressReporter?.error('Not an Angular project');
                 return false;
             }
             return true;
         }
         catch (error) {
-            console.error('Prerequisite validation failed:', error);
+            this.progressReporter?.error(`Prerequisite validation failed: ${error}`);
             return false;
         }
     }
     /**
-     * Update Angular dependencies to target version
+     * Update Angular dependencies to target version with automatic installation
      */
     async updateAngularDependencies(projectPath) {
-        const packageJsonPath = path.join(projectPath, 'package.json');
-        const packageJson = await fs.readJson(packageJsonPath);
-        const angularPackages = [
-            '@angular/animations',
-            '@angular/common',
-            '@angular/compiler',
-            '@angular/core',
-            '@angular/forms',
-            '@angular/platform-browser',
-            '@angular/platform-browser-dynamic',
-            '@angular/router'
-        ];
-        const devAngularPackages = [
-            '@angular/cli',
-            '@angular/compiler-cli',
-            '@angular-devkit/build-angular'
-        ];
-        // Update production dependencies
-        for (const pkg of angularPackages) {
-            if (packageJson.dependencies?.[pkg]) {
-                packageJson.dependencies[pkg] = `^${this.version}.0.0`;
-            }
+        // Use the DependencyInstaller for automatic installation
+        const success = await this.dependencyInstaller.updateAngularPackages(this.version);
+        if (!success) {
+            this.progressReporter.warn('Angular dependencies updated in package.json. Manual npm install may be required.');
         }
-        // Update dev dependencies
-        for (const pkg of devAngularPackages) {
-            if (packageJson.devDependencies?.[pkg]) {
-                packageJson.devDependencies[pkg] = `^${this.version}.0.0`;
-            }
+        else {
+            this.progressReporter.success('Angular dependencies installed successfully');
         }
-        await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
     }
     /**
-     * Update TypeScript version
+     * Update TypeScript version with automatic installation
      */
     async updateTypeScript(projectPath) {
-        const packageJsonPath = path.join(projectPath, 'package.json');
-        const packageJson = await fs.readJson(packageJsonPath);
         const requiredTsVersion = this.getRequiredTypeScriptVersion();
-        if (packageJson.devDependencies?.typescript) {
-            packageJson.devDependencies.typescript = requiredTsVersion;
-            await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+        this.progressReporter.updateMessage(`Installing TypeScript ${requiredTsVersion}...`);
+        const success = await this.dependencyInstaller.updateTypeScript(requiredTsVersion);
+        if (!success) {
+            this.progressReporter.warn('TypeScript version updated in package.json. Manual npm install may be required.');
+        }
+        else {
+            this.progressReporter.success(`TypeScript ${requiredTsVersion} installed successfully`);
         }
     }
     /**
-     * Update Angular CLI
+     * Update Angular CLI with automatic installation
      */
     async updateAngularCli(projectPath) {
-        try {
-            (0, child_process_1.execSync)(`npm install @angular/cli@^${this.version}.0.0 --save-dev`, {
-                cwd: projectPath,
-                stdio: 'inherit'
-            });
-        }
-        catch (error) {
-            console.warn('Failed to update Angular CLI automatically');
-        }
+        // Angular CLI is already updated as part of updateAngularDependencies
+        // This method is kept for compatibility but the work is done above
+        this.progressReporter.info('Angular CLI updated with other Angular packages');
     }
     /**
-     * Update configuration files
+     * Update configuration files while preserving existing content
      */
     async updateConfigurationFiles(projectPath, options) {
+        // Update main.ts using FileContentPreserver if needed for Angular 14+
+        const mainTsPath = path.join(projectPath, 'src', 'main.ts');
+        if (await fs.pathExists(mainTsPath)) {
+            const targetVersion = parseInt(this.version);
+            if (targetVersion >= 14 && options.strategy !== 'conservative') {
+                // Use FileContentPreserver to update main.ts while preserving custom code
+                await FileContentPreserver_1.FileContentPreserver.updateMainTsFile(mainTsPath, targetVersion);
+                this.progressReporter?.success('Updated main.ts while preserving custom code');
+            }
+        }
         await this.updateAngularJson(projectPath);
         await this.updateTsConfig(projectPath);
         if (options.strategy !== 'conservative') {
             await this.updateOptionalConfigs(projectPath);
+            // Update template files for Angular 17+ (optional)
+            if (parseInt(this.version) >= 17) {
+                await this.updateTemplateFiles(projectPath);
+            }
         }
     }
     /**
@@ -307,6 +301,73 @@ class BaseVersionHandler {
         if (await fs.pathExists(filePath)) {
             await fs.copy(filePath, `${filePath}.backup`);
         }
+    }
+    /**
+     * Update component files using FileContentPreserver
+     */
+    async updateComponentFiles(projectPath, transformations) {
+        const componentsPath = path.join(projectPath, 'src', 'app');
+        if (await fs.pathExists(componentsPath)) {
+            // Find all component files
+            const componentFiles = await this.findComponentFiles(componentsPath);
+            for (const file of componentFiles) {
+                await FileContentPreserver_1.FileContentPreserver.updateComponentFile(file, transformations);
+            }
+            if (componentFiles.length > 0) {
+                this.progressReporter?.success(`Updated ${componentFiles.length} component files while preserving custom code`);
+            }
+        }
+    }
+    /**
+     * Update template files using FileContentPreserver
+     */
+    async updateTemplateFiles(projectPath) {
+        const targetVersion = parseInt(this.version);
+        const templatesPath = path.join(projectPath, 'src', 'app');
+        if (await fs.pathExists(templatesPath)) {
+            // Find all template files
+            const templateFiles = await this.findTemplateFiles(templatesPath);
+            for (const file of templateFiles) {
+                await FileContentPreserver_1.FileContentPreserver.updateTemplateFile(file, targetVersion);
+            }
+            if (templateFiles.length > 0) {
+                this.progressReporter?.info(`Template files preserved - migration to new syntax is optional`);
+            }
+        }
+    }
+    /**
+     * Find all component files in a directory
+     */
+    async findComponentFiles(dir) {
+        const files = [];
+        const entries = await fs.readdir(dir, { withFileTypes: true });
+        for (const entry of entries) {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                files.push(...await this.findComponentFiles(fullPath));
+            }
+            else if (entry.name.endsWith('.component.ts')) {
+                files.push(fullPath);
+            }
+        }
+        return files;
+    }
+    /**
+     * Find all template files in a directory
+     */
+    async findTemplateFiles(dir) {
+        const files = [];
+        const entries = await fs.readdir(dir, { withFileTypes: true });
+        for (const entry of entries) {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                files.push(...await this.findTemplateFiles(fullPath));
+            }
+            else if (entry.name.endsWith('.component.html')) {
+                files.push(fullPath);
+            }
+        }
+        return files;
     }
     /**
      * Create version-specific breaking change

@@ -1,0 +1,1614 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular Multi-Version Upgrade Orchestrator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Angular Multi-Version Upgrade Orchestrator</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >AngularSchematicsRunner</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/utils/AngularSchematicsRunner.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Runs Angular&#39;s built-in schematics and ng update commands
+to leverage Angular&#39;s official migration capabilities</p>
+
+            </p>
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#progressReporter" >progressReporter</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#analyzeUpdate" >analyzeUpdate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#checkAvailableMigrations" >checkAvailableMigrations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#completeControlFlowMigration" >completeControlFlowMigration</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseIncompatibilities" >parseIncompatibilities</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseMigrationsFromOutput" >parseMigrationsFromOutput</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseRecommendations" >parseRecommendations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runApplicationBuilderMigration" >runApplicationBuilderMigration</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runControlFlowMigration" >runControlFlowMigration</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runMaterialMDCMigration" >runMaterialMDCMigration</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#runModernizationSchematics" >runModernizationSchematics</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#runNgUpdate" >runNgUpdate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#runSchematic" >runSchematic</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#runStandaloneComponentsMigration" >runStandaloneComponentsMigration</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(projectPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, progressReporter?: <a href="../classes/ProgressReporter.html" target="_self">ProgressReporter</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/utils/AngularSchematicsRunner.ts:11</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>projectPath</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>progressReporter</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/ProgressReporter.html" target="_self" >ProgressReporter</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            Yes
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="progressReporter"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>progressReporter</b></span>
+                        <a href="#progressReporter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/ProgressReporter.html" target="_self" >ProgressReporter</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/utils/AngularSchematicsRunner.ts:11</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="analyzeUpdate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>analyzeUpdate</b></span>
+                        <a href="#analyzeUpdate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>analyzeUpdate(targetVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="277"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:277</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run ng update with analysis only (dry run)</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>targetVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkAvailableMigrations"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>checkAvailableMigrations</b></span>
+                        <a href="#checkAvailableMigrations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkAvailableMigrations(packageName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, fromVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, toVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="121"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:121</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Check available migrations for a package</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>packageName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>fromVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>toVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string[]&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="completeControlFlowMigration"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>completeControlFlowMigration</b></span>
+                        <a href="#completeControlFlowMigration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>completeControlFlowMigration()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="244"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:244</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Complete control flow migration (Angular 18+)</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseIncompatibilities"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>parseIncompatibilities</b></span>
+                        <a href="#parseIncompatibilities"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseIncompatibilities(output: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="316"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:316</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Parse incompatibilities from ng update output</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>output</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>string[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseMigrationsFromOutput"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>parseMigrationsFromOutput</b></span>
+                        <a href="#parseMigrationsFromOutput"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseMigrationsFromOutput(output: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="260"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:260</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Parse migrations from ng update output</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>output</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>string[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseRecommendations"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>parseRecommendations</b></span>
+                        <a href="#parseRecommendations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseRecommendations(output: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="334"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:334</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Parse recommendations from ng update output</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>output</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>string[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runApplicationBuilderMigration"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runApplicationBuilderMigration</b></span>
+                        <a href="#runApplicationBuilderMigration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runApplicationBuilderMigration()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="229"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:229</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Migrate to application builder (Angular 17+)</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runControlFlowMigration"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runControlFlowMigration</b></span>
+                        <a href="#runControlFlowMigration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runControlFlowMigration()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:212</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Migrate to new control flow syntax (Angular 17+)</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runMaterialMDCMigration"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runMaterialMDCMigration</b></span>
+                        <a href="#runMaterialMDCMigration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runMaterialMDCMigration()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="191"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:191</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Migrate Angular Material to MDC (Angular 15+)</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runModernizationSchematics"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>runModernizationSchematics</b></span>
+                        <a href="#runModernizationSchematics"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runModernizationSchematics(targetVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="144"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:144</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run Angular&#39;s built-in code modernization schematics</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>targetVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runNgUpdate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>runNgUpdate</b></span>
+                        <a href="#runNgUpdate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runNgUpdate(targetVersion: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: literal type)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="24"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run ng update for a specific Angular version
+This uses Angular&#39;s official migration schematics</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>targetVersion</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runSchematic"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>runSchematic</b></span>
+                        <a href="#runSchematic"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runSchematic(schematicName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: Record<string | any>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="83"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:83</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Run a specific Angular schematic</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>schematicName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                        <code>Record&lt;string | any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runStandaloneComponentsMigration"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>runStandaloneComponentsMigration</b></span>
+                        <a href="#runStandaloneComponentsMigration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runStandaloneComponentsMigration()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="174"
+                                    class="link-to-prism">src/utils/AngularSchematicsRunner.ts:174</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Migrate to standalone components (Angular 14+)</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { execSync } from &#x27;child_process&#x27;;
+import * as fs from &#x27;fs-extra&#x27;;
+import * as path from &#x27;path&#x27;;
+import { ProgressReporter } from &#x27;./ProgressReporter&#x27;;
+
+/**
+ * Runs Angular&#x27;s built-in schematics and ng update commands
+ * to leverage Angular&#x27;s official migration capabilities
+ */
+export class AngularSchematicsRunner {
+  private progressReporter: ProgressReporter;
+
+  constructor(
+    private projectPath: string,
+    progressReporter?: ProgressReporter
+  ) {
+    this.progressReporter &#x3D; progressReporter || new ProgressReporter();
+  }
+
+  /**
+   * Run ng update for a specific Angular version
+   * This uses Angular&#x27;s official migration schematics
+   */
+  async runNgUpdate(
+    targetVersion: string,
+    options: {
+      force?: boolean;
+      migrateOnly?: boolean;
+      packages?: string[];
+      createCommits?: boolean;
+    } &#x3D; {}
+  ): Promise&lt;{ success: boolean; output: string; migrationsApplied: string[] }&gt; {
+    try {
+      this.progressReporter.updateMessage(&#x60;Running Angular ${targetVersion} official migrations...&#x60;);
+
+      // Build the ng update command
+      const packages &#x3D; options.packages || [
+        &#x27;@angular/core&#x27;,
+        &#x27;@angular/cli&#x27;
+      ];
+
+      const packageSpecs &#x3D; packages.map(pkg &#x3D;&gt; &#x60;${pkg}@${targetVersion}&#x60;).join(&#x27; &#x27;);
+      
+      let command &#x3D; &#x60;npx ng update ${packageSpecs}&#x60;;
+      
+      // Add options
+      if (options.force) command +&#x3D; &#x27; --force&#x27;;
+      if (options.migrateOnly) command +&#x3D; &#x27; --migrate-only&#x27;;
+      if (options.createCommits) command +&#x3D; &#x27; --create-commits&#x27;;
+      
+      // Run the command
+      const output &#x3D; execSync(command, {
+        cwd: this.projectPath,
+        encoding: &#x27;utf-8&#x27;,
+        maxBuffer: 10 * 1024 * 1024 // 10MB buffer for large outputs
+      });
+
+      // Parse migrations that were applied
+      const migrationsApplied &#x3D; this.parseMigrationsFromOutput(output);
+
+      this.progressReporter.success(&#x60;✓ Angular ${targetVersion} migrations completed&#x60;);
+      
+      return {
+        success: true,
+        output,
+        migrationsApplied
+      };
+    } catch (error) {
+      const errorMessage &#x3D; error instanceof Error ? error.message : String(error);
+      this.progressReporter.error(&#x60;Failed to run ng update: ${errorMessage}&#x60;);
+      
+      return {
+        success: false,
+        output: errorMessage,
+        migrationsApplied: []
+      };
+    }
+  }
+
+  /**
+   * Run a specific Angular schematic
+   */
+  async runSchematic(
+    schematicName: string,
+    options: Record&lt;string, any&gt; &#x3D; {}
+  ): Promise&lt;{ success: boolean; output: string }&gt; {
+    try {
+      this.progressReporter.updateMessage(&#x60;Running schematic: ${schematicName}&#x60;);
+
+      // Build the schematic command
+      let command &#x3D; &#x60;npx ng generate ${schematicName}&#x60;;
+      
+      // Add options
+      for (const [key, value] of Object.entries(options)) {
+        if (typeof value &#x3D;&#x3D;&#x3D; &#x27;boolean&#x27;) {
+          if (value) command +&#x3D; &#x60; --${key}&#x60;;
+        } else {
+          command +&#x3D; &#x60; --${key}&#x3D;&quot;${value}&quot;&#x60;;
+        }
+      }
+
+      const output &#x3D; execSync(command, {
+        cwd: this.projectPath,
+        encoding: &#x27;utf-8&#x27;
+      });
+
+      this.progressReporter.success(&#x60;✓ Schematic ${schematicName} completed&#x60;);
+      
+      return { success: true, output };
+    } catch (error) {
+      const errorMessage &#x3D; error instanceof Error ? error.message : String(error);
+      this.progressReporter.error(&#x60;Failed to run schematic: ${errorMessage}&#x60;);
+      
+      return { success: false, output: errorMessage };
+    }
+  }
+
+  /**
+   * Check available migrations for a package
+   */
+  async checkAvailableMigrations(
+    packageName: string,
+    fromVersion: string,
+    toVersion: string
+  ): Promise&lt;string[]&gt; {
+    try {
+      const command &#x3D; &#x60;npx ng update ${packageName} --from&#x3D;&quot;${fromVersion}&quot; --to&#x3D;&quot;${toVersion}&quot; --migrate-only --dry-run&#x60;;
+      
+      const output &#x3D; execSync(command, {
+        cwd: this.projectPath,
+        encoding: &#x27;utf-8&#x27;
+      });
+
+      return this.parseMigrationsFromOutput(output);
+    } catch (error) {
+      // If command fails, it might mean no migrations are available
+      return [];
+    }
+  }
+
+  /**
+   * Run Angular&#x27;s built-in code modernization schematics
+   */
+  async runModernizationSchematics(targetVersion: number): Promise&lt;void&gt; {
+    // Angular 14+: Standalone components migration
+    if (targetVersion &gt;&#x3D; 14) {
+      await this.runStandaloneComponentsMigration();
+    }
+
+    // Angular 15+: Material MDC migration
+    if (targetVersion &gt;&#x3D; 15) {
+      await this.runMaterialMDCMigration();
+    }
+
+    // Angular 16+: Control flow migration
+    if (targetVersion &gt;&#x3D; 16) {
+      await this.runControlFlowMigration();
+    }
+
+    // Angular 17+: Application builder migration
+    if (targetVersion &gt;&#x3D; 17) {
+      await this.runApplicationBuilderMigration();
+    }
+
+    // Angular 18+: Built-in control flow completion
+    if (targetVersion &gt;&#x3D; 18) {
+      await this.completeControlFlowMigration();
+    }
+  }
+
+  /**
+   * Migrate to standalone components (Angular 14+)
+   */
+  private async runStandaloneComponentsMigration(): Promise&lt;void&gt; {
+    this.progressReporter.info(&#x27;Checking for standalone components migration...&#x27;);
+    
+    // This schematic converts NgModules to standalone components
+    const result &#x3D; await this.runSchematic(&#x27;@angular/core:standalone&#x27;, {
+      migrate: true,
+      &#x27;convert-to-standalone&#x27;: true
+    });
+
+    if (result.success) {
+      this.progressReporter.success(&#x27;✓ Standalone components migration completed&#x27;);
+    }
+  }
+
+  /**
+   * Migrate Angular Material to MDC (Angular 15+)
+   */
+  private async runMaterialMDCMigration(): Promise&lt;void&gt; {
+    const packageJsonPath &#x3D; path.join(this.projectPath, &#x27;package.json&#x27;);
+    const packageJson &#x3D; await fs.readJson(packageJsonPath);
+    
+    if (packageJson.dependencies?.[&#x27;@angular/material&#x27;]) {
+      this.progressReporter.info(&#x27;Running Angular Material MDC migration...&#x27;);
+      
+      const result &#x3D; await this.runSchematic(&#x27;@angular/material:mdc-migration&#x27;, {
+        &#x27;migrate-styles&#x27;: true,
+        &#x27;migrate-templates&#x27;: true
+      });
+
+      if (result.success) {
+        this.progressReporter.success(&#x27;✓ Material MDC migration completed&#x27;);
+      }
+    }
+  }
+
+  /**
+   * Migrate to new control flow syntax (Angular 17+)
+   */
+  private async runControlFlowMigration(): Promise&lt;void&gt; {
+    this.progressReporter.info(&#x27;Migrating to new control flow syntax...&#x27;);
+    
+    // This schematic converts *ngIf, *ngFor to @if, @for
+    const result &#x3D; await this.runSchematic(&#x27;@angular/core:control-flow&#x27;, {
+      path: &#x27;src&#x27;,
+      &#x27;migrate-all&#x27;: true
+    });
+
+    if (result.success) {
+      this.progressReporter.success(&#x27;✓ Control flow migration completed&#x27;);
+    }
+  }
+
+  /**
+   * Migrate to application builder (Angular 17+)
+   */
+  private async runApplicationBuilderMigration(): Promise&lt;void&gt; {
+    this.progressReporter.info(&#x27;Migrating to application builder...&#x27;);
+    
+    const result &#x3D; await this.runSchematic(&#x27;@angular-devkit/build-angular:application&#x27;, {
+      project: &#x27;default&#x27;
+    });
+
+    if (result.success) {
+      this.progressReporter.success(&#x27;✓ Application builder migration completed&#x27;);
+    }
+  }
+
+  /**
+   * Complete control flow migration (Angular 18+)
+   */
+  private async completeControlFlowMigration(): Promise&lt;void&gt; {
+    this.progressReporter.info(&#x27;Completing control flow migration...&#x27;);
+    
+    // Remove any remaining structural directives
+    const result &#x3D; await this.runSchematic(&#x27;@angular/core:control-flow-complete&#x27;, {
+      &#x27;remove-structural-directives&#x27;: true
+    });
+
+    if (result.success) {
+      this.progressReporter.success(&#x27;✓ Control flow migration completed&#x27;);
+    }
+  }
+
+  /**
+   * Parse migrations from ng update output
+   */
+  private parseMigrationsFromOutput(output: string): string[] {
+    const migrations: string[] &#x3D; [];
+    const lines &#x3D; output.split(&#x27;\n&#x27;);
+    
+    for (const line of lines) {
+      // Look for migration indicators in the output
+      if (line.includes(&#x27;Migration&#x27;)) {
+        migrations.push(line.trim());
+      }
+    }
+    
+    return migrations;
+  }
+
+  /**
+   * Run ng update with analysis only (dry run)
+   */
+  async analyzeUpdate(targetVersion: string): Promise&lt;{
+    canUpdate: boolean;
+    incompatibilities: string[];
+    recommendations: string[];
+  }&gt; {
+    try {
+      const command &#x3D; &#x60;npx ng update @angular/core@${targetVersion} @angular/cli@${targetVersion} --dry-run&#x60;;
+      
+      const output &#x3D; execSync(command, {
+        cwd: this.projectPath,
+        encoding: &#x27;utf-8&#x27;
+      });
+
+      // Parse the output to understand what would be updated
+      const incompatibilities &#x3D; this.parseIncompatibilities(output);
+      const recommendations &#x3D; this.parseRecommendations(output);
+
+      return {
+        canUpdate: incompatibilities.length &#x3D;&#x3D;&#x3D; 0,
+        incompatibilities,
+        recommendations
+      };
+    } catch (error) {
+      const errorMessage &#x3D; error instanceof Error ? error.message : String(error);
+      
+      // Parse error for incompatibilities
+      const incompatibilities &#x3D; this.parseIncompatibilities(errorMessage);
+      
+      return {
+        canUpdate: false,
+        incompatibilities,
+        recommendations: []
+      };
+    }
+  }
+
+  /**
+   * Parse incompatibilities from ng update output
+   */
+  private parseIncompatibilities(output: string): string[] {
+    const incompatibilities: string[] &#x3D; [];
+    const lines &#x3D; output.split(&#x27;\n&#x27;);
+    
+    for (const line of lines) {
+      if (line.includes(&#x27;incompatible&#x27;) || 
+          line.includes(&#x27;peer dependency&#x27;) ||
+          line.includes(&#x27;cannot resolve&#x27;)) {
+        incompatibilities.push(line.trim());
+      }
+    }
+    
+    return incompatibilities;
+  }
+
+  /**
+   * Parse recommendations from ng update output
+   */
+  private parseRecommendations(output: string): string[] {
+    const recommendations: string[] &#x3D; [];
+    const lines &#x3D; output.split(&#x27;\n&#x27;);
+    
+    for (const line of lines) {
+      if (line.includes(&#x27;recommend&#x27;) || 
+          line.includes(&#x27;consider&#x27;) ||
+          line.includes(&#x27;should&#x27;)) {
+        recommendations.push(line.trim());
+      }
+    }
+    
+    return recommendations;
+  }
+}</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'AngularSchematicsRunner.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

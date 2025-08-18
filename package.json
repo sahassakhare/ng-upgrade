@@ -21,12 +21,18 @@
     "test": "jest --passWithNoTests",
     "lint": "eslint src/**/*.ts",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build && npm run test",
+    "prepublishOnly": "npm run build && npm run test && npm run docs:generate",
     "prepare": "npm run build",
     "ng-upgrade": "node dist/cli.js",
     "demo:analyze": "node dist/cli.js analyze",
-    "demo:upgrade": "node dist/cli.js upgrade --target 17 --dry-run",
-    "demo:basic": "node examples/basic-upgrade.js"
+    "demo:upgrade": "node dist/cli.js upgrade --target 20 --dry-run",
+    "demo:basic": "node examples/basic-upgrade.js",
+    "docs:generate": "compodoc -p tsconfig.json -d docs/api --theme material --name \"Angular Multi-Version Upgrade Orchestrator\" --hideGenerator --disableCoverage false --disablePrivate false --disableProtected false --disableInternal false --disableLifeCycleHooks false --disableRoutesGraph true",
+    "docs:serve": "compodoc -s -p tsconfig.json -d docs --theme material --name \"Angular Multi-Version Upgrade Orchestrator\"",
+    "docs:watch": "compodoc -p tsconfig.json -d docs --theme material --name \"Angular Multi-Version Upgrade Orchestrator\" --watch",
+    "docs:coverage": "compodoc -p tsconfig.json --coverageTest 90 --coverageTestThresholdFail true",
+    "docs:stats": "compodoc -p tsconfig.json --exportFormat json -d docs/stats",
+    "docs:clean": "rimraf docs/index.html docs/js docs/css docs/images docs/fonts"
   },
   "keywords": [
     "angular",
@@ -64,31 +70,32 @@
     "access": "public"
   },
   "dependencies": {
-    "@angular-devkit/schematics": "^17.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@angular-devkit/schematics": "^20.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "chalk": "^4.1.2",
-    "commander": "^11.0.0",
-    "fs-extra": "^11.0.0",
-    "glob": "^10.0.0",
+    "commander": "^12.0.0",
+    "fs-extra": "^11.2.0",
+    "glob": "^11.0.0",
     "inquirer": "^8.2.6",
     "ora": "^5.4.1",
-    "semver": "^7.5.0",
-    "typescript": "^5.0.0",
-    "uuid": "^9.0.0"
+    "semver": "^7.6.0",
+    "typescript": "^5.6.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.0",
+    "@compodoc/compodoc": "^1.1.26",
+    "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^8.2.10",
-    "@types/jest": "^29.0.0",
-    "@types/node": "^20.0.0",
-    "@types/semver": "^7.5.0",
-    "@types/uuid": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "eslint": "^8.0.0",
-    "jest": "^29.0.0",
-    "ts-jest": "^29.0.0"
+    "@types/jest": "^29.5.12",
+    "@types/node": "^22.0.0",
+    "@types/semver": "^7.5.8",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "eslint": "^9.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.11.1"
   }
 }

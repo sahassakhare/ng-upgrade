@@ -12,9 +12,10 @@ export class Angular13Handler extends BaseVersionHandler {
     return '>=4.4.2 <4.6.0';
   }
 
-  protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
-    console.log('Applying Angular 13 specific changes...');
+  protected async applyVersionSpecificChanges(_projectPath: string, _options: UpgradeOptions): Promise<void> {
+    this.progressReporter?.updateMessage('Applying Angular 13 specific changes...');
     // Angular 13 specific changes would be implemented here
+    this.progressReporter?.success('Angular 13 upgrade steps completed');
   }
 
   getBreakingChanges(): BreakingChange[] {

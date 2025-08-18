@@ -1,7 +1,11 @@
 import { UpgradeStep, UpgradeOptions, BreakingChange } from '../types';
 import { VersionHandler } from '../core/VersionHandlerRegistry';
+import { DependencyInstaller } from '../utils/DependencyInstaller';
+import { ProgressReporter } from '../utils/ProgressReporter';
 export declare abstract class BaseVersionHandler implements VersionHandler {
     abstract readonly version: string;
+    protected dependencyInstaller: DependencyInstaller;
+    protected progressReporter: ProgressReporter;
     /**
      * Execute version-specific upgrade logic
      */
@@ -21,19 +25,19 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
     protected abstract getRequiredTypeScriptVersion(): string;
     protected abstract applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void>;
     /**
-     * Update Angular dependencies to target version
+     * Update Angular dependencies to target version with automatic installation
      */
     protected updateAngularDependencies(projectPath: string): Promise<void>;
     /**
-     * Update TypeScript version
+     * Update TypeScript version with automatic installation
      */
     protected updateTypeScript(projectPath: string): Promise<void>;
     /**
-     * Update Angular CLI
+     * Update Angular CLI with automatic installation
      */
     protected updateAngularCli(projectPath: string): Promise<void>;
     /**
-     * Update configuration files
+     * Update configuration files while preserving existing content
      */
     protected updateConfigurationFiles(projectPath: string, options: UpgradeOptions): Promise<void>;
     /**
@@ -84,6 +88,22 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      * Backup file before modification
      */
     protected backupFile(filePath: string): Promise<void>;
+    /**
+     * Update component files using FileContentPreserver
+     */
+    protected updateComponentFiles(projectPath: string, transformations: any[]): Promise<void>;
+    /**
+     * Update template files using FileContentPreserver
+     */
+    protected updateTemplateFiles(projectPath: string): Promise<void>;
+    /**
+     * Find all component files in a directory
+     */
+    private findComponentFiles;
+    /**
+     * Find all template files in a directory
+     */
+    private findTemplateFiles;
     /**
      * Create version-specific breaking change
      */

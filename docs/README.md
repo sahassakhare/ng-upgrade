@@ -13,12 +13,19 @@ Welcome to the comprehensive documentation for the Angular Multi-Version Upgrade
 - **[Code Flow Documentation](./CODE_FLOW.md)** - Detailed execution flows and component interactions
 
 ### API References
+- **[Generated API Documentation](./api/index.html)** - Interactive documentation generated with Compodoc
 - **[API Reference](./API_REFERENCE.md)** - Comprehensive interface and type documentation
 - **[JSDoc Comments](../src/)** - Inline code documentation in source files
 
 ### Implementation Guides
 - **[Usage Examples](../examples/)** - Practical implementation examples
 - **[CLI Reference](../README.md#cli-commands)** - Command-line interface documentation
+
+### Generated Documentation
+- **[Interactive API Docs](./api/index.html)** - Full interactive documentation with search and navigation
+- **[Class Documentation](./api/classes/)** - Detailed documentation for all handler classes
+- **[Interface Documentation](./api/interfaces/)** - Complete interface and type definitions
+- **[Coverage Report](./api/coverage.html)** - Documentation coverage analysis
 
 ## Documentation Quick Links
 

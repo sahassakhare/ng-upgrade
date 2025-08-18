@@ -1,21 +1,67 @@
 import { BaseVersionHandler } from './BaseVersionHandler';
-import { BreakingChange, UpgradeOptions } from '../types';
+import { BreakingChange, UpgradeOptions, Migration } from '../types';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { FileContentPreserver } from '../utils/FileContentPreserver';
 
+/**
+ * Angular 17 Handler - New application bootstrap and asset management
+ * 
+ * Manages migration to Angular 17 with new application bootstrap API, asset folder
+ * restructuring, enhanced SSR capabilities, and stable control flow syntax. This
+ * version introduces significant architectural improvements and developer experience
+ * enhancements while maintaining backward compatibility.
+ * 
+ * Key Features in Angular 17:
+ * - New application bootstrap API
+ * - Assets folder migration to public folder
+ * - Stable control flow syntax (@if, @for, @switch)
+ * - Enhanced SSR with improved hydration
+ * - Build system optimizations
+ * - Material Design 3 support
+ * 
+ * @example
+ * ```typescript
+ * const handler = new Angular17Handler();
+ * await handler.applyVersionSpecificChanges('/path/to/project', {
+ *   strategy: 'progressive',
+ *   enableNewBootstrap: true
+ * });
+ * ```
+ * 
+ * @since 1.0.0
+ * @author Angular Multi-Version Upgrade Orchestrator
+ */
 export class Angular17Handler extends BaseVersionHandler {
+  /** The Angular version this handler manages */
   readonly version = '17';
 
+  /**
+   * Gets the minimum required Node.js version for Angular 17
+   * @returns The minimum Node.js version requirement
+   */
   protected getRequiredNodeVersion(): string {
     return '>=18.13.0';
   }
 
+  /**
+   * Gets the required TypeScript version range for Angular 17
+   * @returns The TypeScript version requirement
+   */
   protected getRequiredTypeScriptVersion(): string {
     return '>=5.2.0 <5.3.0';
   }
 
   /**
-   * Apply Angular 17 specific changes
+   * Applies all Angular 17 specific transformations to the project
+   * 
+   * Orchestrates migration including new application bootstrap, asset restructuring,
+   * control flow syntax stabilization, and SSR enhancements. Provides safe migration
+   * paths while preserving existing functionality.
+   * 
+   * @param projectPath - The absolute path to the Angular project root
+   * @param options - Upgrade configuration options including strategy and feature flags
+   * @throws {Error} When critical transformations fail
    */
   protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
     console.log('Applying Angular 17 specific changes...');
@@ -44,52 +90,32 @@ export class Angular17Handler extends BaseVersionHandler {
   }
 
   /**
-   * Update to new application bootstrap
+   * Update to new application bootstrap while preserving existing code
    */
   private async updateApplicationBootstrap(projectPath: string): Promise<void> {
     const mainTsPath = path.join(projectPath, 'src', 'main.ts');
     
+    // Use FileContentPreserver to update main.ts while preserving custom code
+    await FileContentPreserver.updateMainTsFile(mainTsPath, 17);
+    
     if (await fs.pathExists(mainTsPath)) {
-      const mainTsContent = await fs.readFile(mainTsPath, 'utf-8');
-      
-      // Check if already using new bootstrap
-      if (mainTsContent.includes('bootstrapApplication')) {
-        return;
-      }
-
-      // Create backup
-      await this.backupFile(mainTsPath);
-
-      // Update to new bootstrap pattern
-      const newMainTs = this.generateNewBootstrapCode(mainTsContent);
-      await fs.writeFile(mainTsPath, newMainTs);
-
-      console.log('✓ Updated to new application bootstrap');
+      this.progressReporter?.success('✓ Updated to new application bootstrap (preserving custom code)');
     }
   }
 
   /**
-   * Generate new bootstrap code
-   */
-  private generateNewBootstrapCode(oldContent: string): string {
-    // This is a simplified transformation
-    // In production, this would use AST transformations
-    return `import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
-import { importProvidersFrom } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    importProvidersFrom(BrowserModule),
-    // Add your providers here
-  ]
-}).catch(err => console.error(err));
-`;
-  }
-
-  /**
-   * Migrate assets folder to public folder (Angular 17+)
+   * Migrates assets folder to public folder structure (Angular 17+)
+   * 
+   * Safely migrates from src/assets to public folder structure while maintaining
+   * backward compatibility. Creates new public folder, copies assets, and updates
+   * angular.json configuration to support both asset structures during transition.
+   * 
+   * @param projectPath - The absolute path to the Angular project root
+   * @private
+   * 
+   * @example
+   * Before: src/assets/images/logo.png
+   * After: public/images/logo.png (with src/assets still working)
    */
   private async migrateAssetsToPublic(projectPath: string): Promise<void> {
     const assetsPath = path.join(projectPath, 'src', 'assets');
@@ -105,7 +131,7 @@ bootstrapApplication(AppComponent, {
       // Update angular.json to use both asset configurations
       await this.updateAssetConfiguration(projectPath);
       
-      console.log('✓ Migrated assets to public folder (maintaining backward compatibility)');
+      this.progressReporter?.success('✓ Migrated assets to public folder (maintaining backward compatibility)');
     }
   }
 
@@ -119,7 +145,7 @@ bootstrapApplication(AppComponent, {
       const angularJson = await fs.readJson(angularJsonPath);
       
       // Update each project's asset configuration
-      for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+      for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
         const config = projectConfig as any;
         
         if (config.architect?.build?.options?.assets) {
@@ -146,11 +172,11 @@ bootstrapApplication(AppComponent, {
   /**
    * Enable new control flow syntax
    */
-  private async enableNewControlFlow(projectPath: string): Promise<void> {
+  private async enableNewControlFlow(_projectPath: string): Promise<void> {
     // This would enable the new @if, @for, @switch syntax
     // For now, just log that it's available
-    console.log('✓ New control flow syntax (@if, @for, @switch) is available');
-    console.log('  Use "ng generate @angular/core:control-flow" to migrate templates');
+    this.progressReporter?.success('✓ New control flow syntax (@if, @for, @switch) is available');
+    this.progressReporter?.info('  Use "ng generate @angular/core:control-flow" to migrate templates');
   }
 
   /**
@@ -164,7 +190,7 @@ bootstrapApplication(AppComponent, {
       let hasSSR = false;
 
       // Check if SSR is configured
-      for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+      for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
         const config = projectConfig as any;
         if (config.architect?.['serve-ssr'] || config.architect?.['build-ssr']) {
           hasSSR = true;
@@ -172,7 +198,7 @@ bootstrapApplication(AppComponent, {
       }
 
       if (hasSSR) {
-        console.log('✓ SSR configuration detected - Angular 17 SSR improvements enabled');
+        this.progressReporter?.success('✓ SSR configuration detected - Angular 17 SSR improvements enabled');
         // Would update SSR configuration for Angular 17 improvements
       }
     }
@@ -188,7 +214,7 @@ bootstrapApplication(AppComponent, {
       const angularJson = await fs.readJson(angularJsonPath);
       
       // Update build configurations for Angular 17
-      for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+      for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
         const config = projectConfig as any;
         
         if (config.architect?.build?.options) {
@@ -205,19 +231,25 @@ bootstrapApplication(AppComponent, {
 
   /**
    * Update Angular Material for Angular 17
+   * Uses DependencyInstaller for automatic installation
    */
   private async updateAngularMaterial(projectPath: string): Promise<void> {
     const packageJsonPath = path.join(projectPath, 'package.json');
     const packageJson = await fs.readJson(packageJsonPath);
     
     if (packageJson.dependencies?.['@angular/material']) {
-      // Update Angular Material to version 17
-      packageJson.dependencies['@angular/material'] = '^17.0.0';
-      packageJson.dependencies['@angular/cdk'] = '^17.0.0';
+      // Use DependencyInstaller to update Angular Material
+      const materialDeps = [
+        { name: '@angular/material', version: '^17.0.0', type: 'dependencies' as const },
+        { name: '@angular/cdk', version: '^17.0.0', type: 'dependencies' as const }
+      ];
       
-      await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+      await this.dependencyInstaller.installDependencies(
+        materialDeps,
+        'Updating Angular Material to version 17...'
+      );
       
-      console.log('✓ Updated Angular Material to version 17');
+      this.progressReporter?.success('✓ Updated Angular Material to version 17');
     }
   }
 
@@ -225,7 +257,7 @@ bootstrapApplication(AppComponent, {
    * Update builder configurations for Angular 17
    */
   protected updateBuilderConfigurations(angularJson: any): void {
-    for (const [projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
+    for (const [_projectName, projectConfig] of Object.entries(angularJson.projects || {})) {
       const config = projectConfig as any;
       
       if (config.architect?.build) {
@@ -304,5 +336,74 @@ bootstrapApplication(AppComponent, {
         'Review Material component designs as they may have visual changes'
       )
     ];
+  }
+
+  /**
+   * Override to provide Angular 17 specific migrations
+   */
+  protected getAvailableMigrations(): Migration[] {
+    const baseMigrations = super.getAvailableMigrations();
+    
+    // Add Angular 17 specific migrations
+    const angular17Migrations: Migration[] = [
+      {
+        name: 'New Application Bootstrap',
+        command: 'npx ng generate @angular/core:new-app-bootstrap',
+        description: 'Migrate to new bootstrapApplication API',
+        optional: true
+      },
+      {
+        name: 'Lazy Loading Routes',
+        command: 'npx ng generate @angular/core:lazy-routes',
+        description: 'Convert eagerly loaded routes to lazy loaded ones',
+        optional: true
+      },
+      {
+        name: 'Assets to Public Migration',
+        command: 'npx ng generate @angular/core:assets-to-public',
+        description: 'Migrate assets folder to public folder structure',
+        optional: true
+      }
+    ];
+    
+    return [...baseMigrations, ...angular17Migrations];
+  }
+
+  /**
+   * Run Angular 17 specific migrations based on strategy
+   */
+  protected async runVersionSpecificMigrations(projectPath: string): Promise<void> {
+    // Get user's upgrade strategy from options
+    const migrations = this.getAvailableMigrations();
+    
+    // Run specific migrations for Angular 17
+    const requiredMigrations = [
+      'Control Flow Syntax',
+      'Signal Inputs', 
+      'Signal Outputs',
+      'Signal Queries',
+      'Self-closing Tags',
+      'New Application Bootstrap',
+      'Assets to Public Migration'
+    ];
+    
+    for (const migrationName of requiredMigrations) {
+      const migration = migrations.find(m => m.name === migrationName);
+      if (migration) {
+        try {
+          this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
+          
+          // Run migration with non-interactive mode for automation
+          let command = migration.command + ' --interactive=false --defaults';
+          
+          await this.runCommand(command, projectPath);
+          
+          this.progressReporter?.info(`✓ ${migration.name} migration completed`);
+        } catch (error) {
+          // Some migrations may not be applicable to all projects
+          this.progressReporter?.warn(`${migration.name} migration skipped: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+    }
   }
 }

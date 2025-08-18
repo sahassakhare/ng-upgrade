@@ -1,0 +1,534 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Angular Multi-Version Upgrade Orchestrator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css">
+        <link rel="stylesheet" href="./styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="./" class="navbar-brand">Angular Multi-Version Upgrade Orchestrator</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content getting-started">
+                   <div class="content-data">
+
+<h1>Angular Multi-Version Upgrade Orchestrator</h1>
+<p><a href="https://badge.fury.io/js/ng-upgrade-orchestrator"><img src="https://badge.fury.io/js/ng-upgrade-orchestrator.svg" alt="npm version" class="img-responsive"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" class="img-responsive"></a>
+<a href="./docs/"><img src="https://img.shields.io/badge/docs-compodoc-blue.svg" alt="Documentation" class="img-responsive"></a>
+<a href="https://angular.io/"><img src="https://img.shields.io/badge/Angular-12%20to%2020-red.svg" alt="Angular Versions" class="img-responsive"></a></p>
+<p>An enterprise-grade, intelligent multi-step upgrade orchestrator that safely migrates Angular applications across multiple major versions (12→13→14→...→20) by performing incremental upgrades, validating each step, handling breaking changes systematically, and ensuring <strong>zero functionality loss</strong> throughout the entire upgrade journey.</p>
+<h2>🚀 <strong>Key Highlights</strong></h2>
+<p>✅ <strong>Enterprise-Ready</strong>: Battle-tested on production applications<br>✅ <strong>Zero Downtime</strong>: Maintains functionality during upgrades<br>✅ <strong>Official Migrations</strong>: Integrates all Angular CLI migrations<br>✅ <strong>Smart Rollback</strong>: Granular checkpoint system<br>✅ <strong>Third-Party Support</strong>: Handles Angular Material, NgRx, PrimeNG+<br>✅ <strong>TypeScript AST</strong>: Precise code transformations</p>
+<h2>Features</h2>
+<h3>Core Capabilities</h3>
+<ul>
+<li><strong>Multi-Version Orchestration</strong>: Seamlessly upgrade through multiple Angular versions in sequence</li>
+<li><strong>Intelligent Path Planning</strong>: Automatically determines the optimal upgrade path from current to target version</li>
+<li><strong>Zero Functionality Loss</strong>: Prioritizes maintaining existing functionality over modernization</li>
+<li><strong>Comprehensive Rollback System</strong>: Full application snapshots at each major version milestone</li>
+<li><strong>Breaking Change Management</strong>: Systematic handling of breaking changes with automated fixes</li>
+<li><strong>Third-Party Library Coordination</strong>: Synchronized updates for Angular Material, NgRx, PrimeNG, and more</li>
+</ul>
+<h3>Advanced Features</h3>
+<ul>
+<li><strong>Checkpoint System</strong>: Create restoration points at each upgrade milestone</li>
+<li><strong>AST-Based Code Transformations</strong>: Precise code modifications using TypeScript AST</li>
+<li><strong>Multi-Layer Compatibility</strong>: Allow old and new patterns to coexist during transitions</li>
+<li><strong>Progressive Enhancement</strong>: Opt-in modernization without breaking existing functionality</li>
+<li><strong>Comprehensive Validation</strong>: Build, test, and runtime validation at each step</li>
+</ul>
+<h2>Quick Start</h2>
+<h3>Installation</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm install -g ng-upgrade-orchestrator</code></pre></div><h3>Basic Usage</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash"># Analyze your project
+ng-upgrade analyze
+
+# Upgrade to Angular 17
+ng-upgrade upgrade --target 17
+
+# Show upgrade plan without executing
+ng-upgrade upgrade --target 20 --dry-run
+
+# Conservative upgrade strategy
+ng-upgrade upgrade --target 16 --strategy conservative</code></pre></div><h3>Interactive Mode</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">ng-upgrade upgrade</code></pre></div><p>The CLI will guide you through:</p>
+<ol>
+<li>Target version selection</li>
+<li>Upgrade strategy configuration</li>
+<li>Validation level settings</li>
+<li>Confirmation and execution</li>
+</ol>
+<h2>Upgrade Strategies</h2>
+<h3>Conservative Mode</h3>
+<ul>
+<li><strong>Maximum Safety</strong>: Minimal changes per version</li>
+<li><strong>Compatibility First</strong>: Preserves all existing patterns</li>
+<li><strong>Manual Opt-in</strong>: New features require explicit adoption</li>
+<li><strong>Extensive Validation</strong>: Comprehensive testing at each step</li>
+</ul>
+<h3>Balanced Mode (Default)</h3>
+<ul>
+<li><strong>Moderate Modernization</strong>: Strategic updates with compatibility layers</li>
+<li><strong>Smart Defaults</strong>: Sensible choices for most applications</li>
+<li><strong>Gradual Enhancement</strong>: Progressive adoption of new features</li>
+<li><strong>Balanced Validation</strong>: Essential checks with optional comprehensive testing</li>
+</ul>
+<h3>Progressive Mode</h3>
+<ul>
+<li><strong>Advanced Features</strong>: Enables cutting-edge Angular capabilities</li>
+<li><strong>Modern Patterns</strong>: Migrates to latest best practices</li>
+<li><strong>Performance Optimized</strong>: Leverages newest optimization features</li>
+<li><strong>Future Ready</strong>: Prepares codebase for upcoming versions</li>
+</ul>
+<h2>CLI Commands</h2>
+<h3>Upgrade Command</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">ng-upgrade upgrade [options]
+
+Options:
+  -t, --target &lt;version&gt;     Target Angular version (12-20)
+  -p, --path &lt;path&gt;          Project path (default: current directory)
+  -s, --strategy &lt;strategy&gt;  conservative|balanced|progressive (default: balanced)
+  --dry-run                  Show upgrade plan without executing
+  --no-backup                Skip automatic backup creation
+  --validation &lt;level&gt;       basic|comprehensive (default: basic)</code></pre></div><h3>Analysis Command</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">ng-upgrade analyze [options]
+
+Options:
+  -p, --path &lt;path&gt;         Project path (default: current directory)</code></pre></div><h3>Checkpoint Management</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">ng-upgrade checkpoints [options]
+
+Options:
+  -p, --path &lt;path&gt;         Project path (default: current directory)
+  --list                    List all checkpoints
+  --rollback &lt;id&gt;           Rollback to specific checkpoint
+  --create &lt;description&gt;    Create new checkpoint
+  --cleanup                 Clean up old checkpoints</code></pre></div><h2>Project Analysis</h2>
+<p>The analyzer provides comprehensive insights:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">ng-upgrade analyze</code></pre></div><p><strong>Sample Output:</strong></p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">Analyzing Angular project
+
+Analysis completed
+
+Project Analysis Results:
+Current Angular version: 12.2.0
+Project type: Application
+Build system: Angular CLI
+Dependencies: 45 total, 3 require updates
+Lines of code: 15,420
+Components: 28
+Services: 12
+Risk level: Medium
+
+Upgrade Recommendations:
+  - Update deprecated dependencies before upgrade
+  - Increase test coverage for better validation
+  - Consider incremental upgrade strategy</code></pre></div><h2>Checkpoint System</h2>
+<h3>Automatic Checkpoints</h3>
+<ul>
+<li>Created before each major version upgrade</li>
+<li>Include complete project state and metadata</li>
+<li>Enable instant rollback to any point in upgrade journey</li>
+</ul>
+<h3>Manual Checkpoint Management</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash"># List all checkpoints
+ng-upgrade checkpoints --list
+
+# Create manual checkpoint
+ng-upgrade checkpoints --create &quot;Before custom modifications&quot;
+
+# Rollback to specific checkpoint
+ng-upgrade checkpoints --rollback checkpoint-id
+
+# Cleanup old checkpoints
+ng-upgrade checkpoints --cleanup</code></pre></div><h2>Supported Angular Versions</h2>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th>Version</th>
+<th>Status</th>
+<th>Key Features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12 → 13</td>
+<td>Supported</td>
+<td>Ivy renderer finalization, View Engine removal</td>
+</tr>
+<tr>
+<td>13 → 14</td>
+<td>Supported</td>
+<td>Standalone components, Angular CLI auto-completion</td>
+</tr>
+<tr>
+<td>14 → 15</td>
+<td>Supported</td>
+<td>Standalone APIs stable, Image directive</td>
+</tr>
+<tr>
+<td>15 → 16</td>
+<td>Supported</td>
+<td>Required inputs, router data as input</td>
+</tr>
+<tr>
+<td>16 → 17</td>
+<td>Supported</td>
+<td>New application bootstrap, SSR improvements</td>
+</tr>
+<tr>
+<td>17 → 18</td>
+<td>Supported</td>
+<td>Material 3 support, built-in control flow</td>
+</tr>
+<tr>
+<td>18 → 19</td>
+<td>Supported</td>
+<td>Zoneless change detection, event replay</td>
+</tr>
+<tr>
+<td>19 → 20</td>
+<td>Supported</td>
+<td>Incremental hydration, advanced SSR</td>
+</tr>
+</tbody>
+</table>
+<h2>Configuration</h2>
+<h3>Upgrade Options</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-typescript">interface UpgradeOptions {
+  targetVersion: string;
+  strategy: &#39;conservative&#39; | &#39;balanced&#39; | &#39;progressive&#39;;
+  checkpointFrequency: &#39;every-step&#39; | &#39;major-versions&#39; | &#39;custom&#39;;
+  validationLevel: &#39;basic&#39; | &#39;comprehensive&#39;;
+  thirdPartyHandling: &#39;automatic&#39; | &#39;manual&#39; | &#39;prompt&#39;;
+  rollbackPolicy: &#39;auto-on-failure&#39; | &#39;manual&#39; | &#39;never&#39;;
+  parallelProcessing: boolean;
+}</code></pre></div><h2>Safety Features</h2>
+<h3>Zero Functionality Loss</h3>
+<ul>
+<li><strong>Compatibility-First Approach</strong>: Prioritizes maintaining existing functionality</li>
+<li><strong>API Bridging</strong>: Creates bridge functions for deprecated APIs</li>
+<li><strong>Gradual Migration</strong>: Allows mixed usage of old and new patterns</li>
+<li><strong>Optional Modernization</strong>: New features are opt-in rather than forced</li>
+</ul>
+<h3>Multi-Version Safety Mechanisms</h3>
+<ul>
+<li><strong>Per-Version Validation</strong>: Comprehensive testing after each Angular version upgrade</li>
+<li><strong>Cross-Version Compatibility</strong>: Runtime checks for deprecated APIs across versions</li>
+<li><strong>Progressive Feature Adoption</strong>: Teams can adopt new features gradually</li>
+<li><strong>Legacy Preservation</strong>: Maintains legacy code patterns until appropriate for modernization</li>
+</ul>
+<h3>Rollback Capabilities</h3>
+<ul>
+<li><strong>Granular Rollback</strong>: Rollback to any checkpoint in the upgrade sequence</li>
+<li><strong>Automatic Recovery</strong>: Auto-rollback on failure if configured</li>
+<li><strong>State Preservation</strong>: Maintains application state during rollbacks</li>
+<li><strong>Dependency Synchronization</strong>: Rollback dependencies in sync with application state</li>
+</ul>
+<h2>Programmatic API</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-typescript">import { UpgradeOrchestrator } from &#39;ng-upgrade-orchestrator&#39;;
+
+const orchestrator = new UpgradeOrchestrator(&#39;/path/to/project&#39;);
+
+// Set up event listeners
+orchestrator.on(&#39;progress&#39;, (report) =&gt; {
+  console.log(`Progress: ${report.message}`);
+});
+
+orchestrator.on(&#39;step-complete&#39;, (step) =&gt; {
+  console.log(`Completed: ${step.fromVersion} → ${step.toVersion}`);
+});
+
+// Execute upgrade
+const result = await orchestrator.orchestrateUpgrade({
+  targetVersion: &#39;17&#39;,
+  strategy: &#39;balanced&#39;,
+  checkpointFrequency: &#39;major-versions&#39;,
+  validationLevel: &#39;comprehensive&#39;,
+  thirdPartyHandling: &#39;automatic&#39;,
+  rollbackPolicy: &#39;auto-on-failure&#39;,
+  parallelProcessing: false
+});
+
+if (result.success) {
+  console.log(&#39;Upgrade completed successfully!&#39;);
+} else {
+  console.error(&#39;Upgrade failed:&#39;, result.error);
+}</code></pre></div><h2>Breaking Changes Handled</h2>
+<h3>Angular 12 → 13</h3>
+<ul>
+<li>View Engine complete removal</li>
+<li>Angular Package Format changes</li>
+<li>Ivy renderer optimizations</li>
+</ul>
+<h3>Angular 13 → 14</h3>
+<ul>
+<li>Standalone components introduction</li>
+<li>Optional injectors in ViewChild/ContentChild</li>
+<li>Angular CLI improvements</li>
+</ul>
+<h3>Angular 14 → 15</h3>
+<ul>
+<li>Standalone APIs stabilization</li>
+<li>Image directive with optimization</li>
+<li>MDC-based Angular Material</li>
+</ul>
+<h3>Angular 15 → 16</h3>
+<ul>
+<li>Required inputs API</li>
+<li>Router data as input</li>
+<li>New control flow syntax introduction</li>
+</ul>
+<h3>Angular 16 → 17</h3>
+<ul>
+<li>New application bootstrap API</li>
+<li>Assets folder migration to public</li>
+<li>Control flow syntax stable</li>
+<li>SSR improvements</li>
+</ul>
+<h3>Angular 17 → 18</h3>
+<ul>
+<li>Material 3 design system</li>
+<li>New lifecycle hooks</li>
+<li>Enhanced build optimizations</li>
+</ul>
+<h3>Angular 18 → 19</h3>
+<ul>
+<li>Zoneless change detection (opt-in)</li>
+<li>Event replay for better UX</li>
+<li>Hybrid rendering capabilities</li>
+</ul>
+<h3>Angular 19 → 20</h3>
+<ul>
+<li>Incremental hydration stable</li>
+<li>Signals ecosystem maturation</li>
+<li>Advanced SSR features</li>
+</ul>
+<h2>Best Practices</h2>
+<h3>Before Upgrade</h3>
+<ol>
+<li><strong>Create Backup</strong>: Always create project backup before starting</li>
+<li><strong>Update Dependencies</strong>: Resolve any known dependency conflicts</li>
+<li><strong>Run Tests</strong>: Ensure all tests pass in current version</li>
+<li><strong>Clean Build</strong>: Verify project builds successfully</li>
+<li><strong>Commit Changes</strong>: Commit all pending changes to version control</li>
+</ol>
+<h3>During Upgrade</h3>
+<ol>
+<li><strong>Monitor Progress</strong>: Watch for any warnings or errors</li>
+<li><strong>Validate Each Step</strong>: Don&#39;t skip validation phases</li>
+<li><strong>Review Changes</strong>: Understand what each version brings</li>
+<li><strong>Test Incrementally</strong>: Test application after major milestones</li>
+</ol>
+<h3>After Upgrade</h3>
+<ol>
+<li><strong>Run Full Test Suite</strong>: Comprehensive testing after completion</li>
+<li><strong>Performance Check</strong>: Verify performance hasn&#39;t degraded</li>
+<li><strong>Update Documentation</strong>: Update project documentation</li>
+<li><strong>Team Training</strong>: Educate team on new features and patterns</li>
+</ol>
+<h2>Troubleshooting</h2>
+<h3>Common Issues</h3>
+<p><strong>Build Failures</strong></p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash"># Check Node.js version compatibility
+node --version
+
+# Clear caches
+npm run ng cache clean
+rm -rf node_modules package-lock.json
+npm install</code></pre></div><p><strong>Dependency Conflicts</strong></p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash"># Analyze dependency tree
+npm ls --depth=0
+
+# Check for peer dependency warnings
+npm install --dry-run</code></pre></div><p><strong>Rollback Issues</strong></p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash"># List available checkpoints
+ng-upgrade checkpoints --list
+
+# Validate checkpoint integrity
+ng-upgrade checkpoints --validate &lt;checkpoint-id&gt;</code></pre></div><h3>Getting Help</h3>
+<ul>
+<li><a href="https://docs.ng-upgrade-orchestrator.com">Documentation</a></li>
+<li><a href="https://github.com/ng-upgrade-orchestrator/issues">Issues</a></li>
+<li><a href="https://github.com/ng-upgrade-orchestrator/discussions">Discussions</a></li>
+</ul>
+<h2>Contributing</h2>
+<p>We welcome contributions! Please see our <a href="CONTRIBUTING.md">Contributing Guide</a> for details.</p>
+<h3>Development Setup</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git clone https://github.com/ng-upgrade-orchestrator/ng-upgrade-orchestrator.git
+cd ng-upgrade-orchestrator
+npm install
+npm run build
+npm link</code></pre></div><h2>License</h2>
+<p>MIT License - see <a href="LICENSE">LICENSE</a> file for details.</p>
+<h2>Acknowledgments</h2>
+<ul>
+<li>Angular Team for the amazing framework</li>
+<li>Community contributors for feedback and improvements</li>
+<li>All the developers who helped test and refine the orchestrator</li>
+</ul>
+<hr>
+<p><strong>Built with love for the Angular community</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'index.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+
+       <script src="./js/menu-wc.js" defer></script>
+       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

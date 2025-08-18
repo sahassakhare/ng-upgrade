@@ -42,7 +42,7 @@ const inquirer = __importStar(require("inquirer"));
 const chalk_1 = __importDefault(require("chalk"));
 const ora = __importStar(require("ora"));
 const path = __importStar(require("path"));
-const UpgradeOrchestrator_1 = require("./core/UpgradeOrchestrator");
+const EnhancedUpgradeOrchestrator_1 = require("./core/EnhancedUpgradeOrchestrator");
 const program = new commander_1.Command();
 program
     .name('ng-upgrade')
@@ -99,7 +99,7 @@ program
 async function runUpgrade(options) {
     console.log(chalk_1.default.blue.bold('Angular Multi-Version Upgrade Orchestrator\n'));
     const projectPath = path.resolve(options.path);
-    const orchestrator = new UpgradeOrchestrator_1.UpgradeOrchestrator(projectPath);
+    const orchestrator = new EnhancedUpgradeOrchestrator_1.EnhancedUpgradeOrchestrator(projectPath);
     // Interactive prompts if target version not provided
     let targetVersion = options.target;
     if (!targetVersion) {
@@ -186,7 +186,7 @@ async function runUpgrade(options) {
 }
 async function analyzeProject(projectPath) {
     console.log(chalk_1.default.blue.bold('Analyzing Angular project\n'));
-    const orchestrator = new UpgradeOrchestrator_1.UpgradeOrchestrator(projectPath);
+    const orchestrator = new EnhancedUpgradeOrchestrator_1.EnhancedUpgradeOrchestrator(projectPath);
     const spinner = ora.default('Analyzing project...').start();
     try {
         // This would call the project analyzer
@@ -222,7 +222,7 @@ async function analyzeProject(projectPath) {
 }
 async function manageCheckpoints(options) {
     const projectPath = path.resolve(options.path);
-    const orchestrator = new UpgradeOrchestrator_1.UpgradeOrchestrator(projectPath);
+    const orchestrator = new EnhancedUpgradeOrchestrator_1.EnhancedUpgradeOrchestrator(projectPath);
     if (options.list) {
         console.log(chalk_1.default.blue.bold('Available Checkpoints\n'));
         const checkpoints = await orchestrator.getCheckpoints();
