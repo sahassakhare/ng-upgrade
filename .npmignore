@@ -1,0 +1,138 @@
+# Source files
+src/
+*.ts
+tsconfig.json
+.gitignore
+
+# Development files
+.vscode/
+.idea/
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Test files
+*.test.*
+*.spec.*
+__tests__/
+test/
+tests/
+coverage/
+.nyc_output/
+jest.config.*
+
+# Build artifacts (keep only dist/)
+*.tsbuildinfo
+.tsc-output/
+
+# Dependencies (let npm handle)
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist-nuxt
+
+# Gatsby files
+.cache/
+public/
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Editor backups and swap files
+*~
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Local configuration
+.ng-upgrade/
+checkpoints/
+backup/
+
+# Documentation build
+docs/.vuepress/dist
+docs/.vitepress/dist
+
+# Development status files
+BUILD_STATUS.md
+DOCUMENTATION_COMPLETE.md
+
+# Claude development file
+claude.md
+CLAUDE.md

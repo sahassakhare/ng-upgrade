@@ -3,9 +3,17 @@
   "version": "1.0.0",
   "description": "Angular Multi-Version Upgrade Orchestrator - Safely migrate Angular applications across multiple major versions",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "ng-upgrade": "dist/cli.js"
   },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE",
+    "docs/**/*",
+    "examples/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -13,6 +21,8 @@
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm run test && npm run lint",
+    "prepare": "npm run build",
     "ng-upgrade": "node dist/cli.js",
     "demo:analyze": "node dist/cli.js analyze",
     "demo:upgrade": "node dist/cli.js upgrade --target 17 --dry-run",
@@ -23,10 +33,36 @@
     "upgrade",
     "migration",
     "orchestrator",
-    "multi-version"
+    "multi-version",
+    "angular12",
+    "angular13",
+    "angular14",
+    "angular15",
+    "angular16",
+    "angular17",
+    "angular18",
+    "angular19",
+    "angular20",
+    "cli",
+    "automation",
+    "enterprise"
   ],
-  "author": "ng-upgrade-orchestrator",
+  "author": {
+    "name": "sahassakhare",
+    "url": "https://github.com/sahassakhare"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sahassakhare/ng-upgrade.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sahassakhare/ng-upgrade/issues"
+  },
+  "homepage": "https://github.com/sahassakhare/ng-upgrade#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@angular-devkit/schematics": "^17.0.0",
     "@typescript-eslint/parser": "^6.0.0",
