@@ -923,7 +923,7 @@ import { provideClientHydration } from '@angular/platform-browser';`);
             if (migration) {
                 try {
                     this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
-                    let command = migration.command + ' --interactive=false --defaults';
+                    const command = migration.command + ' --interactive=false --defaults';
                     await this.runCommand(command, projectPath);
                     this.progressReporter?.info(`✓ ${migration.name} migration completed`);
                 }

@@ -216,12 +216,14 @@ bootstrapApplication(AppComponent, {
      */
     static insertAtPosition(content, position, text) {
         switch (position) {
-            case 'after-imports':
+            case 'after-imports': {
                 const importEndIndex = this.findLastImportIndex(content);
                 return content.slice(0, importEndIndex) + '\n' + text + content.slice(importEndIndex);
-            case 'before-class':
+            }
+            case 'before-class': {
                 const classIndex = content.indexOf('export class');
                 return content.slice(0, classIndex) + text + '\n' + content.slice(classIndex);
+            }
             default:
                 return content;
         }

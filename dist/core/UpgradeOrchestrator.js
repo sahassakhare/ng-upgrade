@@ -129,8 +129,8 @@ class UpgradeOrchestrator extends events_1.EventEmitter {
      */
     async orchestrateUpgrade(options) {
         const startTime = Date.now();
-        let completedSteps = [];
-        let checkpoints = [];
+        const completedSteps = [];
+        const checkpoints = [];
         try {
             this.emit('progress', { message: 'Starting upgrade orchestration', phase: 'initialization' });
             // 1. Analyze current project

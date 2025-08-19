@@ -19,7 +19,7 @@
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
     "test": "jest --passWithNoTests",
-    "lint": "eslint \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --max-warnings 80",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build && npm run test && npm run docs:generate",
     "prepare": "npm run build",

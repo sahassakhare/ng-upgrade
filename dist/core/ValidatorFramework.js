@@ -236,7 +236,7 @@ class ValidatorFramework {
      */
     async runLintValidation(validation) {
         try {
-            const command = validation.command || this.getLintCommand();
+            const command = validation.command || await this.getLintCommand();
             const timeout = validation.timeout || 120000; // 2 minutes default
             const result = (0, child_process_1.execSync)(command, {
                 cwd: this.projectPath,
@@ -314,11 +314,11 @@ class ValidatorFramework {
     /**
      * Get appropriate lint command
      */
-    getLintCommand() {
+    async getLintCommand() {
         // Check what linter is configured
         const packageJsonPath = path.join(this.projectPath, 'package.json');
         try {
-            const packageJson = require(packageJsonPath);
+            const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
             const scripts = packageJson.scripts || {};
             if (scripts.lint) {
                 return 'npm run lint';

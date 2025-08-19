@@ -44,8 +44,8 @@ class EnhancedUpgradeOrchestrator extends events_1.EventEmitter {
      */
     async orchestrateUpgrade(options) {
         const startTime = Date.now();
-        let completedSteps = [];
-        let checkpoints = [];
+        const completedSteps = [];
+        const checkpoints = [];
         try {
             // Pass progress reporter to options for handlers to use
             options.progressReporter = this.progressReporter;
