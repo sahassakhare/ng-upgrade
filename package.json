@@ -1,7 +1,7 @@
 {
   "name": "ng-upgrade-orchestrator",
   "version": "1.0.0",
-  "description": "Angular Multi-Version Upgrade Orchestrator - Safely migrate Angular applications across multiple major versions",
+  "description": "Enterprise-grade Angular Multi-Version Upgrade Orchestrator with automatic npm installation, comprehensive dependency management, and seamless integration of all 9 official Angular migrations. Safely migrate Angular applications across multiple major versions (12→20) with zero functionality loss.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -40,6 +40,12 @@
     "migration",
     "orchestrator",
     "multi-version",
+    "npm-install",
+    "dependency-management",
+    "official-migrations",
+    "standalone-components",
+    "control-flow",
+    "signals",
     "angular12",
     "angular13",
     "angular14",
@@ -51,7 +57,9 @@
     "angular20",
     "cli",
     "automation",
-    "enterprise"
+    "enterprise",
+    "zero-downtime",
+    "ast-transformations"
   ],
   "author": {
     "name": "sahassakhare",

@@ -39,5 +39,21 @@ export declare class DependencyInstaller {
      * Run npm install to ensure all dependencies are installed
      */
     runNpmInstall(): Promise<boolean>;
+    /**
+     * Run npm install with retry mechanism
+     */
+    private runNpmInstallWithRetry;
+    /**
+     * Install individual packages as fallback
+     */
+    private installIndividualPackages;
+    /**
+     * Safely update package.json with new dependencies
+     */
+    private updatePackageJsonSafely;
+    /**
+     * Verify that dependencies are actually installed
+     */
+    verifyDependenciesInstalled(dependencies: DependencyUpdate[]): Promise<boolean>;
 }
 //# sourceMappingURL=DependencyInstaller.d.ts.map

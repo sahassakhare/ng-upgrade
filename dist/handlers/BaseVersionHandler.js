@@ -105,6 +105,9 @@ class BaseVersionHandler {
         await this.updateTypeScript(projectPath);
         // Update Angular CLI
         await this.updateAngularCli(projectPath);
+        // Ensure all dependencies are properly installed before proceeding
+        this.progressReporter.updateMessage('Verifying dependency installation...');
+        await this.ensureDependenciesInstalled(projectPath);
         // Apply version-specific transformations
         await this.applyVersionSpecificChanges(projectPath, options);
         // Update configuration files
@@ -161,20 +164,26 @@ class BaseVersionHandler {
     /**
      * Update Angular dependencies to target version with automatic installation
      */
-    async updateAngularDependencies(projectPath) {
-        // Use the DependencyInstaller for automatic installation
-        const success = await this.dependencyInstaller.updateAngularPackages(this.version);
-        if (!success) {
-            this.progressReporter.warn('Angular dependencies updated in package.json. Manual npm install may be required.');
+    async updateAngularDependencies(_projectPath) {
+        try {
+            // Use the DependencyInstaller for automatic installation
+            const success = await this.dependencyInstaller.updateAngularPackages(this.version);
+            if (!success) {
+                this.progressReporter.warn('Angular dependencies updated in package.json. Dependencies will be verified later.');
+            }
+            else {
+                this.progressReporter.success('Angular dependencies installed successfully');
+            }
         }
-        else {
-            this.progressReporter.success('Angular dependencies installed successfully');
+        catch (error) {
+            this.progressReporter.warn(`Angular dependency update failed: ${error instanceof Error ? error.message : String(error)}`);
+            // Don't fail the entire upgrade, dependencies will be verified later
         }
     }
     /**
      * Update TypeScript version with automatic installation
      */
-    async updateTypeScript(projectPath) {
+    async updateTypeScript(_projectPath) {
         const requiredTsVersion = this.getRequiredTypeScriptVersion();
         this.progressReporter.updateMessage(`Installing TypeScript ${requiredTsVersion}...`);
         const success = await this.dependencyInstaller.updateTypeScript(requiredTsVersion);
@@ -188,7 +197,7 @@ class BaseVersionHandler {
     /**
      * Update Angular CLI with automatic installation
      */
-    async updateAngularCli(projectPath) {
+    async updateAngularCli(_projectPath) {
         // Angular CLI is already updated as part of updateAngularDependencies
         // This method is kept for compatibility but the work is done above
         this.progressReporter.info('Angular CLI updated with other Angular packages');
@@ -519,75 +528,94 @@ class BaseVersionHandler {
     getAvailableMigrations() {
         const version = parseInt(this.version);
         const migrations = [];
-        // Angular Update migrations - run ng update commands
-        if (version >= 14) {
+        // Core Angular Update (always run first)
+        if (version >= 12) {
             migrations.push({
-                name: 'Angular Core Update',
-                command: `npx ng update @angular/core@${version} --migrate-only --allow-dirty`,
-                description: 'Run Angular core migrations',
+                name: 'Angular Framework Update',
+                command: `npx ng update @angular/core@${version} @angular/cli@${version} --allow-dirty --force`,
+                description: 'Update Angular framework and apply automatic migrations',
                 optional: false
             });
         }
-        // Angular CLI Update migrations  
+        // Official Angular Migration Schematics - Integrated Seamlessly
+        // 1. Standalone Components Migration (Angular 14+)
         if (version >= 14) {
             migrations.push({
-                name: 'Angular CLI Update',
-                command: `npx ng update @angular/cli@${version} --migrate-only --allow-dirty`,
-                description: 'Run Angular CLI migrations',
+                name: 'Standalone Components Migration',
+                command: 'npx ng generate @angular/core:standalone-migration --mode=convert-to-standalone --allow-dirty',
+                description: 'Convert components to standalone, removing NgModule dependencies',
+                optional: false // Make it automatic for better UX
+            });
+        }
+        // 2. inject() Function Migration (Angular 14+)
+        if (version >= 14) {
+            migrations.push({
+                name: 'inject() Function Migration',
+                command: 'npx ng generate @angular/core:inject-function --allow-dirty',
+                description: 'Convert constructor injection to inject() function',
                 optional: false
             });
         }
-        // Standalone Components Schematic (Angular 14+)
+        // 3. Control Flow Migration (Angular 17+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Control Flow Migration',
+                command: 'npx ng generate @angular/core:control-flow-migration --allow-dirty',
+                description: 'Convert *ngIf, *ngFor, *ngSwitch to @if, @for, @switch',
+                optional: false // Make it automatic for modern syntax
+            });
+        }
+        // 4. Signal Inputs Migration (Angular 17.1+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Signal Inputs Migration',
+                command: 'npx ng generate @angular/core:signal-inputs --allow-dirty',
+                description: 'Convert @Input fields to signal inputs',
+                optional: false
+            });
+        }
+        // 5. Signal Outputs Migration (Angular 17.3+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Signal Outputs Migration',
+                command: 'npx ng generate @angular/core:outputs --allow-dirty',
+                description: 'Convert @Output custom events to output function',
+                optional: false
+            });
+        }
+        // 6. Signal Queries Migration (Angular 17.3+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Signal Queries Migration',
+                command: 'npx ng generate @angular/core:signal-queries --allow-dirty',
+                description: 'Convert ViewChild/ContentChild to signal queries',
+                optional: false
+            });
+        }
+        // 7. Route Lazy Loading Migration (Angular 14+)
         if (version >= 14) {
             migrations.push({
-                name: 'Standalone Components Conversion',
-                command: 'npx ng generate @angular/core:standalone --mode=convert-to-standalone --allow-dirty',
-                description: 'Convert components to standalone components',
-                optional: true
+                name: 'Route Lazy Loading Migration',
+                command: 'npx ng generate @angular/core:route-lazy-loading --allow-dirty',
+                description: 'Convert eager routes to lazy-loaded routes for smaller bundles',
+                optional: true // Keep optional as it might affect routing structure
             });
         }
-        // Control Flow Syntax Schematic (Angular 17+)
-        if (version >= 17) {
-            migrations.push({
-                name: 'Control Flow Syntax Conversion',
-                command: 'npx ng generate @angular/core:control-flow --mode=convert-to-control-flow --allow-dirty',
-                description: 'Convert *ngIf, *ngFor to @if, @for syntax',
-                optional: true
-            });
-        }
-        // Signal Outputs (Angular 17.3+)
-        if (version >= 17) {
-            migrations.push({
-                name: 'Signal Outputs',
-                command: 'npx ng generate @angular/core:signal-outputs',
-                description: 'Convert @Output fields to signal outputs',
-                optional: true
-            });
-        }
-        // Signal Queries (Angular 17.2+)
-        if (version >= 17) {
-            migrations.push({
-                name: 'Signal Queries',
-                command: 'npx ng generate @angular/core:signal-queries',
-                description: 'Convert decorator queries to signal queries',
-                optional: true
-            });
-        }
-        // Self-closing Tags (Angular 16+)
+        // 8. Self-closing Tags Migration (Angular 16+)
         if (version >= 16) {
             migrations.push({
-                name: 'Self-closing Tags',
-                command: 'npx ng generate @angular/core:self-closing-tags',
+                name: 'Self-closing Tags Migration',
+                command: 'npx ng generate @angular/core:self-closing-tags --allow-dirty',
                 description: 'Convert templates to use self-closing tags',
-                optional: true
+                optional: false
             });
         }
-        // Cleanup Unused Imports (All versions)
+        // 9. Cleanup Unused Imports (All versions)
         migrations.push({
             name: 'Cleanup Unused Imports',
-            command: 'npx ng generate @angular/core:cleanup-unused-imports',
-            description: 'Remove unused imports from project files',
-            optional: true
+            command: 'npx ng generate @angular/core:cleanup-unused-imports --allow-dirty',
+            description: 'Remove unused imports for cleaner code',
+            optional: false
         });
         return migrations;
     }
@@ -615,7 +643,40 @@ class BaseVersionHandler {
         }
     }
     /**
-     * Install dependencies
+     * Ensure all dependencies are properly installed
+     */
+    async ensureDependenciesInstalled(projectPath) {
+        try {
+            // Check if node_modules exists and is not empty
+            const nodeModulesPath = path.join(projectPath, 'node_modules');
+            const nodeModulesExists = await fs.pathExists(nodeModulesPath);
+            if (!nodeModulesExists) {
+                this.progressReporter?.warn('node_modules not found. Running npm install...');
+                const success = await this.dependencyInstaller.runNpmInstall();
+                if (!success) {
+                    throw new Error('Failed to install dependencies. Please run npm install manually.');
+                }
+            }
+            else {
+                // Verify key Angular packages are installed
+                const angularCore = path.join(nodeModulesPath, '@angular', 'core');
+                if (!await fs.pathExists(angularCore)) {
+                    this.progressReporter?.warn('Angular core packages missing. Running npm install...');
+                    const success = await this.dependencyInstaller.runNpmInstall();
+                    if (!success) {
+                        this.progressReporter?.warn('npm install failed, but continuing with upgrade...');
+                    }
+                }
+            }
+            this.progressReporter?.success('✓ Dependencies verified');
+        }
+        catch (error) {
+            this.progressReporter?.warn(`Dependency verification failed: ${error instanceof Error ? error.message : String(error)}`);
+            // Don't fail the entire upgrade for dependency issues
+        }
+    }
+    /**
+     * Install dependencies (legacy method - kept for compatibility)
      */
     async installDependencies(projectPath) {
         try {

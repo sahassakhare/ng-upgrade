@@ -124,15 +124,15 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
     /**
      * Update Angular dependencies to target version with automatic installation
      */
-    protected updateAngularDependencies(projectPath: string): Promise<void>;
+    protected updateAngularDependencies(_projectPath: string): Promise<void>;
     /**
      * Update TypeScript version with automatic installation
      */
-    protected updateTypeScript(projectPath: string): Promise<void>;
+    protected updateTypeScript(_projectPath: string): Promise<void>;
     /**
      * Update Angular CLI with automatic installation
      */
-    protected updateAngularCli(projectPath: string): Promise<void>;
+    protected updateAngularCli(_projectPath: string): Promise<void>;
     /**
      * Update configuration files while preserving existing content
      */
@@ -195,7 +195,11 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      */
     protected runSpecificMigration(projectPath: string, migrationName: string, interactive?: boolean): Promise<void>;
     /**
-     * Install dependencies
+     * Ensure all dependencies are properly installed
+     */
+    protected ensureDependenciesInstalled(projectPath: string): Promise<void>;
+    /**
+     * Install dependencies (legacy method - kept for compatibility)
      */
     protected installDependencies(projectPath: string): Promise<void>;
     /**

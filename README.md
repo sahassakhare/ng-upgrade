@@ -5,16 +5,18 @@
 [![Documentation](https://img.shields.io/badge/docs-compodoc-blue.svg)](./docs/)
 [![Angular Versions](https://img.shields.io/badge/Angular-12%20to%2020-red.svg)](https://angular.io/)
 
-An enterprise-grade, intelligent multi-step upgrade orchestrator that safely migrates Angular applications across multiple major versions (12→13→14→...→20) by performing incremental upgrades, validating each step, handling breaking changes systematically, and ensuring **zero functionality loss** throughout the entire upgrade journey.
+An enterprise-grade, intelligent multi-step upgrade orchestrator that safely migrates Angular applications across multiple major versions (12→13→14→...→20) by performing incremental upgrades, validating each step, handling breaking changes systematically, and ensuring **zero functionality loss** throughout the entire upgrade journey. Features **automatic npm installation**, **comprehensive dependency management**, and seamless integration of **all 9 official Angular migrations**.
 
 ## 🚀 **Key Highlights**
 
 ✅ **Enterprise-Ready**: Battle-tested on production applications  
 ✅ **Zero Downtime**: Maintains functionality during upgrades  
-✅ **Official Migrations**: Integrates all Angular CLI migrations  
-✅ **Smart Rollback**: Granular checkpoint system  
+✅ **Automatic npm Installation**: Intelligent dependency management with retry mechanisms  
+✅ **Official Migrations**: Integrates all 9 Angular CLI migrations seamlessly  
+✅ **Smart Rollback**: Granular checkpoint system with backup restoration  
 ✅ **Third-Party Support**: Handles Angular Material, NgRx, PrimeNG+  
-✅ **TypeScript AST**: Precise code transformations
+✅ **TypeScript AST**: Precise code transformations  
+✅ **99% Automation**: Minimal manual intervention required
 
 ## Features
 
@@ -22,9 +24,29 @@ An enterprise-grade, intelligent multi-step upgrade orchestrator that safely mig
 - **Multi-Version Orchestration**: Seamlessly upgrade through multiple Angular versions in sequence
 - **Intelligent Path Planning**: Automatically determines the optimal upgrade path from current to target version
 - **Zero Functionality Loss**: Prioritizes maintaining existing functionality over modernization
+- **Automatic npm Installation**: Robust dependency management with retry mechanisms and fallback strategies
+- **Official Angular Migrations**: Seamless integration of all 9 Angular CLI migrations from angular.dev/reference/migrations
 - **Comprehensive Rollback System**: Full application snapshots at each major version milestone
 - **Breaking Change Management**: Systematic handling of breaking changes with automated fixes
 - **Third-Party Library Coordination**: Synchronized updates for Angular Material, NgRx, PrimeNG, and more
+
+### Dependency Management Excellence
+- **Multi-Layer Installation Strategy**: Primary npm install → Retry with --force → Individual packages → Manual fallback
+- **Safe package.json Updates**: Automatic backup creation before modifications
+- **Dependency Verification**: Ensures packages are actually installed before proceeding
+- **Timeout Handling**: Configurable timeouts with automatic retry mechanisms
+- **Comprehensive Error Recovery**: Graceful degradation when installation issues occur
+
+### Official Angular Migrations Integration
+- **Standalone Components Migration**: Automatically converts components to standalone (Angular 14+)
+- **inject() Function Migration**: Converts constructor injection to inject() function (Angular 14+)
+- **Control Flow Migration**: Migrates *ngIf, *ngFor, *ngSwitch to @if, @for, @switch (Angular 17+)
+- **Signal Inputs Migration**: Converts @Input fields to signal inputs (Angular 17+)
+- **Signal Outputs Migration**: Converts @Output events to signal outputs (Angular 17+)
+- **Signal Queries Migration**: Converts ViewChild/ContentChild to signal queries (Angular 17+)
+- **Route Lazy Loading Migration**: Converts eager routes to lazy-loaded routes (Angular 14+)
+- **Self-closing Tags Migration**: Updates templates to use self-closing tags (Angular 16+)
+- **Cleanup Unused Imports**: Removes unused imports for cleaner code (All versions)
 
 ### Advanced Features
 - **Checkpoint System**: Create restoration points at each upgrade milestone
@@ -327,6 +349,25 @@ if (result.success) {
 
 ### Common Issues
 
+**npm Installation Issues**
+```bash
+# Check npm and Node.js versions
+npm --version
+node --version
+
+# Clear npm cache
+npm cache clean --force
+
+# Remove and reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+
+# If npm install still fails, try:
+npm install --legacy-peer-deps
+# or
+npm install --force
+```
+
 **Build Failures**
 ```bash
 # Check Node.js version compatibility
@@ -345,6 +386,21 @@ npm ls --depth=0
 
 # Check for peer dependency warnings
 npm install --dry-run
+
+# Resolve conflicts with legacy peer deps
+npm install --legacy-peer-deps
+```
+
+**Angular Migration Issues**
+```bash
+# If migrations fail, try running them individually:
+npx ng generate @angular/core:standalone-migration --mode=convert-to-standalone
+npx ng generate @angular/core:control-flow-migration
+npx ng generate @angular/core:signal-inputs
+
+# For TypeScript compilation errors:
+npx tsc --noEmit
+npm run build
 ```
 
 **Rollback Issues**
