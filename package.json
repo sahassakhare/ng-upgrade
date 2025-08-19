@@ -27,7 +27,7 @@
     "demo:analyze": "node dist/cli.js analyze",
     "demo:upgrade": "node dist/cli.js upgrade --target 20 --dry-run",
     "demo:basic": "node examples/basic-upgrade.js",
-    "docs:generate": "compodoc -p tsconfig.json -d docs/api --theme material --name \"Angular Multi-Version Upgrade Orchestrator\" --hideGenerator --disableCoverage false --disablePrivate false --disableProtected false --disableInternal false --disableLifeCycleHooks false --disableRoutesGraph true",
+    "docs:generate": "compodoc src -p tsconfig.json -d docs/api --theme material --name \"Angular Multi-Version Upgrade Orchestrator\" --hideGenerator --disableCoverage false --disablePrivate false --disableProtected false --disableInternal false --disableLifeCycleHooks false --disableRoutesGraph true",
     "docs:serve": "compodoc -s -p tsconfig.json -d docs --theme material --name \"Angular Multi-Version Upgrade Orchestrator\"",
     "docs:watch": "compodoc -p tsconfig.json -d docs --theme material --name \"Angular Multi-Version Upgrade Orchestrator\" --watch",
     "docs:coverage": "compodoc -p tsconfig.json --coverageTest 90 --coverageTestThresholdFail true",
