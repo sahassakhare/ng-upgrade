@@ -394,7 +394,7 @@ export class Angular17Handler extends BaseVersionHandler {
           this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
           
           // Run migration with non-interactive mode for automation
-          let command = migration.command + ' --interactive=false --defaults';
+          const command = migration.command + ' --interactive=false --defaults';
           
           await this.runCommand(command, projectPath);
           

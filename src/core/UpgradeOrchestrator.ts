@@ -139,8 +139,8 @@ export class UpgradeOrchestrator extends EventEmitter {
    */
   async orchestrateUpgrade(options: UpgradeOptions): Promise<UpgradeResult> {
     const startTime = Date.now();
-    let completedSteps: UpgradeStep[] = [];
-    let checkpoints: Checkpoint[] = [];
+    const completedSteps: UpgradeStep[] = [];
+    const checkpoints: Checkpoint[] = [];
 
     try {
       this.emit('progress', { message: 'Starting upgrade orchestration', phase: 'initialization' });
