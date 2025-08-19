@@ -1,27 +1,41 @@
 // @ts-check
 
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
+const js = require('@eslint/js');
 
-module.exports = tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+module.exports = [
+  js.configs.recommended,
   {
+    files: ['src/**/*.ts'],
     languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
+      parser: require('@typescript-eslint/parser'),
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+        project: './tsconfig.json',
+      },
+      globals: {
+        ...require('globals').node,
+      },
+    },
+    plugins: {
+      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
     },
     rules: {
+      // Base ESLint rules  
+      'no-console': 'off',
+      'prefer-const': 'warn',
+      'no-case-declarations': 'error',
+      'no-unused-vars': 'off', // Disable base rule in favor of TypeScript version
+      
+      // TypeScript ESLint rules
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/no-explicit-any': 'off', // Allow any for now
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-empty-function': 'off',
-      'no-console': 'off',
-      'prefer-const': 'warn', // Downgrade to warning
-      'no-case-declarations': 'error', // Keep this as error
+      '@typescript-eslint/no-require-imports': 'error',
     },
   },
   {
     ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', 'docs/**'],
-  }
-);
+  },
+];
