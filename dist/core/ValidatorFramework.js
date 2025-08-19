@@ -39,6 +39,7 @@ const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const semver = __importStar(require("semver"));
 class ValidatorFramework {
+    projectPath;
     constructor(projectPath) {
         this.projectPath = projectPath;
     }

@@ -37,9 +37,7 @@ exports.CodeTransformer = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 class CodeTransformer {
-    constructor() {
-        this.type = 'code';
-    }
+    type = 'code';
     async apply(projectPath, change) {
         console.log(`Applying transformation for: ${change.description}`);
         switch (change.type) {

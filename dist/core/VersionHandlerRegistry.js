@@ -37,9 +37,9 @@ const CodeTransformer_1 = require("../transformers/CodeTransformer");
  * ```
  */
 class VersionHandlerRegistry {
+    handlers = new Map();
+    transformers = new Map();
     constructor() {
-        this.handlers = new Map();
-        this.transformers = new Map();
         this.registerDefaultHandlers();
         this.registerDefaultTransformers();
     }

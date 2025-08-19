@@ -223,6 +223,13 @@ export interface UpgradeOptions {
    * If not provided, a default progress reporter will be created.
    */
   progressReporter?: any;
+  
+  /** 
+   * Enable experimental zoneless change detection (Angular 19+).
+   * This is an opt-in feature for applications that want to use 
+   * zoneless change detection instead of Zone.js.
+   */
+  enableZonelessChangeDetection?: boolean;
 }
 
 export interface UpgradeResult {
@@ -312,4 +319,17 @@ export interface ProgressIssue {
   step?: string;
   resolvable: boolean;
   resolution?: string;
+}
+
+export interface DependencyUpdate {
+  name: string;
+  version: string;
+  type: 'dependencies' | 'devDependencies' | 'peerDependencies';
+}
+
+export interface Migration {
+  name: string;
+  command: string;
+  description: string;
+  optional: boolean;
 }

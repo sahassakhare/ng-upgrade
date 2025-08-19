@@ -17,6 +17,16 @@ const DependencyInstaller_1 = require("../utils/DependencyInstaller");
  * - File content preservation
  */
 class EnhancedUpgradeOrchestrator extends events_1.EventEmitter {
+    projectPath;
+    versionHandlers;
+    checkpointManager;
+    pathCalculator;
+    projectAnalyzer;
+    validator;
+    rollbackEngine;
+    progressReporter;
+    dependencyInstaller;
+    currentCheckpoint;
     constructor(projectPath) {
         super();
         this.projectPath = projectPath;

@@ -37,6 +37,7 @@ exports.ProjectAnalyzer = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 class ProjectAnalyzer {
+    projectPath;
     constructor(projectPath) {
         this.projectPath = projectPath;
     }

@@ -40,9 +40,59 @@ const child_process_1 = require("child_process");
 const DependencyInstaller_1 = require("../utils/DependencyInstaller");
 const FileContentPreserver_1 = require("../utils/FileContentPreserver");
 const ProgressReporter_1 = require("../utils/ProgressReporter");
+/**
+ * Base class for all Angular version handlers providing common upgrade functionality
+ *
+ * This abstract class serves as the foundation for all version-specific upgrade handlers,
+ * providing shared infrastructure for dependency management, configuration updates,
+ * migration execution, and progress reporting. Each concrete handler extends this class
+ * to implement version-specific transformations.
+ *
+ * @abstract
+ * @implements {VersionHandler}
+ *
+ * @example
+ * ```typescript
+ * export class Angular16Handler extends BaseVersionHandler {
+ *   readonly version = '16';
+ *
+ *   protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
+ *     // Implementation specific to Angular 16
+ *   }
+ * }
+ * ```
+ *
+ * @since 1.0.0
+ * @author Angular Multi-Version Upgrade Orchestrator
+ */
 class BaseVersionHandler {
+    /** Utility for managing dependency installations and updates */
+    dependencyInstaller;
+    /** Utility for reporting upgrade progress and status messages */
+    progressReporter;
     /**
-     * Execute version-specific upgrade logic
+     * Executes the complete version-specific upgrade process
+     *
+     * Orchestrates the entire upgrade workflow including dependency updates,
+     * configuration changes, code transformations, and validation. This is the
+     * main entry point for version upgrades.
+     *
+     * @param projectPath - The absolute path to the Angular project root
+     * @param step - The upgrade step configuration with source and target versions
+     * @param options - Comprehensive upgrade options including strategy and validation level
+     * @throws {Error} When critical upgrade operations fail
+     *
+     * @example
+     * ```typescript
+     * const handler = new Angular16Handler();
+     * await handler.execute('/path/to/project', {
+     *   fromVersion: '15',
+     *   toVersion: '16'
+     * }, {
+     *   strategy: 'balanced',
+     *   validationLevel: 'comprehensive'
+     * });
+     * ```
      */
     async execute(projectPath, step, options) {
         this.dependencyInstaller = new DependencyInstaller_1.DependencyInstaller(projectPath);
@@ -64,7 +114,22 @@ class BaseVersionHandler {
         this.progressReporter.completeStep(`Angular ${this.version} Upgrade`, `Angular ${this.version} upgrade completed successfully`);
     }
     /**
-     * Validate prerequisites for this version
+     * Validates all prerequisites required for this Angular version upgrade
+     *
+     * Checks Node.js version, TypeScript compatibility, and project structure
+     * to ensure the upgrade can proceed safely. Each version handler can override
+     * this method to add version-specific validation requirements.
+     *
+     * @param projectPath - The absolute path to the Angular project root
+     * @returns Promise resolving to true if all prerequisites are met
+     *
+     * @example
+     * ```typescript
+     * const isReady = await handler.validatePrerequisites('/path/to/project');
+     * if (!isReady) {
+     *   throw new Error('Prerequisites not met for Angular 16 upgrade');
+     * }
+     * ```
      */
     async validatePrerequisites(projectPath) {
         try {
@@ -226,10 +291,11 @@ class BaseVersionHandler {
         }
     }
     /**
-     * Run Angular update schematics
+     * Run Angular update schematics and official migrations
      */
     async runAngularUpdateSchematics(projectPath) {
         try {
+            this.progressReporter?.updateMessage('Running Angular update schematics...');
             // Run ng update for Angular core
             (0, child_process_1.execSync)(`npx ng update @angular/core@${this.version} --migrate-only --allow-dirty`, {
                 cwd: projectPath,
@@ -240,9 +306,130 @@ class BaseVersionHandler {
                 cwd: projectPath,
                 stdio: 'inherit'
             });
+            // Run version-specific official migrations
+            await this.runVersionSpecificMigrations(projectPath);
+            this.progressReporter?.success('✓ Angular update schematics completed');
         }
         catch (error) {
-            console.warn('Angular schematics migration completed with warnings');
+            this.progressReporter?.warn('Angular schematics migration completed with warnings');
+        }
+    }
+    /**
+     * Run version-specific official Angular migrations
+     */
+    async runVersionSpecificMigrations(projectPath) {
+        const migrations = this.getAvailableMigrations();
+        for (const migration of migrations) {
+            try {
+                this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
+                await this.runCommand(migration.command, projectPath);
+                this.progressReporter?.info(`✓ ${migration.name} migration completed`);
+            }
+            catch (error) {
+                this.progressReporter?.warn(`${migration.name} migration completed with warnings: ${error instanceof Error ? error.message : String(error)}`);
+            }
+        }
+    }
+    /**
+     * Get available migrations for this Angular version
+     * Override in specific version handlers to provide version-specific migrations
+     */
+    getAvailableMigrations() {
+        const version = parseInt(this.version);
+        const migrations = [];
+        // Standalone Components (Angular 14+)
+        if (version >= 14) {
+            migrations.push({
+                name: 'Standalone Components',
+                command: 'npx ng generate @angular/core:standalone',
+                description: 'Convert components to standalone components',
+                optional: true
+            });
+        }
+        // Control Flow Syntax (Angular 17+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Control Flow Syntax',
+                command: 'npx ng generate @angular/core:control-flow',
+                description: 'Convert structural directives to built-in control flow',
+                optional: true
+            });
+        }
+        // inject() Function (Angular 14+)
+        if (version >= 14) {
+            migrations.push({
+                name: 'inject() Function',
+                command: 'npx ng generate @angular/core:inject-function',
+                description: 'Convert constructor injection to inject() function',
+                optional: true
+            });
+        }
+        // Signal Inputs (Angular 17.1+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Signal Inputs',
+                command: 'npx ng generate @angular/core:signal-inputs',
+                description: 'Convert @Input fields to signal inputs',
+                optional: true
+            });
+        }
+        // Signal Outputs (Angular 17.3+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Signal Outputs',
+                command: 'npx ng generate @angular/core:signal-outputs',
+                description: 'Convert @Output fields to signal outputs',
+                optional: true
+            });
+        }
+        // Signal Queries (Angular 17.2+)
+        if (version >= 17) {
+            migrations.push({
+                name: 'Signal Queries',
+                command: 'npx ng generate @angular/core:signal-queries',
+                description: 'Convert decorator queries to signal queries',
+                optional: true
+            });
+        }
+        // Self-closing Tags (Angular 16+)
+        if (version >= 16) {
+            migrations.push({
+                name: 'Self-closing Tags',
+                command: 'npx ng generate @angular/core:self-closing-tags',
+                description: 'Convert templates to use self-closing tags',
+                optional: true
+            });
+        }
+        // Cleanup Unused Imports (All versions)
+        migrations.push({
+            name: 'Cleanup Unused Imports',
+            command: 'npx ng generate @angular/core:cleanup-unused-imports',
+            description: 'Remove unused imports from project files',
+            optional: true
+        });
+        return migrations;
+    }
+    /**
+     * Run specific migration by name
+     */
+    async runSpecificMigration(projectPath, migrationName, interactive = false) {
+        const migrations = this.getAvailableMigrations();
+        const migration = migrations.find(m => m.name === migrationName);
+        if (!migration) {
+            throw new Error(`Migration '${migrationName}' not found for Angular ${this.version}`);
+        }
+        try {
+            this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
+            let command = migration.command;
+            if (!interactive) {
+                command += ' --interactive=false --defaults';
+            }
+            await this.runCommand(command, projectPath);
+            this.progressReporter?.success(`✓ ${migration.name} migration completed`);
+        }
+        catch (error) {
+            this.progressReporter?.warn(`${migration.name} migration failed: ${error instanceof Error ? error.message : String(error)}`);
+            throw error;
         }
     }
     /**

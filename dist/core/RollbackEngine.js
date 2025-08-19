@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RollbackEngine = void 0;
 class RollbackEngine {
+    checkpointManager;
     constructor(checkpointManager) {
         this.checkpointManager = checkpointManager;
     }

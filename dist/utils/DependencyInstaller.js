@@ -43,6 +43,8 @@ const path = __importStar(require("path"));
 const chalk = __importStar(require("chalk"));
 const ora_1 = __importDefault(require("ora"));
 class DependencyInstaller {
+    projectPath;
+    spinner;
     constructor(projectPath) {
         this.projectPath = projectPath;
         this.spinner = (0, ora_1.default)();

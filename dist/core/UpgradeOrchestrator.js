@@ -48,6 +48,14 @@ const RollbackEngine_1 = require("./RollbackEngine");
  * @emits rollback-complete - Emitted when rollback process completes
  */
 class UpgradeOrchestrator extends events_1.EventEmitter {
+    projectPath;
+    versionHandlers;
+    checkpointManager;
+    pathCalculator;
+    projectAnalyzer;
+    validator;
+    rollbackEngine;
+    currentCheckpoint;
     /**
      * Creates a new UpgradeOrchestrator instance.
      *

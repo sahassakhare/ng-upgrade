@@ -38,19 +38,61 @@ const BaseVersionHandler_1 = require("./BaseVersionHandler");
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const FileContentPreserver_1 = require("../utils/FileContentPreserver");
+/**
+ * Angular 17 Handler - New application bootstrap and asset management
+ *
+ * Manages migration to Angular 17 with new application bootstrap API, asset folder
+ * restructuring, enhanced SSR capabilities, and stable control flow syntax. This
+ * version introduces significant architectural improvements and developer experience
+ * enhancements while maintaining backward compatibility.
+ *
+ * Key Features in Angular 17:
+ * - New application bootstrap API
+ * - Assets folder migration to public folder
+ * - Stable control flow syntax (@if, @for, @switch)
+ * - Enhanced SSR with improved hydration
+ * - Build system optimizations
+ * - Material Design 3 support
+ *
+ * @example
+ * ```typescript
+ * const handler = new Angular17Handler();
+ * await handler.applyVersionSpecificChanges('/path/to/project', {
+ *   strategy: 'progressive',
+ *   enableNewBootstrap: true
+ * });
+ * ```
+ *
+ * @since 1.0.0
+ * @author Angular Multi-Version Upgrade Orchestrator
+ */
 class Angular17Handler extends BaseVersionHandler_1.BaseVersionHandler {
-    constructor() {
-        super(...arguments);
-        this.version = '17';
-    }
+    /** The Angular version this handler manages */
+    version = '17';
+    /**
+     * Gets the minimum required Node.js version for Angular 17
+     * @returns The minimum Node.js version requirement
+     */
     getRequiredNodeVersion() {
         return '>=18.13.0';
     }
+    /**
+     * Gets the required TypeScript version range for Angular 17
+     * @returns The TypeScript version requirement
+     */
     getRequiredTypeScriptVersion() {
         return '>=5.2.0 <5.3.0';
     }
     /**
-     * Apply Angular 17 specific changes
+     * Applies all Angular 17 specific transformations to the project
+     *
+     * Orchestrates migration including new application bootstrap, asset restructuring,
+     * control flow syntax stabilization, and SSR enhancements. Provides safe migration
+     * paths while preserving existing functionality.
+     *
+     * @param projectPath - The absolute path to the Angular project root
+     * @param options - Upgrade configuration options including strategy and feature flags
+     * @throws {Error} When critical transformations fail
      */
     async applyVersionSpecificChanges(projectPath, options) {
         console.log('Applying Angular 17 specific changes...');
@@ -83,8 +125,18 @@ class Angular17Handler extends BaseVersionHandler_1.BaseVersionHandler {
         }
     }
     /**
-     * Migrate assets folder to public folder (Angular 17+)
-     * This preserves the existing assets while adding the new public folder
+     * Migrates assets folder to public folder structure (Angular 17+)
+     *
+     * Safely migrates from src/assets to public folder structure while maintaining
+     * backward compatibility. Creates new public folder, copies assets, and updates
+     * angular.json configuration to support both asset structures during transition.
+     *
+     * @param projectPath - The absolute path to the Angular project root
+     * @private
+     *
+     * @example
+     * Before: src/assets/images/logo.png
+     * After: public/images/logo.png (with src/assets still working)
      */
     async migrateAssetsToPublic(projectPath) {
         const assetsPath = path.join(projectPath, 'src', 'assets');
@@ -234,6 +286,67 @@ class Angular17Handler extends BaseVersionHandler_1.BaseVersionHandler {
             this.createBreakingChange('ng17-ssr-improvements', 'build', 'low', 'SSR improvements and new features', 'Enhanced server-side rendering with better hydration', 'SSR applications may benefit from new hydration features'),
             this.createBreakingChange('ng17-angular-material-update', 'dependency', 'medium', 'Angular Material 17 with Material Design 3', 'Angular Material updated with Material Design 3 components', 'Review Material component designs as they may have visual changes')
         ];
+    }
+    /**
+     * Override to provide Angular 17 specific migrations
+     */
+    getAvailableMigrations() {
+        const baseMigrations = super.getAvailableMigrations();
+        // Add Angular 17 specific migrations
+        const angular17Migrations = [
+            {
+                name: 'New Application Bootstrap',
+                command: 'npx ng generate @angular/core:new-app-bootstrap',
+                description: 'Migrate to new bootstrapApplication API',
+                optional: true
+            },
+            {
+                name: 'Lazy Loading Routes',
+                command: 'npx ng generate @angular/core:lazy-routes',
+                description: 'Convert eagerly loaded routes to lazy loaded ones',
+                optional: true
+            },
+            {
+                name: 'Assets to Public Migration',
+                command: 'npx ng generate @angular/core:assets-to-public',
+                description: 'Migrate assets folder to public folder structure',
+                optional: true
+            }
+        ];
+        return [...baseMigrations, ...angular17Migrations];
+    }
+    /**
+     * Run Angular 17 specific migrations based on strategy
+     */
+    async runVersionSpecificMigrations(projectPath) {
+        // Get user's upgrade strategy from options
+        const migrations = this.getAvailableMigrations();
+        // Run specific migrations for Angular 17
+        const requiredMigrations = [
+            'Control Flow Syntax',
+            'Signal Inputs',
+            'Signal Outputs',
+            'Signal Queries',
+            'Self-closing Tags',
+            'New Application Bootstrap',
+            'Assets to Public Migration'
+        ];
+        for (const migrationName of requiredMigrations) {
+            const migration = migrations.find(m => m.name === migrationName);
+            if (migration) {
+                try {
+                    this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
+                    // Run migration with non-interactive mode for automation
+                    let command = migration.command + ' --interactive=false --defaults';
+                    await this.runCommand(command, projectPath);
+                    this.progressReporter?.info(`✓ ${migration.name} migration completed`);
+                }
+                catch (error) {
+                    // Some migrations may not be applicable to all projects
+                    this.progressReporter?.warn(`${migration.name} migration skipped: ${error instanceof Error ? error.message : String(error)}`);
+                }
+            }
+        }
     }
 }
 exports.Angular17Handler = Angular17Handler;

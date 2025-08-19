@@ -38,10 +38,7 @@ const BaseVersionHandler_1 = require("./BaseVersionHandler");
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 class Angular12Handler extends BaseVersionHandler_1.BaseVersionHandler {
-    constructor() {
-        super(...arguments);
-        this.version = '12';
-    }
+    version = '12';
     getRequiredNodeVersion() {
         return '>=12.20.0';
     }

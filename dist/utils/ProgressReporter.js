@@ -41,9 +41,12 @@ const chalk = __importStar(require("chalk"));
 const ora_1 = __importDefault(require("ora"));
 const events_1 = require("events");
 class ProgressReporter extends events_1.EventEmitter {
+    spinner;
+    progress;
+    startTime;
+    stepStartTimes = new Map();
     constructor() {
         super();
-        this.stepStartTimes = new Map();
         this.spinner = (0, ora_1.default)();
         this.startTime = Date.now();
     }

@@ -39,6 +39,9 @@ const path = __importStar(require("path"));
 const child_process_1 = require("child_process");
 const uuid_1 = require("uuid");
 class CheckpointManager {
+    projectPath;
+    checkpointsDir;
+    metadataFile;
     constructor(projectPath) {
         this.projectPath = projectPath;
         this.checkpointsDir = path.join(projectPath, '.ng-upgrade', 'checkpoints');

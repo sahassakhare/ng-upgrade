@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpgradePathCalculator = void 0;
 const VersionHandlerRegistry_1 = require("./VersionHandlerRegistry");
 class UpgradePathCalculator {
+    versionHandlers;
+    supportedVersions = ['12', '13', '14', '15', '16', '17', '18', '19', '20'];
     constructor() {
-        this.supportedVersions = ['12', '13', '14', '15', '16', '17', '18', '19', '20'];
         this.versionHandlers = new VersionHandlerRegistry_1.VersionHandlerRegistry();
     }
     /**

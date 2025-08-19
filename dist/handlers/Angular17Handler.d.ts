@@ -1,11 +1,56 @@
 import { BaseVersionHandler } from './BaseVersionHandler';
-import { BreakingChange, UpgradeOptions } from '../types';
+import { BreakingChange, UpgradeOptions, Migration } from '../types';
+/**
+ * Angular 17 Handler - New application bootstrap and asset management
+ *
+ * Manages migration to Angular 17 with new application bootstrap API, asset folder
+ * restructuring, enhanced SSR capabilities, and stable control flow syntax. This
+ * version introduces significant architectural improvements and developer experience
+ * enhancements while maintaining backward compatibility.
+ *
+ * Key Features in Angular 17:
+ * - New application bootstrap API
+ * - Assets folder migration to public folder
+ * - Stable control flow syntax (@if, @for, @switch)
+ * - Enhanced SSR with improved hydration
+ * - Build system optimizations
+ * - Material Design 3 support
+ *
+ * @example
+ * ```typescript
+ * const handler = new Angular17Handler();
+ * await handler.applyVersionSpecificChanges('/path/to/project', {
+ *   strategy: 'progressive',
+ *   enableNewBootstrap: true
+ * });
+ * ```
+ *
+ * @since 1.0.0
+ * @author Angular Multi-Version Upgrade Orchestrator
+ */
 export declare class Angular17Handler extends BaseVersionHandler {
+    /** The Angular version this handler manages */
     readonly version = "17";
+    /**
+     * Gets the minimum required Node.js version for Angular 17
+     * @returns The minimum Node.js version requirement
+     */
     protected getRequiredNodeVersion(): string;
+    /**
+     * Gets the required TypeScript version range for Angular 17
+     * @returns The TypeScript version requirement
+     */
     protected getRequiredTypeScriptVersion(): string;
     /**
-     * Apply Angular 17 specific changes
+     * Applies all Angular 17 specific transformations to the project
+     *
+     * Orchestrates migration including new application bootstrap, asset restructuring,
+     * control flow syntax stabilization, and SSR enhancements. Provides safe migration
+     * paths while preserving existing functionality.
+     *
+     * @param projectPath - The absolute path to the Angular project root
+     * @param options - Upgrade configuration options including strategy and feature flags
+     * @throws {Error} When critical transformations fail
      */
     protected applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void>;
     /**
@@ -13,8 +58,18 @@ export declare class Angular17Handler extends BaseVersionHandler {
      */
     private updateApplicationBootstrap;
     /**
-     * Migrate assets folder to public folder (Angular 17+)
-     * This preserves the existing assets while adding the new public folder
+     * Migrates assets folder to public folder structure (Angular 17+)
+     *
+     * Safely migrates from src/assets to public folder structure while maintaining
+     * backward compatibility. Creates new public folder, copies assets, and updates
+     * angular.json configuration to support both asset structures during transition.
+     *
+     * @param projectPath - The absolute path to the Angular project root
+     * @private
+     *
+     * @example
+     * Before: src/assets/images/logo.png
+     * After: public/images/logo.png (with src/assets still working)
      */
     private migrateAssetsToPublic;
     /**
@@ -50,5 +105,13 @@ export declare class Angular17Handler extends BaseVersionHandler {
      * Angular 17 breaking changes
      */
     getBreakingChanges(): BreakingChange[];
+    /**
+     * Override to provide Angular 17 specific migrations
+     */
+    protected getAvailableMigrations(): Migration[];
+    /**
+     * Run Angular 17 specific migrations based on strategy
+     */
+    protected runVersionSpecificMigrations(projectPath: string): Promise<void>;
 }
 //# sourceMappingURL=Angular17Handler.d.ts.map
