@@ -24,7 +24,7 @@ export class Angular20Handler extends BaseVersionHandler {
   }
   
   protected getRequiredTypeScriptVersion(): string { 
-    return '>=5.6.0 <5.7.0'; 
+    return '>=5.8.0 <5.9.0'; 
   }
 
   /**
@@ -419,10 +419,10 @@ import { withSSROptimizations, withStreamingRendering } from '@angular/ssr';`
         tsConfig.compilerOptions.module = 'ES2022';
         tsConfig.compilerOptions.moduleResolution = 'bundler';
         
-        // Enable strict mode optimizations
-        tsConfig.compilerOptions.strict = true;
-        tsConfig.compilerOptions.strictNullChecks = true;
-        tsConfig.compilerOptions.strictFunctionTypes = true;
+        // Keep strict mode false for safer migration (as per user requirements)
+        tsConfig.compilerOptions.strict = false;
+        tsConfig.compilerOptions.strictNullChecks = false;
+        tsConfig.compilerOptions.strictFunctionTypes = false;
         
         await fs.writeJson(tsConfigPath, tsConfig, { spaces: 2 });
         this.progressReporter?.info('✓ Updated TypeScript configuration for Angular 20');
