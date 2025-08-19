@@ -79,8 +79,8 @@ class Angular20Handler extends BaseVersionHandler_1.BaseVersionHandler {
             // SSR packages (if present)
             { name: '@angular/ssr', version: '^20.0.0', type: 'dependencies' },
             { name: '@angular/platform-server', version: '^20.0.0', type: 'dependencies' },
-            // TypeScript and supporting packages
-            { name: 'typescript', version: '~5.6.0', type: 'devDependencies' },
+            // TypeScript and supporting packages - Angular 20 requires TypeScript >=5.8.0 <5.9.0
+            { name: 'typescript', version: '>=5.8.0 <5.9.0', type: 'devDependencies' },
             { name: 'zone.js', version: '~0.15.0', type: 'dependencies' },
             { name: 'rxjs', version: '~7.8.0', type: 'dependencies' },
             // Angular Material (if present)

@@ -173,16 +173,6 @@ export abstract class BaseVersionHandler implements VersionHandler {
    */
   protected abstract getRequiredNodeVersion(): string;
   
-  /**
-   * Gets the required TypeScript version range for this Angular version
-   * 
-   * Each version handler must specify the compatible TypeScript version range
-   * that works with the target Angular version.
-   * 
-   * @returns The TypeScript version requirement (e.g., ">=4.9.3 <5.1.0")
-   * @abstract
-   */
-  protected abstract getRequiredTypeScriptVersion(): string;
   
   /**
    * Applies version-specific changes and transformations to the project
@@ -286,8 +276,77 @@ export abstract class BaseVersionHandler implements VersionHandler {
    * Update builder configurations in angular.json
    */
   protected updateBuilderConfigurations(angularJson: any): void {
-    // This would be implemented by specific version handlers
-    // to update builder configurations as needed
+    // Update schema version based on Angular version
+    const schemaMap: Record<string, string> = {
+      '12': './node_modules/@angular/cli/lib/config/schema.json',
+      '13': './node_modules/@angular/cli/lib/config/schema.json',
+      '14': './node_modules/@angular/cli/lib/config/schema.json',
+      '15': './node_modules/@angular/cli/lib/config/schema.json',
+      '16': './node_modules/@angular/cli/lib/config/schema.json',
+      '17': './node_modules/@angular/cli/lib/config/schema.json',
+      '18': './node_modules/@angular/cli/lib/config/schema.json',
+      '19': './node_modules/@angular/cli/lib/config/schema.json',
+      '20': './node_modules/@angular/cli/lib/config/schema.json'
+    };
+    
+    if (schemaMap[this.version]) {
+      angularJson.$schema = schemaMap[this.version];
+    }
+    
+    // Update version field
+    angularJson.version = 1;
+    
+    // Handle browserTarget to buildTarget migration (Angular 15+)
+    const versionNum = parseInt(this.version);
+    if (versionNum >= 15) {
+      this.migrateBrowserTargetToBuildTarget(angularJson);
+    }
+  }
+  
+  /**
+   * Migrate browserTarget to buildTarget in angular.json (Angular 15+)
+   */
+  protected migrateBrowserTargetToBuildTarget(angularJson: any): void {
+    for (const projectName in angularJson.projects) {
+      const project = angularJson.projects[projectName];
+      
+      // Update serve configuration
+      if (project.architect?.serve?.configurations) {
+        for (const config of Object.values(project.architect.serve.configurations)) {
+          const serveConfig = config as any;
+          if (serveConfig.browserTarget && !serveConfig.buildTarget) {
+            serveConfig.buildTarget = serveConfig.browserTarget;
+            delete serveConfig.browserTarget;
+          }
+        }
+      }
+      
+      // Update serve options
+      if (project.architect?.serve?.options) {
+        if (project.architect.serve.options.browserTarget && !project.architect.serve.options.buildTarget) {
+          project.architect.serve.options.buildTarget = project.architect.serve.options.browserTarget;
+          delete project.architect.serve.options.browserTarget;
+        }
+      }
+      
+      // Update extract-i18n configuration
+      if (project.architect?.['extract-i18n']?.options) {
+        const extractConfig = project.architect['extract-i18n'].options;
+        if (extractConfig.browserTarget && !extractConfig.buildTarget) {
+          extractConfig.buildTarget = extractConfig.browserTarget;
+          delete extractConfig.browserTarget;
+        }
+      }
+      
+      // Update test configuration
+      if (project.architect?.test?.options) {
+        const testConfig = project.architect.test.options;
+        if (testConfig.browserTarget && !testConfig.buildTarget) {
+          testConfig.buildTarget = testConfig.browserTarget;
+          delete testConfig.browserTarget;
+        }
+      }
+    }
   }
 
   /**
@@ -310,15 +369,93 @@ export abstract class BaseVersionHandler implements VersionHandler {
    * Update TypeScript configuration
    */
   protected updateTypeScriptConfig(tsconfig: any): void {
-    // Default TypeScript updates that apply to most versions
+    // Set proper compiler options based on Angular version
     if (!tsconfig.compilerOptions) {
       tsconfig.compilerOptions = {};
     }
-
-    // Enable strict mode by default for newer versions
-    if (Number(this.version) >= 15) {
-      tsconfig.compilerOptions.strict = true;
+    
+    // Handle strict mode - set to false for safer migration
+    tsconfig.compilerOptions.strict = false;
+    
+    // Set individual strict flags to false for migration
+    tsconfig.compilerOptions.strictNullChecks = false;
+    tsconfig.compilerOptions.strictPropertyInitialization = false;
+    tsconfig.compilerOptions.strictBindCallApply = false;
+    tsconfig.compilerOptions.strictFunctionTypes = false;
+    tsconfig.compilerOptions.noImplicitAny = false;
+    tsconfig.compilerOptions.noImplicitThis = false;
+    tsconfig.compilerOptions.alwaysStrict = false;
+    
+    // Set target and module based on Angular version
+    const versionNum = parseInt(this.version);
+    if (versionNum >= 16) {
+      tsconfig.compilerOptions.target = 'ES2022';
+      tsconfig.compilerOptions.module = 'ES2022';
+      tsconfig.compilerOptions.lib = ['ES2022', 'dom'];
+    } else if (versionNum >= 15) {
+      tsconfig.compilerOptions.target = 'ES2022';
+      tsconfig.compilerOptions.module = 'ES2022';
+      tsconfig.compilerOptions.lib = ['ES2022', 'dom'];
+    } else if (versionNum >= 14) {
+      tsconfig.compilerOptions.target = 'ES2020';
+      tsconfig.compilerOptions.module = 'ES2020';
+      tsconfig.compilerOptions.lib = ['ES2020', 'dom'];
+    } else {
+      tsconfig.compilerOptions.target = 'ES2017';
+      tsconfig.compilerOptions.module = 'ES2020';
+      tsconfig.compilerOptions.lib = ['ES2018', 'dom'];
     }
+    
+    // Enable experimental decorators for older versions
+    if (versionNum < 16) {
+      tsconfig.compilerOptions.experimentalDecorators = true;
+    }
+    
+    // Set module resolution
+    tsconfig.compilerOptions.moduleResolution = 'node';
+    
+    // Enable source maps for development
+    tsconfig.compilerOptions.sourceMap = true;
+    
+    // Set output directory
+    tsconfig.compilerOptions.outDir = './dist/out-tsc';
+    
+    // Enable declaration files
+    tsconfig.compilerOptions.declaration = false;
+    
+    // Set base URL
+    tsconfig.compilerOptions.baseUrl = './';
+    
+    // Enable incremental compilation
+    tsconfig.compilerOptions.incremental = true;
+    
+    // Import helpers from tslib
+    tsconfig.compilerOptions.importHelpers = true;
+    
+    // Skip lib check for faster builds
+    tsconfig.compilerOptions.skipLibCheck = true;
+    
+    // Enable ES module interop
+    tsconfig.compilerOptions.esModuleInterop = true;
+  }
+  
+  /**
+   * Get required TypeScript version for this Angular version
+   */
+  protected getRequiredTypeScriptVersion(): string {
+    const tsVersionMap: Record<string, string> = {
+      '12': '~4.3.0',
+      '13': '~4.4.0',
+      '14': '~4.7.0',
+      '15': '~4.9.0',
+      '16': '~5.1.0',
+      '17': '~5.2.0',
+      '18': '~5.4.0',
+      '19': '~5.6.0',
+      '20': '>=5.8.0 <5.9.0'
+    };
+    
+    return tsVersionMap[this.version] || '~5.8.0';
   }
 
   /**
@@ -385,22 +522,84 @@ export abstract class BaseVersionHandler implements VersionHandler {
   }
 
   /**
+   * Ensure Angular project is ready for migrations
+   */
+  protected async ensureAngularProjectReady(projectPath: string): Promise<void> {
+    // Check if angular.json exists
+    const angularJsonPath = path.join(projectPath, 'angular.json');
+    if (!await fs.pathExists(angularJsonPath)) {
+      throw new Error('angular.json not found. This does not appear to be an Angular project.');
+    }
+    
+    // Check if package.json exists
+    const packageJsonPath = path.join(projectPath, 'package.json');
+    if (!await fs.pathExists(packageJsonPath)) {
+      throw new Error('package.json not found. Invalid Angular project structure.');
+    }
+    
+    // Ensure node_modules exists
+    const nodeModulesPath = path.join(projectPath, 'node_modules');
+    if (!await fs.pathExists(nodeModulesPath)) {
+      this.progressReporter?.warn('node_modules not found. Running npm install...');
+      try {
+        await this.runCommand('npm install', projectPath);
+        this.progressReporter?.success('Dependencies installed successfully');
+      } catch (error) {
+        throw new Error('Failed to install dependencies. Please run npm install manually.');
+      }
+    }
+    
+    // Check if Angular CLI is available globally or locally
+    try {
+      await this.runCommand('npx ng version', projectPath);
+    } catch (error) {
+      throw new Error('Angular CLI not available. Please install Angular CLI: npm install -g @angular/cli');
+    }
+  }
+
+  /**
    * Run version-specific official Angular migrations
    */
   protected async runVersionSpecificMigrations(projectPath: string): Promise<void> {
+    // Ensure the project is ready for migrations
+    await this.ensureAngularProjectReady(projectPath);
+    
     const migrations = this.getAvailableMigrations();
+    
+    if (migrations.length === 0) {
+      this.progressReporter?.info('No version-specific migrations available for this Angular version');
+      return;
+    }
+    
+    this.progressReporter?.info(`Running ${migrations.length} migration(s) for Angular ${this.version}...`);
     
     for (const migration of migrations) {
       try {
         this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
+        this.progressReporter?.info(`Command: ${migration.command}`);
         
-        await this.runCommand(migration.command, projectPath);
+        const output = await this.runCommand(migration.command, projectPath);
         
-        this.progressReporter?.info(`✓ ${migration.name} migration completed`);
+        this.progressReporter?.success(`✓ ${migration.name} migration completed successfully`);
+        
+        // Log migration output for debugging
+        if (output && output.trim()) {
+          this.progressReporter?.info(`Migration output: ${output.trim()}`);
+        }
+        
       } catch (error) {
-        this.progressReporter?.warn(`${migration.name} migration completed with warnings: ${error instanceof Error ? error.message : String(error)}`);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        
+        if (migration.optional) {
+          this.progressReporter?.warn(`⚠ ${migration.name} migration skipped: ${errorMessage}`);
+        } else {
+          this.progressReporter?.error(`✗ ${migration.name} migration failed: ${errorMessage}`);
+          // Don't throw for required migrations - continue with other migrations
+        }
       }
     }
+    
+    this.progressReporter?.success(`Completed all migrations for Angular ${this.version}`);
   }
 
   /**
@@ -411,42 +610,42 @@ export abstract class BaseVersionHandler implements VersionHandler {
     const version = parseInt(this.version);
     const migrations: Migration[] = [];
 
-    // Standalone Components (Angular 14+)
+    // Angular Update migrations - run ng update commands
     if (version >= 14) {
       migrations.push({
-        name: 'Standalone Components',
-        command: 'npx ng generate @angular/core:standalone',
+        name: 'Angular Core Update',
+        command: `npx ng update @angular/core@${version} --migrate-only --allow-dirty`,
+        description: 'Run Angular core migrations',
+        optional: false
+      });
+    }
+
+    // Angular CLI Update migrations  
+    if (version >= 14) {
+      migrations.push({
+        name: 'Angular CLI Update',
+        command: `npx ng update @angular/cli@${version} --migrate-only --allow-dirty`,
+        description: 'Run Angular CLI migrations',
+        optional: false
+      });
+    }
+
+    // Standalone Components Schematic (Angular 14+)
+    if (version >= 14) {
+      migrations.push({
+        name: 'Standalone Components Conversion',
+        command: 'npx ng generate @angular/core:standalone --mode=convert-to-standalone --allow-dirty',
         description: 'Convert components to standalone components',
         optional: true
       });
     }
 
-    // Control Flow Syntax (Angular 17+)
+    // Control Flow Syntax Schematic (Angular 17+)
     if (version >= 17) {
       migrations.push({
-        name: 'Control Flow Syntax',
-        command: 'npx ng generate @angular/core:control-flow',
-        description: 'Convert structural directives to built-in control flow',
-        optional: true
-      });
-    }
-
-    // inject() Function (Angular 14+)
-    if (version >= 14) {
-      migrations.push({
-        name: 'inject() Function',
-        command: 'npx ng generate @angular/core:inject-function',
-        description: 'Convert constructor injection to inject() function',
-        optional: true
-      });
-    }
-
-    // Signal Inputs (Angular 17.1+)
-    if (version >= 17) {
-      migrations.push({
-        name: 'Signal Inputs',
-        command: 'npx ng generate @angular/core:signal-inputs',
-        description: 'Convert @Input fields to signal inputs',
+        name: 'Control Flow Syntax Conversion',
+        command: 'npx ng generate @angular/core:control-flow --mode=convert-to-control-flow --allow-dirty',
+        description: 'Convert *ngIf, *ngFor to @if, @for syntax',
         optional: true
       });
     }

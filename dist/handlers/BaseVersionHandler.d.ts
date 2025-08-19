@@ -108,16 +108,6 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      */
     protected abstract getRequiredNodeVersion(): string;
     /**
-     * Gets the required TypeScript version range for this Angular version
-     *
-     * Each version handler must specify the compatible TypeScript version range
-     * that works with the target Angular version.
-     *
-     * @returns The TypeScript version requirement (e.g., ">=4.9.3 <5.1.0")
-     * @abstract
-     */
-    protected abstract getRequiredTypeScriptVersion(): string;
-    /**
      * Applies version-specific changes and transformations to the project
      *
      * This is the core method that each version handler must implement to
@@ -156,6 +146,10 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      */
     protected updateBuilderConfigurations(angularJson: any): void;
     /**
+     * Migrate browserTarget to buildTarget in angular.json (Angular 15+)
+     */
+    protected migrateBrowserTargetToBuildTarget(angularJson: any): void;
+    /**
      * Update tsconfig.json
      */
     protected updateTsConfig(projectPath: string): Promise<void>;
@@ -163,6 +157,10 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      * Update TypeScript configuration
      */
     protected updateTypeScriptConfig(tsconfig: any): void;
+    /**
+     * Get required TypeScript version for this Angular version
+     */
+    protected getRequiredTypeScriptVersion(): string;
     /**
      * Update optional configuration files
      */
@@ -179,6 +177,10 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      * Run Angular update schematics and official migrations
      */
     protected runAngularUpdateSchematics(projectPath: string): Promise<void>;
+    /**
+     * Ensure Angular project is ready for migrations
+     */
+    protected ensureAngularProjectReady(projectPath: string): Promise<void>;
     /**
      * Run version-specific official Angular migrations
      */
