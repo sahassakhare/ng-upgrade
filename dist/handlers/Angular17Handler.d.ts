@@ -94,6 +94,10 @@ export declare class Angular17Handler extends BaseVersionHandler {
      */
     private updateAngularMaterial;
     /**
+     * Update third-party Angular ecosystem packages to compatible versions
+     */
+    protected updateThirdPartyDependencies(projectPath: string): Promise<void>;
+    /**
      * Update builder configurations for Angular 17
      */
     protected updateBuilderConfigurations(angularJson: any): void;

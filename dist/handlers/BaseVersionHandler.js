@@ -42,6 +42,8 @@ const FileContentPreserver_1 = require("../utils/FileContentPreserver");
 const AdvancedContentPreserver_1 = require("../utils/AdvancedContentPreserver");
 const ProgressReporter_1 = require("../utils/ProgressReporter");
 const UpgradeReportGenerator_1 = require("../utils/UpgradeReportGenerator");
+const DependencyCompatibilityMatrix_1 = require("../utils/DependencyCompatibilityMatrix");
+const NgCompatibilityUpdater_1 = require("../utils/NgCompatibilityUpdater");
 /**
  * Base class for all Angular version handlers providing common upgrade functionality
  *
@@ -207,6 +209,112 @@ class BaseVersionHandler {
             this.progressReporter.warn(`Angular dependency update failed: ${errorMsg}`);
             this.reportGenerator.addError(`Angular dependency update failed: ${errorMsg}`);
             // Don't fail the entire upgrade, dependencies will be verified later
+        }
+    }
+    /**
+     * Update third-party dependencies compatible with target Angular version
+     * Uses NgCompatibilityUpdater for comprehensive dependency checking
+     */
+    async updateThirdPartyDependencies(projectPath) {
+        try {
+            this.progressReporter.updateMessage(`Checking Angular ${this.version} compatibility...`);
+            // Use NgCompatibilityUpdater for comprehensive checking
+            const updater = new NgCompatibilityUpdater_1.NgCompatibilityUpdater(this.version);
+            const result = await updater.checkAndUpdate(projectPath, {
+                dryRun: false, // Apply updates automatically during upgrade
+                includeDevDependencies: true,
+                onlyAngularEcosystem: false, // Check all dependencies
+                updateStrategy: 'conservative' // Conservative approach during automated upgrade
+            });
+            // Report results
+            if (result.totalUpdates > 0) {
+                this.progressReporter.success(`✓ Updated ${result.totalUpdates} dependencies for Angular ${this.version} compatibility`);
+                // Log individual updates
+                result.updates.forEach(update => {
+                    if (update.updateType === 'deprecated') {
+                        this.progressReporter.warn(`Removed deprecated package: ${update.name}`);
+                        this.reportGenerator.addWarning(`Deprecated package removed: ${update.name} - ${update.notes || 'No longer maintained'}`);
+                    }
+                    else {
+                        this.reportGenerator.addSuccessStory(`Updated ${update.name}: ${update.currentVersion} → ${update.compatibleVersion}`);
+                        if (update.notes) {
+                            this.progressReporter.info(`${update.name}: ${update.notes}`);
+                        }
+                    }
+                });
+                // Report critical updates
+                if (result.criticalUpdates > 0) {
+                    this.progressReporter.warn(`⚠️ ${result.criticalUpdates} critical updates were applied`);
+                }
+                // Report deprecated packages
+                if (result.deprecated.length > 0) {
+                    this.progressReporter.warn(`🗑️ Removed ${result.deprecated.length} deprecated packages: ${result.deprecated.join(', ')}`);
+                    result.deprecated.forEach(pkg => {
+                        this.reportGenerator.addWarning(`Deprecated package removed: ${pkg}`);
+                    });
+                }
+            }
+            else {
+                this.progressReporter.info('✓ All dependencies already compatible with Angular ' + this.version);
+            }
+            // Report any warnings
+            if (result.warnings.length > 0) {
+                result.warnings.forEach(warning => {
+                    this.progressReporter.warn(warning);
+                    this.reportGenerator.addWarning(warning);
+                });
+            }
+            // Fallback to legacy method for packages not covered by NgCompatibilityUpdater
+            await this.updateRemainingDependencies(projectPath);
+        }
+        catch (error) {
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            this.progressReporter.warn(`Advanced dependency update failed, falling back to basic update: ${errorMsg}`);
+            // Fallback to original method
+            await this.updateRemainingDependencies(projectPath);
+        }
+    }
+    /**
+     * Fallback method for packages not covered by NgCompatibilityUpdater
+     */
+    async updateRemainingDependencies(projectPath) {
+        try {
+            const packageJsonPath = path.join(projectPath, 'package.json');
+            const packageJson = await fs.readJson(packageJsonPath);
+            // Get compatible versions for this Angular version
+            const compatibleDependencies = DependencyCompatibilityMatrix_1.DependencyCompatibilityMatrix.getCompatibleDependencies(this.version);
+            let updated = false;
+            const updates = [];
+            // Update existing third-party packages to compatible versions (legacy method)
+            for (const dep of compatibleDependencies) {
+                const existingVersion = packageJson.dependencies?.[dep.name] ||
+                    packageJson.devDependencies?.[dep.name];
+                if (existingVersion && existingVersion !== dep.version) {
+                    // Only update if NgCompatibilityUpdater didn't handle it
+                    const currentInPackageJson = packageJson.dependencies?.[dep.name] || packageJson.devDependencies?.[dep.name];
+                    if (currentInPackageJson === existingVersion) { // Still the old version, wasn't updated
+                        if (dep.type === 'dependencies') {
+                            packageJson.dependencies[dep.name] = dep.version;
+                        }
+                        else {
+                            packageJson.devDependencies = packageJson.devDependencies || {};
+                            packageJson.devDependencies[dep.name] = dep.version;
+                        }
+                        updates.push(`${dep.name}: ${existingVersion} → ${dep.version}`);
+                        updated = true;
+                    }
+                }
+            }
+            if (updated) {
+                await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+                this.progressReporter.info(`✓ Updated ${updates.length} additional dependencies`);
+                this.reportGenerator.addSuccessStory(`Additional dependencies updated: ${updates.join(', ')}`);
+            }
+        }
+        catch (error) {
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            this.progressReporter.warn(`Fallback dependency update failed: ${errorMsg}`);
+            this.reportGenerator.addError(`Fallback dependency update failed: ${errorMsg}`);
         }
     }
     /**

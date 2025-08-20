@@ -49,15 +49,17 @@ class Angular12Handler extends BaseVersionHandler_1.BaseVersionHandler {
         this.progressReporter?.updateMessage('Applying Angular 12 specific changes...');
         // 1. Enable Ivy renderer (should already be default in v12)
         await this.ensureIvyRenderer(projectPath);
-        // 2. Update to Webpack 5 support
+        // 2. Update Angular CDK and Material versions
+        await this.updateAngularCDKMaterial(projectPath);
+        // 3. Update to Webpack 5 support
         await this.updateWebpackConfiguration(projectPath);
-        // 3. Update Angular Package Format (APF)
+        // 4. Update Angular Package Format (APF)
         await this.updatePackageFormat(projectPath);
-        // 4. Enable strict mode by default
+        // 5. Enable strict mode by default
         if (options.strategy !== 'conservative') {
             await this.enableStrictMode(projectPath);
         }
-        // 5. Update Hot Module Replacement support
+        // 6. Update Hot Module Replacement support
         await this.updateHMRSupport(projectPath);
     }
     async ensureIvyRenderer(projectPath) {
@@ -92,6 +94,27 @@ class Angular12Handler extends BaseVersionHandler_1.BaseVersionHandler {
             tsconfig.compilerOptions.noFallthroughCasesInSwitch = true;
             await fs.writeJson(tsconfigPath, tsconfig, { spaces: 2 });
             this.progressReporter?.success('✓ Enabled TypeScript strict mode');
+        }
+    }
+    async updateAngularCDKMaterial(projectPath) {
+        const packageJsonPath = path.join(projectPath, 'package.json');
+        if (await fs.pathExists(packageJsonPath)) {
+            const packageJson = await fs.readJson(packageJsonPath);
+            let updated = false;
+            // Update Angular Material version
+            if (packageJson.dependencies?.['@angular/material']) {
+                packageJson.dependencies['@angular/material'] = '^12.0.0';
+                updated = true;
+            }
+            // Update Angular CDK version
+            if (packageJson.dependencies?.['@angular/cdk']) {
+                packageJson.dependencies['@angular/cdk'] = '^12.0.0';
+                updated = true;
+            }
+            if (updated) {
+                await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+                this.progressReporter?.success('✓ Updated Angular Material and CDK to version 12');
+            }
         }
     }
     async updateHMRSupport(_projectPath) {

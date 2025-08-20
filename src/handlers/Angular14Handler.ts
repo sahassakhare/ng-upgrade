@@ -2,6 +2,8 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { BaseVersionHandler } from './BaseVersionHandler';
 import { BreakingChange, UpgradeOptions, DependencyUpdate, Migration } from '../types';
+import { SSRDetector } from '../utils/SSRDetector';
+import { DependencyCompatibilityMatrix } from '../utils/DependencyCompatibilityMatrix';
 
 /**
  * Angular 14 Handler - Standalone components and enhanced APIs
@@ -81,9 +83,16 @@ export class Angular14Handler extends BaseVersionHandler {
       { name: 'zone.js', version: '~0.11.4', type: 'dependencies' },
       { name: 'rxjs', version: '~7.5.0', type: 'dependencies' },
       
-      // Angular Material (if present)
+      // Angular Material and CDK
       { name: '@angular/material', version: '^14.0.0', type: 'dependencies' },
-      { name: '@angular/cdk', version: '^14.0.0', type: 'dependencies' }
+      { name: '@angular/cdk', version: '^14.0.0', type: 'dependencies' },
+      
+      // Third-party Angular ecosystem packages
+      ...DependencyCompatibilityMatrix.getCompatibleDependencies('14').map(dep => ({
+        name: dep.name,
+        version: dep.version,
+        type: dep.type as 'dependencies' | 'devDependencies'
+      }))
     ];
   }
 
@@ -101,6 +110,10 @@ export class Angular14Handler extends BaseVersionHandler {
    */
   protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
     this.progressReporter?.updateMessage('Applying Angular 14 transformations...');
+    
+    // Check if this is an SSR application
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
+    this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
     
     // 1. Setup standalone components foundation
     await this.setupStandaloneComponentsSupport(projectPath);

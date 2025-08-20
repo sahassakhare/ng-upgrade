@@ -132,6 +132,15 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      */
     protected updateAngularDependencies(projectPath: string): Promise<void>;
     /**
+     * Update third-party dependencies compatible with target Angular version
+     * Uses NgCompatibilityUpdater for comprehensive dependency checking
+     */
+    protected updateThirdPartyDependencies(projectPath: string): Promise<void>;
+    /**
+     * Fallback method for packages not covered by NgCompatibilityUpdater
+     */
+    private updateRemainingDependencies;
+    /**
      * Update TypeScript version with automatic installation
      */
     protected updateTypeScript(_projectPath: string): Promise<void>;

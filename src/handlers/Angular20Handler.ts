@@ -3,6 +3,7 @@ import * as path from 'path';
 import { BaseVersionHandler } from './BaseVersionHandler';
 import { BreakingChange, UpgradeOptions, DependencyUpdate } from '../types';
 import { FileContentPreserver } from '../utils/FileContentPreserver';
+import { SSRDetector } from '../utils/SSRDetector';
 
 /**
  * Angular 20 Handler - Latest Angular version with cutting-edge features
@@ -244,9 +245,17 @@ export class Angular20Handler extends BaseVersionHandler {
   }
 
   /**
-   * Configure incremental hydration for SSR applications
+   * Configure incremental hydration for SSR applications only
    */
   private async configureIncrementalHydration(projectPath: string): Promise<void> {
+    // Check if this is an SSR application first
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
+    
+    if (!isSSRApp) {
+      this.progressReporter?.info('✓ Skipping incremental hydration configuration (CSR application detected)');
+      return;
+    }
+
     const appConfigPath = path.join(projectPath, 'src/app/app.config.ts');
     
     if (await fs.pathExists(appConfigPath)) {
@@ -271,7 +280,7 @@ import { provideClientHydration, withIncrementalHydration } from '@angular/platf
           );
           
           await fs.writeFile(appConfigPath, content);
-          this.progressReporter?.info('✓ Configured incremental hydration for SSR');
+          this.progressReporter?.info('✓ Configured incremental hydration for SSR application');
         }
       } catch (error) {
         this.progressReporter?.warn(`Could not configure incremental hydration: ${error instanceof Error ? error.message : String(error)}`);
@@ -365,6 +374,14 @@ import { provideClientHydration, withIncrementalHydration } from '@angular/platf
    * Configure advanced SSR features
    */
   private async configureAdvancedSSR(projectPath: string): Promise<void> {
+    // Check if this is an SSR application first
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
+    
+    if (!isSSRApp) {
+      this.progressReporter?.info('✓ Skipping advanced SSR configuration (CSR application detected)');
+      return;
+    }
+
     const serverTsPath = path.join(projectPath, 'src/main.server.ts');
     
     if (await fs.pathExists(serverTsPath)) {
@@ -393,7 +410,7 @@ import { withSSROptimizations, withStreamingRendering } from '@angular/ssr';`
           );
           
           await fs.writeFile(serverTsPath, content);
-          this.progressReporter?.info('✓ Configured advanced SSR features');
+          this.progressReporter?.info('✓ Configured advanced SSR features for SSR application');
         }
       } catch (error) {
         this.progressReporter?.warn(`Could not configure advanced SSR: ${error instanceof Error ? error.message : String(error)}`);

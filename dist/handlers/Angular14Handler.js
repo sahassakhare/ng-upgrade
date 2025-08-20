@@ -37,6 +37,8 @@ exports.Angular14Handler = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const BaseVersionHandler_1 = require("./BaseVersionHandler");
+const SSRDetector_1 = require("../utils/SSRDetector");
+const DependencyCompatibilityMatrix_1 = require("../utils/DependencyCompatibilityMatrix");
 /**
  * Angular 14 Handler - Standalone components and enhanced APIs
  *
@@ -109,9 +111,15 @@ class Angular14Handler extends BaseVersionHandler_1.BaseVersionHandler {
             { name: 'typescript', version: '~4.7.2', type: 'devDependencies' },
             { name: 'zone.js', version: '~0.11.4', type: 'dependencies' },
             { name: 'rxjs', version: '~7.5.0', type: 'dependencies' },
-            // Angular Material (if present)
+            // Angular Material and CDK
             { name: '@angular/material', version: '^14.0.0', type: 'dependencies' },
-            { name: '@angular/cdk', version: '^14.0.0', type: 'dependencies' }
+            { name: '@angular/cdk', version: '^14.0.0', type: 'dependencies' },
+            // Third-party Angular ecosystem packages
+            ...DependencyCompatibilityMatrix_1.DependencyCompatibilityMatrix.getCompatibleDependencies('14').map(dep => ({
+                name: dep.name,
+                version: dep.version,
+                type: dep.type
+            }))
         ];
     }
     /**
@@ -128,6 +136,9 @@ class Angular14Handler extends BaseVersionHandler_1.BaseVersionHandler {
      */
     async applyVersionSpecificChanges(projectPath, options) {
         this.progressReporter?.updateMessage('Applying Angular 14 transformations...');
+        // Check if this is an SSR application
+        const isSSRApp = await SSRDetector_1.SSRDetector.isSSRApplication(projectPath);
+        this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
         // 1. Setup standalone components foundation
         await this.setupStandaloneComponentsSupport(projectPath);
         // 2. Implement optional injectors and inject() function

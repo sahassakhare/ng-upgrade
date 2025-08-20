@@ -37,6 +37,7 @@ exports.Angular19Handler = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const BaseVersionHandler_1 = require("./BaseVersionHandler");
+const SSRDetector_1 = require("../utils/SSRDetector");
 /**
  * Angular 19 Handler - Zoneless change detection and event replay
  *
@@ -457,14 +458,20 @@ Zoneless Change Detection in Angular 19:
         }
     }
     /**
-     * Enhanced event replay for SSR hydration
+     * Enhanced event replay for SSR hydration - only for SSR applications
      */
     async enhanceEventReplaySSR(projectPath) {
+        // Check if this is an SSR application first
+        const isSSRApp = await SSRDetector_1.SSRDetector.isSSRApplication(projectPath);
+        if (!isSSRApp) {
+            this.progressReporter?.info('✓ Skipping event replay configuration (CSR application detected)');
+            return;
+        }
         const mainTsPath = path.join(projectPath, 'src/main.ts');
         if (await fs.pathExists(mainTsPath)) {
             try {
                 let content = await fs.readFile(mainTsPath, 'utf-8');
-                // Enhanced event replay configuration
+                // Enhanced event replay configuration only if hydration is already present
                 if (content.includes('provideClientHydration') && !content.includes('withEventReplay')) {
                     content = content.replace(/import { provideClientHydration } from '@angular\/platform-browser';/, `import { provideClientHydration, withEventReplay } from '@angular/platform-browser';`);
                     // Enhanced event replay with options
@@ -1714,9 +1721,11 @@ export class PerformanceMonitorComponent implements OnInit, OnDestroy {
         this.progressReporter?.info('✓ Build configurations updated as part of advanced optimizations');
     }
     /**
-     * Validate third-party compatibility for Angular 19
+     * Validate and update third-party compatibility for Angular 19
      */
     async validateThirdPartyCompatibility(projectPath) {
+        // First, update third-party dependencies to compatible versions
+        await this.updateThirdPartyDependencies(projectPath);
         const packageJsonPath = path.join(projectPath, 'package.json');
         if (await fs.pathExists(packageJsonPath)) {
             try {

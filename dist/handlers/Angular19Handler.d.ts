@@ -28,7 +28,7 @@ export declare class Angular19Handler extends BaseVersionHandler {
      */
     private setupZonelessChangeDetection;
     /**
-     * Enhanced event replay for SSR hydration
+     * Enhanced event replay for SSR hydration - only for SSR applications
      */
     private enhanceEventReplaySSR;
     /**
@@ -60,7 +60,7 @@ export declare class Angular19Handler extends BaseVersionHandler {
      */
     private updateBuildConfigurations;
     /**
-     * Validate third-party compatibility for Angular 19
+     * Validate and update third-party compatibility for Angular 19
      */
     private validateThirdPartyCompatibility;
     /**

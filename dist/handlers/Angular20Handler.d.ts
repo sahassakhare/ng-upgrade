@@ -33,7 +33,7 @@ export declare class Angular20Handler extends BaseVersionHandler {
      */
     private updateBuildConfigurations;
     /**
-     * Configure incremental hydration for SSR applications
+     * Configure incremental hydration for SSR applications only
      */
     private configureIncrementalHydration;
     /**

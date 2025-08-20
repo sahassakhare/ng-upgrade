@@ -2,6 +2,8 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { BaseVersionHandler } from './BaseVersionHandler';
 import { BreakingChange, UpgradeOptions, DependencyUpdate } from '../types';
+import { SSRDetector } from '../utils/SSRDetector';
+import { DependencyCompatibilityMatrix } from '../utils/DependencyCompatibilityMatrix';
 
 /**
  * Angular 13 Handler - Complete View Engine removal and APF updates
@@ -48,17 +50,28 @@ export class Angular13Handler extends BaseVersionHandler {
       
       // TypeScript and supporting packages
       { name: 'typescript', version: '~4.4.2', type: 'devDependencies' },
+      
+      // Angular Material and CDK
+      { name: '@angular/material', version: '^13.0.0', type: 'dependencies' },
+      { name: '@angular/cdk', version: '^13.0.0', type: 'dependencies' },
       { name: 'zone.js', version: '~0.11.4', type: 'dependencies' },
       { name: 'rxjs', version: '~7.4.0', type: 'dependencies' },
       
-      // Angular Material (if present)
-      { name: '@angular/material', version: '^13.0.0', type: 'dependencies' },
-      { name: '@angular/cdk', version: '^13.0.0', type: 'dependencies' }
+      // Third-party Angular ecosystem packages
+      ...DependencyCompatibilityMatrix.getCompatibleDependencies('13').map(dep => ({
+        name: dep.name,
+        version: dep.version,
+        type: dep.type as 'dependencies' | 'devDependencies'
+      }))
     ];
   }
 
   protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
     this.progressReporter?.updateMessage('Applying Angular 13 transformations...');
+    
+    // Check if this is an SSR application
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
+    this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
     
     // 1. Remove View Engine references and ensure Ivy compatibility
     await this.ensureIvyCompatibility(projectPath);

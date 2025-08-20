@@ -2,6 +2,8 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { BaseVersionHandler } from './BaseVersionHandler';
 import { BreakingChange, UpgradeOptions, DependencyUpdate } from '../types';
+import { SSRDetector } from '../utils/SSRDetector';
+import { DependencyCompatibilityMatrix } from '../utils/DependencyCompatibilityMatrix';
 
 /**
  * Angular 18 Handler - Material 3 and built-in control flow stabilization
@@ -55,12 +57,23 @@ export class Angular18Handler extends BaseVersionHandler {
       
       // Angular Material with Material 3 support
       { name: '@angular/material', version: '^18.0.0', type: 'dependencies' },
-      { name: '@angular/cdk', version: '^18.0.0', type: 'dependencies' }
+      { name: '@angular/cdk', version: '^18.0.0', type: 'dependencies' },
+      
+      // Third-party Angular ecosystem packages
+      ...DependencyCompatibilityMatrix.getCompatibleDependencies('18').map(dep => ({
+        name: dep.name,
+        version: dep.version,
+        type: dep.type as 'dependencies' | 'devDependencies'
+      }))
     ];
   }
 
   protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
     this.progressReporter?.updateMessage('Applying Angular 18 transformations...');
+    
+    // Check if this is an SSR application
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
+    this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
     
     // 1. Implement Material Design 3 support
     await this.implementMaterial3Support(projectPath);

@@ -595,8 +595,8 @@ export class UpgradeReportGenerator {
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #334155;
+            background: #ffffff;
             min-height: 100vh;
             padding: 20px;
         }
@@ -604,15 +604,17 @@ export class UpgradeReportGenerator {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             overflow: hidden;
+            border: 1px solid #e2e8f0;
         }
         header {
-            background: linear-gradient(135deg, #DD0031 0%, #C3002F 100%);
-            color: white;
+            background: white;
+            color: #1e293b;
             padding: 40px;
             text-align: center;
+            border-bottom: 1px solid #e2e8f0;
         }
         h1 {
             font-size: 2.5em;
@@ -621,6 +623,8 @@ export class UpgradeReportGenerator {
             align-items: center;
             justify-content: center;
             gap: 15px;
+            position: relative;
+            z-index: 1;
         }
         .angular-logo {
             width: 50px;
@@ -628,18 +632,33 @@ export class UpgradeReportGenerator {
         }
         .subtitle {
             font-size: 1.2em;
-            opacity: 0.9;
+            opacity: 0.7;
+            color: #64748b;
         }
         .status {
             display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 6px;
             margin-top: 15px;
-            font-weight: bold;
+            font-weight: 500;
+            font-size: 0.95em;
+            letter-spacing: 0.25px;
         }
-        .status.success { background: #4CAF50; }
-        .status.warning { background: #FF9800; }
-        .status.error { background: #f44336; }
+        .status.success { 
+            background: #f0f9ff;
+            color: #0369a1;
+            border: 1px solid #0ea5e9;
+        }
+        .status.warning { 
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #f59e0b;
+        }
+        .status.error { 
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #ef4444;
+        }
         .content { padding: 40px; }
         .summary-grid {
             display: grid;
@@ -648,55 +667,67 @@ export class UpgradeReportGenerator {
             margin: 30px 0;
         }
         .summary-card {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
+            background: white;
+            padding: 25px;
+            border-radius: 6px;
             text-align: center;
-            transition: transform 0.3s;
+            transition: all 0.2s ease;
+            border: 1px solid #e2e8f0;
         }
         .summary-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .summary-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #DD0031;
+            font-size: 2.2em;
+            font-weight: 600;
+            color: #1e293b;
         }
         .summary-label {
-            color: #666;
-            margin-top: 5px;
+            color: #64748b;
+            margin-top: 8px;
+            font-size: 0.95em;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         section {
-            margin: 40px 0;
+            margin: 30px 0;
             padding: 30px;
-            background: #fafafa;
-            border-radius: 8px;
+            background: #ffffff;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
         }
         h2 {
-            color: #DD0031;
+            color: #1e293b;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #DD0031;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 1.4em;
+            font-weight: 600;
         }
         h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
+            color: #475569;
+            margin: 25px 0 12px 0;
+            font-size: 1.1em;
+            font-weight: 600;
         }
         ul {
             list-style: none;
             padding-left: 0;
         }
         li {
-            padding: 8px 0;
-            padding-left: 25px;
+            padding: 10px 0;
+            padding-left: 30px;
             position: relative;
+            color: #4b5563;
         }
         li:before {
-            content: "▸";
+            content: "→";
             position: absolute;
             left: 0;
-            color: #DD0031;
+            color: #3b82f6;
+            font-weight: bold;
         }
         .level-success { border-left: 4px solid #4CAF50; }
         .level-warning { border-left: 4px solid #FF9800; }

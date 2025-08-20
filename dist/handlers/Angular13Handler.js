@@ -37,6 +37,8 @@ exports.Angular13Handler = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const BaseVersionHandler_1 = require("./BaseVersionHandler");
+const SSRDetector_1 = require("../utils/SSRDetector");
+const DependencyCompatibilityMatrix_1 = require("../utils/DependencyCompatibilityMatrix");
 /**
  * Angular 13 Handler - Complete View Engine removal and APF updates
  *
@@ -77,15 +79,24 @@ class Angular13Handler extends BaseVersionHandler_1.BaseVersionHandler {
             { name: '@angular-devkit/build-angular', version: '^13.0.0', type: 'devDependencies' },
             // TypeScript and supporting packages
             { name: 'typescript', version: '~4.4.2', type: 'devDependencies' },
+            // Angular Material and CDK
+            { name: '@angular/material', version: '^13.0.0', type: 'dependencies' },
+            { name: '@angular/cdk', version: '^13.0.0', type: 'dependencies' },
             { name: 'zone.js', version: '~0.11.4', type: 'dependencies' },
             { name: 'rxjs', version: '~7.4.0', type: 'dependencies' },
-            // Angular Material (if present)
-            { name: '@angular/material', version: '^13.0.0', type: 'dependencies' },
-            { name: '@angular/cdk', version: '^13.0.0', type: 'dependencies' }
+            // Third-party Angular ecosystem packages
+            ...DependencyCompatibilityMatrix_1.DependencyCompatibilityMatrix.getCompatibleDependencies('13').map(dep => ({
+                name: dep.name,
+                version: dep.version,
+                type: dep.type
+            }))
         ];
     }
     async applyVersionSpecificChanges(projectPath, options) {
         this.progressReporter?.updateMessage('Applying Angular 13 transformations...');
+        // Check if this is an SSR application
+        const isSSRApp = await SSRDetector_1.SSRDetector.isSSRApplication(projectPath);
+        this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
         // 1. Remove View Engine references and ensure Ivy compatibility
         await this.ensureIvyCompatibility(projectPath);
         // 2. Update Angular Package Format for libraries

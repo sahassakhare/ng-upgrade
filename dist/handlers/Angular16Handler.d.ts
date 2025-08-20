@@ -150,7 +150,7 @@ export declare class Angular16Handler extends BaseVersionHandler {
      */
     private setupStandaloneCollection;
     /**
-     * Configure non-destructive hydration
+     * Configure non-destructive hydration - only for SSR applications
      */
     private configureNonDestructiveHydration;
     /**
@@ -162,7 +162,7 @@ export declare class Angular16Handler extends BaseVersionHandler {
      */
     private updateBuildConfigurations;
     /**
-     * Validate third-party compatibility for Angular 16
+     * Validate and update third-party compatibility for Angular 16
      */
     private validateThirdPartyCompatibility;
     /**

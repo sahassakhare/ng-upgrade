@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as ts from 'typescript';
+import { SSRDetector } from './SSRDetector';
 
 export class FileContentPreserver {
   /**
@@ -12,6 +13,10 @@ export class FileContentPreserver {
     }
 
     const content = await fs.readFile(filePath, 'utf-8');
+    const projectPath = path.dirname(path.dirname(filePath)); // Go up from src/main.ts to project root
+    
+    // Detect if this is an SSR application
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
     
     // Parse the file to understand its structure
     const sourceFile = ts.createSourceFile(
@@ -38,7 +43,8 @@ export class FileContentPreserver {
         customImports,
         customProviders,
         appModulePath,
-        targetAngularVersion
+        targetAngularVersion,
+        isSSRApp
       );
 
       // Backup original file
@@ -175,15 +181,22 @@ export class FileContentPreserver {
     customImports: string[],
     customProviders: string[],
     appModulePath: string,
-    targetVersion: number
+    targetVersion: number,
+    isSSRApp?: boolean
   ): string {
     if (targetVersion >= 14) {
-      // Generate standalone bootstrap
+      // Generate standalone bootstrap - only add SSR imports for SSR applications
+      const ssrImports = isSSRApp ? `
+import { provideClientHydration } from '@angular/platform-browser';` : '';
+      
+      const ssrProviders = isSSRApp ? `
+    provideClientHydration(),` : '';
+
       return `import { bootstrapApplication } from '@angular/platform-browser';
 import { importProvidersFrom } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppModule } from '${appModulePath}';
-import { AppComponent } from './app/app.component';
+import { AppComponent } from './app/app.component';${ssrImports}
 ${customImports.join('\n')}
 
 // Preserved custom configuration
@@ -191,7 +204,7 @@ const customProviders = ${customProviders.length > 0 ? customProviders[0] : '{}'
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(BrowserModule, AppModule),
+    importProvidersFrom(BrowserModule, AppModule),${ssrProviders}
     // Custom providers preserved from original configuration
     ...(customProviders.providers || [])
   ]

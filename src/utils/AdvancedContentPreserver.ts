@@ -2,6 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { Project, SourceFile, ClassDeclaration, ImportDeclaration, MethodDeclaration, ScriptTarget, ModuleKind, ModuleResolutionKind } from 'ts-morph';
 import chalk from 'chalk';
+import { IntelligentMergeEngine, MergeOptions, MergeConflict as IntelligentMergeConflict } from './IntelligentMergeEngine';
 
 export interface PreservationOptions {
   preserveComments: boolean;
@@ -38,6 +39,7 @@ export class AdvancedContentPreserver {
   private project: Project;
   private conflicts: MergeConflict[] = [];
   private warnings: string[] = [];
+  private mergeEngine: IntelligentMergeEngine;
 
   constructor(private projectPath: string) {
     const tsConfigPath = path.join(projectPath, 'tsconfig.json');
@@ -56,6 +58,9 @@ export class AdvancedContentPreserver {
         }
       })
     });
+    
+    // Initialize the intelligent merge engine
+    this.mergeEngine = new IntelligentMergeEngine(projectPath);
   }
 
   /**
@@ -119,6 +124,90 @@ export class AdvancedContentPreserver {
     result.conflicts = this.conflicts;
     result.warnings = this.warnings;
     return result;
+  }
+
+  /**
+   * Preserve and merge package.json using IntelligentMergeEngine
+   */
+  async preservePackageJson(
+    packageJsonPath: string,
+    migrationUpdates: any,
+    options: PreservationOptions = this.getDefaultOptions()
+  ): Promise<PreservationResult> {
+    const mergeOptions: MergeOptions = {
+      preserveUserCode: options.preserveCustomLogic,
+      preserveComments: options.preserveComments,
+      preferUserConfiguration: options.mergeConflictResolution === 'user',
+      createBackups: options.createDetailedBackup,
+      mergeStrategy: 'conservative',
+      conflictResolution: options.mergeConflictResolution
+    };
+
+    const result = await this.mergeEngine.mergePackageJson(packageJsonPath, migrationUpdates, mergeOptions);
+    
+    return {
+      success: result.success,
+      filesModified: result.success ? [packageJsonPath] : [],
+      conflicts: this.convertConflicts(result.conflicts),
+      backupPaths: result.backupPath ? [result.backupPath] : [],
+      warnings: result.warnings
+    };
+  }
+
+  /**
+   * Preserve and merge angular.json using IntelligentMergeEngine
+   */
+  async preserveAngularJson(
+    angularJsonPath: string,
+    migrationUpdates: any,
+    options: PreservationOptions = this.getDefaultOptions()
+  ): Promise<PreservationResult> {
+    const mergeOptions: MergeOptions = {
+      preserveUserCode: options.preserveCustomLogic,
+      preserveComments: options.preserveComments,
+      preferUserConfiguration: options.mergeConflictResolution === 'user',
+      createBackups: options.createDetailedBackup,
+      mergeStrategy: 'conservative',
+      conflictResolution: options.mergeConflictResolution
+    };
+
+    const result = await this.mergeEngine.mergeAngularJson(angularJsonPath, migrationUpdates, mergeOptions);
+    
+    return {
+      success: result.success,
+      filesModified: result.success ? [angularJsonPath] : [],
+      conflicts: this.convertConflicts(result.conflicts),
+      backupPaths: result.backupPath ? [result.backupPath] : [],
+      warnings: result.warnings
+    };
+  }
+
+  /**
+   * Preserve and merge tsconfig.json using IntelligentMergeEngine
+   */
+  async preserveTsConfig(
+    tsConfigPath: string,
+    migrationUpdates: any,
+    options: PreservationOptions = this.getDefaultOptions()
+  ): Promise<PreservationResult> {
+    const mergeOptions: MergeOptions = {
+      preserveUserCode: options.preserveCustomLogic,
+      preserveComments: options.preserveComments,
+      preferUserConfiguration: options.mergeConflictResolution === 'user',
+      createBackups: options.createDetailedBackup,
+      mergeStrategy: 'conservative',
+      conflictResolution: options.mergeConflictResolution
+    };
+
+    const result = await this.mergeEngine.mergeTsConfig(tsConfigPath, migrationUpdates, mergeOptions);
+    
+    return {
+      success: result.success,
+      filesModified: result.success ? [tsConfigPath] : [],
+      conflicts: this.convertConflicts(result.conflicts),
+      backupPaths: result.backupPath ? [result.backupPath] : [],
+      warnings: result.warnings
+    };
   }
 
   /**
@@ -660,16 +749,196 @@ Resolution needed: Choose between user code or migration code
     conflicts: MergeConflict[],
     options: PreservationOptions
   ): Promise<void> {
-    // Automatically resolve conflicts based on user preferences
-    conflicts.forEach(conflict => {
-      if (options.mergeConflictResolution === 'user') {
-        // Keep user code
-        conflict.resolution = 'user';
-      } else if (options.mergeConflictResolution === 'migration') {
-        // Apply migration code
-        conflict.resolution = 'migration';
+    // Intelligently resolve conflicts by attempting smart merges
+    for (const conflict of conflicts) {
+      try {
+        let shouldMerge = false;
+        let mergedCode = '';
+
+        if (options.mergeConflictResolution === 'user') {
+          // Prioritize user code but try to integrate migration improvements
+          if (conflict.type === 'import') {
+            mergedCode = this.mergeImportStatements(conflict.userCode, conflict.migrationCode);
+            shouldMerge = true;
+          } else if (conflict.type === 'method') {
+            mergedCode = this.mergeMethodDefinitions(conflict.userCode, conflict.migrationCode);
+            shouldMerge = true;
+          } else if (conflict.type === 'decorator') {
+            mergedCode = this.mergeDecorators(conflict.userCode, conflict.migrationCode);
+            shouldMerge = true;
+          }
+          
+          if (shouldMerge && mergedCode !== conflict.userCode) {
+            conflict.resolution = 'merged';
+            conflict.mergedCode = mergedCode;
+            this.applyMergedCode(sourceFile, conflict);
+          } else {
+            conflict.resolution = 'user';
+          }
+        } else if (options.mergeConflictResolution === 'migration') {
+          // Apply migration code but preserve essential user customizations
+          if (conflict.type === 'method' && this.hasEssentialUserLogic(conflict.userCode)) {
+            mergedCode = this.preserveUserLogicInMigration(conflict.userCode, conflict.migrationCode);
+            conflict.resolution = 'merged';
+            conflict.mergedCode = mergedCode;
+            this.applyMergedCode(sourceFile, conflict);
+          } else {
+            conflict.resolution = 'migration';
+          }
+        }
+      } catch (error) {
+        // If merge fails, fall back to user preference
+        conflict.resolution = options.mergeConflictResolution === 'user' ? 'user' : 'migration';
+        this.warnings.push(`Failed to merge conflict in ${conflict.file}: ${error instanceof Error ? error.message : String(error)}`);
       }
-    });
+    }
+  }
+
+  /**
+   * Intelligently merge import statements
+   */
+  private mergeImportStatements(userImport: string, migrationImport: string): string {
+    try {
+      // Extract imports from both statements
+      const userImports = this.extractImportsFromStatement(userImport);
+      const migrationImports = this.extractImportsFromStatement(migrationImport);
+      
+      // Merge imports, preserving user's custom imports
+      const allImports = new Set([...userImports.imports, ...migrationImports.imports]);
+      
+      // Use migration's module path but keep all imports
+      return `import { ${Array.from(allImports).join(', ')} } from '${migrationImports.from}';`;
+    } catch (error) {
+      // If parsing fails, return user import
+      return userImport;
+    }
+  }
+
+  /**
+   * Merge method definitions while preserving user logic
+   */
+  private mergeMethodDefinitions(userMethod: string, migrationMethod: string): string {
+    try {
+      // Extract method signature from migration and body from user
+      const migrationSignature = this.extractMethodSignature(migrationMethod);
+      const userBody = this.extractMethodBody(userMethod);
+      
+      // Combine migration signature with user implementation
+      return `${migrationSignature} {\n${userBody}\n  }`;
+    } catch (error) {
+      // If parsing fails, return user method
+      return userMethod;
+    }
+  }
+
+  /**
+   * Merge decorators while preserving user configurations
+   */
+  private mergeDecorators(userDecorator: string, migrationDecorator: string): string {
+    try {
+      // For decorators, prefer user configuration but add migration properties if missing
+      const userConfig = this.extractDecoratorConfig(userDecorator);
+      const migrationConfig = this.extractDecoratorConfig(migrationDecorator);
+      
+      // Merge configurations, user takes precedence
+      const mergedConfig = { ...migrationConfig, ...userConfig };
+      const decoratorName = this.extractDecoratorName(migrationDecorator);
+      
+      return `@${decoratorName}(${JSON.stringify(mergedConfig, null, 2)})`;
+    } catch (error) {
+      // If parsing fails, return user decorator
+      return userDecorator;
+    }
+  }
+
+  /**
+   * Apply merged code to the source file
+   */
+  private applyMergedCode(sourceFile: SourceFile, conflict: MergeConflict): void {
+    if (!conflict.mergedCode) return;
+
+    try {
+      const fileText = sourceFile.getFullText();
+      let updatedText = fileText;
+
+      // Replace the original user code with merged code
+      if (conflict.type === 'import') {
+        updatedText = fileText.replace(conflict.userCode, conflict.mergedCode);
+      } else if (conflict.type === 'method') {
+        updatedText = fileText.replace(conflict.userCode, conflict.mergedCode);
+      } else if (conflict.type === 'decorator') {
+        updatedText = fileText.replace(conflict.userCode, conflict.mergedCode);
+      }
+
+      sourceFile.replaceWithText(updatedText);
+    } catch (error) {
+      this.warnings.push(`Failed to apply merged code: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  // Helper methods for code parsing
+  private extractImportsFromStatement(importStatement: string): { imports: string[], from: string } {
+    const match = importStatement.match(/import\s*\{\s*([^}]+)\s*\}\s*from\s*['"]([^'"]+)['"]/);
+    if (match) {
+      const imports = match[1].split(',').map(imp => imp.trim());
+      return { imports, from: match[2] };
+    }
+    return { imports: [], from: '' };
+  }
+
+  private extractMethodSignature(methodText: string): string {
+    const match = methodText.match(/((?:async\s+)?(?:public\s+|private\s+|protected\s+)?[^{]+)/);
+    return match ? match[1].trim() : '';
+  }
+
+  private extractMethodBody(methodText: string): string {
+    const match = methodText.match(/\{([\s\S]*)\}/);
+    return match ? match[1].trim() : '';
+  }
+
+  private extractDecoratorConfig(decoratorText: string): any {
+    const match = decoratorText.match(/@\w+\((\{[\s\S]*\})\)/);
+    if (match) {
+      try {
+        return JSON.parse(match[1]);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  }
+
+  private extractDecoratorName(decoratorText: string): string {
+    const match = decoratorText.match(/@(\w+)/);
+    return match ? match[1] : '';
+  }
+
+  private hasEssentialUserLogic(userCode: string): boolean {
+    // Check if user code contains complex logic that should be preserved
+    const essentialPatterns = [
+      /\/\*[\s\S]*?\*\//, // Multi-line comments
+      /\/\/.*$/m, // Single-line comments
+      /console\.(log|error|warn)/, // Logging statements
+      /if\s*\(.*\)\s*\{[\s\S]*\}/, // Complex conditionals
+      /for\s*\(.*\)\s*\{[\s\S]*\}/, // Loops
+      /\.subscribe\(/, // RxJS subscriptions
+      /\.pipe\(/, // RxJS pipes
+    ];
+
+    return essentialPatterns.some(pattern => pattern.test(userCode));
+  }
+
+  private preserveUserLogicInMigration(userCode: string, migrationCode: string): string {
+    try {
+      // Extract user's method body and preserve it in migration structure
+      const userBody = this.extractMethodBody(userCode);
+      const migrationSignature = this.extractMethodSignature(migrationCode);
+      
+      return `${migrationSignature} {\n    // Preserved user logic\n${userBody}\n  }`;
+    } catch (error) {
+      // If merge fails, return user code
+      return userCode;
+    }
   }
 
   private async resolveTemplateConflicts(
@@ -707,6 +976,40 @@ ${conflict.migrationCode}
 `;
 
     await fs.writeFile(conflictPath, conflictContent);
+  }
+
+  /**
+   * Convert IntelligentMergeEngine conflicts to AdvancedContentPreserver format
+   */
+  private convertConflicts(conflicts: IntelligentMergeConflict[]): MergeConflict[] {
+    return conflicts.map(conflict => ({
+      file: conflict.file,
+      type: this.mapConflictType(conflict.type),
+      userCode: typeof conflict.userValue === 'string' ? conflict.userValue : JSON.stringify(conflict.userValue),
+      migrationCode: typeof conflict.migrationValue === 'string' ? conflict.migrationValue : JSON.stringify(conflict.migrationValue),
+      resolution: conflict.resolution,
+      mergedCode: conflict.mergedValue ? 
+        (typeof conflict.mergedValue === 'string' ? conflict.mergedValue : JSON.stringify(conflict.mergedValue)) : 
+        undefined
+    }));
+  }
+
+  /**
+   * Map IntelligentMergeEngine conflict types to AdvancedContentPreserver types
+   */
+  private mapConflictType(type: 'configuration' | 'code' | 'template' | 'style'): 'import' | 'method' | 'property' | 'decorator' | 'template' {
+    switch (type) {
+      case 'configuration':
+        return 'property'; // Configuration conflicts are treated as property conflicts
+      case 'code':
+        return 'method'; // Code conflicts are typically method-related
+      case 'template':
+        return 'template';
+      case 'style':
+        return 'property'; // Style conflicts are treated as property conflicts
+      default:
+        return 'property';
+    }
   }
 
   private getDefaultOptions(): PreservationOptions {

@@ -37,6 +37,7 @@ exports.Angular16Handler = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const BaseVersionHandler_1 = require("./BaseVersionHandler");
+const SSRDetector_1 = require("../utils/SSRDetector");
 /**
  * Angular 16 Handler - Required inputs, signals, and new control flow
  *
@@ -669,14 +670,20 @@ Continue using Observables for:
         }
     }
     /**
-     * Configure non-destructive hydration
+     * Configure non-destructive hydration - only for SSR applications
      */
     async configureNonDestructiveHydration(projectPath) {
+        // Check if this is an SSR application first
+        const isSSRApp = await SSRDetector_1.SSRDetector.isSSRApplication(projectPath);
+        if (!isSSRApp) {
+            this.progressReporter?.info('✓ Skipping hydration configuration (CSR application detected)');
+            return;
+        }
         const mainTsPath = path.join(projectPath, 'src/main.ts');
         if (await fs.pathExists(mainTsPath)) {
             try {
                 let content = await fs.readFile(mainTsPath, 'utf-8');
-                // Add non-destructive hydration import if SSR is detected
+                // Add non-destructive hydration import if SSR is detected and not already present
                 if (content.includes('bootstrapApplication') && !content.includes('provideClientHydration')) {
                     content = content.replace(/import { bootstrapApplication } from '@angular\/platform-browser';/, `import { bootstrapApplication } from '@angular/platform-browser';
 import { provideClientHydration } from '@angular/platform-browser';`);
@@ -686,7 +693,7 @@ import { provideClientHydration } from '@angular/platform-browser';`);
     $1
   ]`);
                     await fs.writeFile(mainTsPath, content);
-                    this.progressReporter?.info('✓ Configured non-destructive hydration (developer preview)');
+                    this.progressReporter?.info('✓ Configured non-destructive hydration for SSR application (developer preview)');
                 }
             }
             catch (error) {
@@ -798,9 +805,11 @@ import { provideClientHydration } from '@angular/platform-browser';`);
         }
     }
     /**
-     * Validate third-party compatibility for Angular 16
+     * Validate and update third-party compatibility for Angular 16
      */
     async validateThirdPartyCompatibility(projectPath) {
+        // First, update third-party dependencies to compatible versions
+        await this.updateThirdPartyDependencies(projectPath);
         const packageJsonPath = path.join(projectPath, 'package.json');
         if (await fs.pathExists(packageJsonPath)) {
             try {

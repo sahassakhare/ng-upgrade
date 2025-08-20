@@ -9,6 +9,7 @@ export declare class Angular12Handler extends BaseVersionHandler {
     private updateWebpackConfiguration;
     private updatePackageFormat;
     private enableStrictMode;
+    private updateAngularCDKMaterial;
     private updateHMRSupport;
     getBreakingChanges(): BreakingChange[];
 }

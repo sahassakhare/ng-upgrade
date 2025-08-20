@@ -35,7 +35,9 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileContentPreserver = void 0;
 const fs = __importStar(require("fs-extra"));
+const path = __importStar(require("path"));
 const ts = __importStar(require("typescript"));
+const SSRDetector_1 = require("./SSRDetector");
 class FileContentPreserver {
     /**
      * Update main.ts file while preserving custom code
@@ -45,6 +47,9 @@ class FileContentPreserver {
             return;
         }
         const content = await fs.readFile(filePath, 'utf-8');
+        const projectPath = path.dirname(path.dirname(filePath)); // Go up from src/main.ts to project root
+        // Detect if this is an SSR application
+        const isSSRApp = await SSRDetector_1.SSRDetector.isSSRApplication(projectPath);
         // Parse the file to understand its structure
         const sourceFile = ts.createSourceFile('main.ts', content, ts.ScriptTarget.Latest, true);
         // Check if already using new bootstrap (Angular 14+)
@@ -58,7 +63,7 @@ class FileContentPreserver {
             const customImports = this.extractCustomImports(sourceFile);
             const appModulePath = this.extractAppModulePath(sourceFile);
             // Generate new bootstrap code preserving custom elements
-            const newContent = this.generateUpdatedBootstrap(customImports, customProviders, appModulePath, targetAngularVersion);
+            const newContent = this.generateUpdatedBootstrap(customImports, customProviders, appModulePath, targetAngularVersion, isSSRApp);
             // Backup original file
             await fs.copy(filePath, `${filePath}.backup`);
             // Write updated content
@@ -170,14 +175,18 @@ class FileContentPreserver {
     /**
      * Generate updated bootstrap code
      */
-    static generateUpdatedBootstrap(customImports, customProviders, appModulePath, targetVersion) {
+    static generateUpdatedBootstrap(customImports, customProviders, appModulePath, targetVersion, isSSRApp) {
         if (targetVersion >= 14) {
-            // Generate standalone bootstrap
+            // Generate standalone bootstrap - only add SSR imports for SSR applications
+            const ssrImports = isSSRApp ? `
+import { provideClientHydration } from '@angular/platform-browser';` : '';
+            const ssrProviders = isSSRApp ? `
+    provideClientHydration(),` : '';
             return `import { bootstrapApplication } from '@angular/platform-browser';
 import { importProvidersFrom } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppModule } from '${appModulePath}';
-import { AppComponent } from './app/app.component';
+import { AppComponent } from './app/app.component';${ssrImports}
 ${customImports.join('\n')}
 
 // Preserved custom configuration
@@ -185,7 +194,7 @@ const customProviders = ${customProviders.length > 0 ? customProviders[0] : '{}'
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(BrowserModule, AppModule),
+    importProvidersFrom(BrowserModule, AppModule),${ssrProviders}
     // Custom providers preserved from original configuration
     ...(customProviders.providers || [])
   ]

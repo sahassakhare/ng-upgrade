@@ -37,6 +37,8 @@ exports.Angular18Handler = void 0;
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const BaseVersionHandler_1 = require("./BaseVersionHandler");
+const SSRDetector_1 = require("../utils/SSRDetector");
+const DependencyCompatibilityMatrix_1 = require("../utils/DependencyCompatibilityMatrix");
 /**
  * Angular 18 Handler - Material 3 and built-in control flow stabilization
  *
@@ -83,11 +85,20 @@ class Angular18Handler extends BaseVersionHandler_1.BaseVersionHandler {
             { name: 'rxjs', version: '~7.8.0', type: 'dependencies' },
             // Angular Material with Material 3 support
             { name: '@angular/material', version: '^18.0.0', type: 'dependencies' },
-            { name: '@angular/cdk', version: '^18.0.0', type: 'dependencies' }
+            { name: '@angular/cdk', version: '^18.0.0', type: 'dependencies' },
+            // Third-party Angular ecosystem packages
+            ...DependencyCompatibilityMatrix_1.DependencyCompatibilityMatrix.getCompatibleDependencies('18').map(dep => ({
+                name: dep.name,
+                version: dep.version,
+                type: dep.type
+            }))
         ];
     }
     async applyVersionSpecificChanges(projectPath, options) {
         this.progressReporter?.updateMessage('Applying Angular 18 transformations...');
+        // Check if this is an SSR application
+        const isSSRApp = await SSRDetector_1.SSRDetector.isSSRApplication(projectPath);
+        this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
         // 1. Implement Material Design 3 support
         await this.implementMaterial3Support(projectPath);
         // 2. Stabilize built-in control flow syntax

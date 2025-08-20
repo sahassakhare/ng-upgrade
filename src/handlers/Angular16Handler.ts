@@ -2,6 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { BaseVersionHandler } from './BaseVersionHandler';
 import { BreakingChange, UpgradeOptions, DependencyUpdate, Migration } from '../types';
+import { SSRDetector } from '../utils/SSRDetector';
 
 /**
  * Angular 16 Handler - Required inputs, signals, and new control flow
@@ -740,16 +741,24 @@ Continue using Observables for:
   }
 
   /**
-   * Configure non-destructive hydration
+   * Configure non-destructive hydration - only for SSR applications
    */
   private async configureNonDestructiveHydration(projectPath: string): Promise<void> {
+    // Check if this is an SSR application first
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
+    
+    if (!isSSRApp) {
+      this.progressReporter?.info('✓ Skipping hydration configuration (CSR application detected)');
+      return;
+    }
+
     const mainTsPath = path.join(projectPath, 'src/main.ts');
     
     if (await fs.pathExists(mainTsPath)) {
       try {
         let content = await fs.readFile(mainTsPath, 'utf-8');
         
-        // Add non-destructive hydration import if SSR is detected
+        // Add non-destructive hydration import if SSR is detected and not already present
         if (content.includes('bootstrapApplication') && !content.includes('provideClientHydration')) {
           content = content.replace(
             /import { bootstrapApplication } from '@angular\/platform-browser';/,
@@ -767,7 +776,7 @@ import { provideClientHydration } from '@angular/platform-browser';`
           );
           
           await fs.writeFile(mainTsPath, content);
-          this.progressReporter?.info('✓ Configured non-destructive hydration (developer preview)');
+          this.progressReporter?.info('✓ Configured non-destructive hydration for SSR application (developer preview)');
         }
         
       } catch (error) {
@@ -895,9 +904,12 @@ import { provideClientHydration } from '@angular/platform-browser';`
   }
 
   /**
-   * Validate third-party compatibility for Angular 16
+   * Validate and update third-party compatibility for Angular 16
    */
   private async validateThirdPartyCompatibility(projectPath: string): Promise<void> {
+    // First, update third-party dependencies to compatible versions
+    await this.updateThirdPartyDependencies(projectPath);
+    
     const packageJsonPath = path.join(projectPath, 'package.json');
     
     if (await fs.pathExists(packageJsonPath)) {

@@ -38,6 +38,8 @@ const BaseVersionHandler_1 = require("./BaseVersionHandler");
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const FileContentPreserver_1 = require("../utils/FileContentPreserver");
+const SSRDetector_1 = require("../utils/SSRDetector");
+const DependencyCompatibilityMatrix_1 = require("../utils/DependencyCompatibilityMatrix");
 /**
  * Angular 17 Handler - New application bootstrap and asset management
  *
@@ -96,6 +98,9 @@ class Angular17Handler extends BaseVersionHandler_1.BaseVersionHandler {
      */
     async applyVersionSpecificChanges(projectPath, options) {
         console.log('Applying Angular 17 specific changes...');
+        // Check if this is an SSR application
+        const isSSRApp = await SSRDetector_1.SSRDetector.isSSRApplication(projectPath);
+        this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
         // 1. Update to new application bootstrap (if not conservative)
         if (options.strategy !== 'conservative') {
             await this.updateApplicationBootstrap(projectPath);
@@ -251,6 +256,23 @@ class Angular17Handler extends BaseVersionHandler_1.BaseVersionHandler {
             ];
             await this.dependencyInstaller.installDependencies(materialDeps, 'Updating Angular Material to version 17...');
             this.progressReporter?.success('✓ Updated Angular Material to version 17');
+        }
+        // Update third-party Angular ecosystem packages
+        await this.updateThirdPartyDependencies(projectPath);
+    }
+    /**
+     * Update third-party Angular ecosystem packages to compatible versions
+     */
+    async updateThirdPartyDependencies(projectPath) {
+        const compatibleDeps = DependencyCompatibilityMatrix_1.DependencyCompatibilityMatrix.getCompatibleDependencies('17');
+        if (compatibleDeps.length > 0) {
+            const depsToUpdate = compatibleDeps.map(dep => ({
+                name: dep.name,
+                version: dep.version,
+                type: dep.type
+            }));
+            await this.dependencyInstaller.installDependencies(depsToUpdate, 'Updating third-party packages to Angular 17 compatible versions...');
+            this.progressReporter?.success('✓ Updated third-party dependencies for Angular 17 compatibility');
         }
     }
     /**

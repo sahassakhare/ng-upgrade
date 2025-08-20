@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "ng-upgrade": "dist/cli.js"
+    "ng-upgrade": "dist/cli.js",
+    "ng-check-updates": "dist/commands/ng-check-updates.js"
   },
   "files": [
     "dist/**/*",
@@ -86,6 +87,7 @@
     "inquirer": "^8.2.6",
     "ora": "^5.4.1",
     "semver": "^7.6.0",
+    "ts-deepmerge": "^7.0.3",
     "ts-morph": "^21.0.1",
     "typescript": "^5.6.0",
     "uuid": "^10.0.0"

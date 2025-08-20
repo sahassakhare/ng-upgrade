@@ -2,6 +2,8 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { BaseVersionHandler } from './BaseVersionHandler';
 import { BreakingChange, UpgradeOptions, DependencyUpdate } from '../types';
+import { SSRDetector } from '../utils/SSRDetector';
+import { DependencyCompatibilityMatrix } from '../utils/DependencyCompatibilityMatrix';
 
 /**
  * Angular 15 Handler - Standalone APIs stabilization and Image directive
@@ -51,14 +53,25 @@ export class Angular15Handler extends BaseVersionHandler {
       { name: 'zone.js', version: '~0.12.0', type: 'dependencies' },
       { name: 'rxjs', version: '~7.5.0', type: 'dependencies' },
       
-      // Angular Material (if present) - MDC-based
+      // Angular Material and CDK - MDC-based
       { name: '@angular/material', version: '^15.0.0', type: 'dependencies' },
-      { name: '@angular/cdk', version: '^15.0.0', type: 'dependencies' }
+      { name: '@angular/cdk', version: '^15.0.0', type: 'dependencies' },
+      
+      // Third-party Angular ecosystem packages
+      ...DependencyCompatibilityMatrix.getCompatibleDependencies('15').map(dep => ({
+        name: dep.name,
+        version: dep.version,
+        type: dep.type as 'dependencies' | 'devDependencies'
+      }))
     ];
   }
 
   protected async applyVersionSpecificChanges(projectPath: string, options: UpgradeOptions): Promise<void> {
     this.progressReporter?.updateMessage('Applying Angular 15 transformations...');
+    
+    // Check if this is an SSR application
+    const isSSRApp = await SSRDetector.isSSRApplication(projectPath);
+    this.progressReporter?.info(`Application type: ${isSSRApp ? 'SSR (Server-Side Rendering)' : 'CSR (Client-Side Rendering)'}`);
     
     // 1. Stabilize standalone APIs and components
     await this.stabilizeStandaloneAPIs(projectPath);
