@@ -3,6 +3,7 @@ import { VersionHandler } from '../core/VersionHandlerRegistry';
 import { DependencyInstaller } from '../utils/DependencyInstaller';
 import { AdvancedContentPreserver } from '../utils/AdvancedContentPreserver';
 import { ProgressReporter } from '../utils/ProgressReporter';
+import { UpgradeReportGenerator } from '../utils/UpgradeReportGenerator';
 /**
  * Base class for all Angular version handlers providing common upgrade functionality
  *
@@ -35,6 +36,8 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
     protected dependencyInstaller: DependencyInstaller;
     /** Advanced content preservation system for intelligent code merging */
     protected contentPreserver: AdvancedContentPreserver;
+    /** Detailed upgrade report generator for tracking all changes */
+    protected reportGenerator: UpgradeReportGenerator;
     /** Utility for reporting upgrade progress and status messages */
     protected progressReporter: ProgressReporter;
     /**
@@ -127,7 +130,7 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
     /**
      * Update Angular dependencies to target version with automatic installation
      */
-    protected updateAngularDependencies(_projectPath: string): Promise<void>;
+    protected updateAngularDependencies(projectPath: string): Promise<void>;
     /**
      * Update TypeScript version with automatic installation
      */
@@ -241,5 +244,13 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      * Create version-specific breaking change
      */
     protected createBreakingChange(id: string, type: BreakingChange['type'], severity: BreakingChange['severity'], description: string, impact: string, migrationInstructions?: string): BreakingChange;
+    /**
+     * Track dependency updates by comparing package.json before and after
+     */
+    private trackDependencyUpdates;
+    /**
+     * Check if a dependency version change is potentially breaking
+     */
+    private isBreakingDependencyChange;
 }
 //# sourceMappingURL=BaseVersionHandler.d.ts.map

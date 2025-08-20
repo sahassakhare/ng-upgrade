@@ -41,6 +41,7 @@ const DependencyInstaller_1 = require("../utils/DependencyInstaller");
 const FileContentPreserver_1 = require("../utils/FileContentPreserver");
 const AdvancedContentPreserver_1 = require("../utils/AdvancedContentPreserver");
 const ProgressReporter_1 = require("../utils/ProgressReporter");
+const UpgradeReportGenerator_1 = require("../utils/UpgradeReportGenerator");
 /**
  * Base class for all Angular version handlers providing common upgrade functionality
  *
@@ -71,6 +72,8 @@ class BaseVersionHandler {
     dependencyInstaller;
     /** Advanced content preservation system for intelligent code merging */
     contentPreserver;
+    /** Detailed upgrade report generator for tracking all changes */
+    reportGenerator;
     /** Utility for reporting upgrade progress and status messages */
     progressReporter;
     /**
@@ -101,6 +104,9 @@ class BaseVersionHandler {
         this.dependencyInstaller = new DependencyInstaller_1.DependencyInstaller(projectPath);
         this.contentPreserver = new AdvancedContentPreserver_1.AdvancedContentPreserver(projectPath);
         this.progressReporter = options.progressReporter || new ProgressReporter_1.ProgressReporter();
+        // Initialize report generator
+        const projectName = path.basename(projectPath);
+        this.reportGenerator = new UpgradeReportGenerator_1.UpgradeReportGenerator(projectPath, projectName, step.fromVersion, step.toVersion, options.strategy || 'balanced');
         this.progressReporter.startStep(`Angular ${this.version} Upgrade`, `Starting Angular ${this.version} upgrade...`);
         // Update Angular dependencies with automatic installation
         this.progressReporter.updateMessage('Updating Angular dependencies...');
@@ -118,6 +124,15 @@ class BaseVersionHandler {
         await this.updateConfigurationFiles(projectPath, options);
         // Run Angular update schematics
         await this.runAngularUpdateSchematics(projectPath);
+        // Generate detailed upgrade report
+        this.progressReporter.updateMessage('Generating upgrade report...');
+        try {
+            const reportPath = await this.reportGenerator.generateReport(true);
+            this.progressReporter.info(`Detailed upgrade report generated: ${reportPath}`);
+        }
+        catch (error) {
+            this.progressReporter.warn(`Failed to generate upgrade report: ${error instanceof Error ? error.message : String(error)}`);
+        }
         this.progressReporter.completeStep(`Angular ${this.version} Upgrade`, `Angular ${this.version} upgrade completed successfully`);
     }
     /**
@@ -168,19 +183,29 @@ class BaseVersionHandler {
     /**
      * Update Angular dependencies to target version with automatic installation
      */
-    async updateAngularDependencies(_projectPath) {
+    async updateAngularDependencies(projectPath) {
         try {
+            // Track Angular package dependencies before update
+            const packageJsonPath = path.join(projectPath, 'package.json');
+            const packageJson = await fs.readJson(packageJsonPath);
             // Use the DependencyInstaller for automatic installation
             const success = await this.dependencyInstaller.updateAngularPackages(this.version);
+            // Track dependency changes
+            const updatedPackageJson = await fs.readJson(packageJsonPath);
+            this.trackDependencyUpdates(packageJson, updatedPackageJson, '@angular/');
             if (!success) {
                 this.progressReporter.warn('Angular dependencies updated in package.json. Dependencies will be verified later.');
+                this.reportGenerator.addWarning('Angular dependency installation required manual verification');
             }
             else {
                 this.progressReporter.success('Angular dependencies installed successfully');
+                this.reportGenerator.addSuccessStory('Angular dependencies updated and installed automatically');
             }
         }
         catch (error) {
-            this.progressReporter.warn(`Angular dependency update failed: ${error instanceof Error ? error.message : String(error)}`);
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            this.progressReporter.warn(`Angular dependency update failed: ${errorMsg}`);
+            this.reportGenerator.addError(`Angular dependency update failed: ${errorMsg}`);
             // Don't fail the entire upgrade, dependencies will be verified later
         }
     }
@@ -909,6 +934,54 @@ class BaseVersionHandler {
                 instructions: migrationInstructions
             }
         };
+    }
+    /**
+     * Track dependency updates by comparing package.json before and after
+     */
+    trackDependencyUpdates(beforePackageJson, afterPackageJson, filterPrefix) {
+        const before = {
+            ...beforePackageJson.dependencies,
+            ...beforePackageJson.devDependencies
+        };
+        const after = {
+            ...afterPackageJson.dependencies,
+            ...afterPackageJson.devDependencies
+        };
+        for (const [name, newVersion] of Object.entries(after)) {
+            if (filterPrefix && !name.startsWith(filterPrefix))
+                continue;
+            const oldVersion = before[name];
+            if (oldVersion && oldVersion !== newVersion) {
+                const dependencyChange = {
+                    name,
+                    previousVersion: oldVersion,
+                    newVersion: newVersion,
+                    type: afterPackageJson.dependencies?.[name] ? 'production' : 'development',
+                    breaking: this.isBreakingDependencyChange(name, oldVersion, newVersion)
+                };
+                this.reportGenerator.trackDependencyChange(dependencyChange);
+            }
+        }
+    }
+    /**
+     * Check if a dependency version change is potentially breaking
+     */
+    isBreakingDependencyChange(name, oldVersion, newVersion) {
+        // Angular packages: major version changes are breaking
+        if (name.startsWith('@angular/')) {
+            const oldMajor = parseInt(oldVersion.replace(/[^\d].*/, ''));
+            const newMajor = parseInt(newVersion.replace(/[^\d].*/, ''));
+            return newMajor > oldMajor;
+        }
+        // For other packages, assume major version changes are breaking
+        try {
+            const oldMajor = parseInt(oldVersion.replace(/[^\d].*/, ''));
+            const newMajor = parseInt(newVersion.replace(/[^\d].*/, ''));
+            return newMajor > oldMajor;
+        }
+        catch {
+            return false;
+        }
     }
 }
 exports.BaseVersionHandler = BaseVersionHandler;

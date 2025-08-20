@@ -50,6 +50,7 @@ An enterprise-grade, intelligent multi-step upgrade orchestrator that safely mig
 
 ### Advanced Features
 - **Intelligent Content Preservation**: Advanced AST-based preservation of user customizations using ts-morph
+- **Detailed Upgrade Reports**: Comprehensive HTML, Markdown, and JSON reports with visual analytics
 - **Checkpoint System**: Create restoration points at each upgrade milestone
 - **AST-Based Code Transformations**: Precise code modifications using TypeScript AST
 - **Multi-Layer Compatibility**: Allow old and new patterns to coexist during transitions
@@ -63,6 +64,15 @@ An enterprise-grade, intelligent multi-step upgrade orchestrator that safely mig
 - **Comment Retention**: Preserves important code comments and documentation
 - **Detailed Backups**: Creates timestamped backups with metadata for easy restoration
 - **TypeScript AST Analysis**: Uses ts-morph for precise code analysis and preservation
+
+### Comprehensive Upgrade Reports
+- **Multiple Formats**: HTML (visual), Markdown (documentation), and JSON (programmatic access)
+- **Visual Analytics**: Beautiful charts and metrics with Angular-themed styling
+- **Detailed Change Tracking**: File modifications, dependency updates, and breaking changes
+- **Executive Summary**: High-level overview with success metrics and duration
+- **Migration Analysis**: Complete breakdown of applied migrations and transformations
+- **Issue Documentation**: Comprehensive listing of warnings, errors, and resolutions
+- **Recommendations**: Actionable next steps and best practices for post-upgrade
 
 ## Quick Start
 
@@ -165,6 +175,19 @@ ng-upgrade upgrade --target 18 \
   --preserve-comments \
   --preserve-custom-methods \
   --conflict-resolution user
+```
+
+### Report Generation
+Detailed upgrade reports are automatically generated after each upgrade:
+
+```bash
+# Reports are saved to .ng-upgrade/reports/
+# - upgrade-report-16-to-17-2024-08-20T10-30-45.html (Visual report)
+# - upgrade-report-16-to-17-2024-08-20T10-30-45.md   (Documentation)
+# - upgrade-report-16-to-17-2024-08-20T10-30-45.json (Programmatic access)
+
+# View the latest HTML report in your browser
+open .ng-upgrade/reports/upgrade-report-*.html
 ```
 
 ## Project Analysis
