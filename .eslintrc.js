@@ -4,7 +4,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './tsconfig.eslint.json',
   },
   plugins: ['@typescript-eslint'],
   // Remove extends to avoid configuration issues
@@ -87,5 +87,5 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-require-imports': 'error',
   },
-  ignorePatterns: ['dist/**', 'node_modules/**', '*.js', '*.mjs', 'docs/**'],
+  ignorePatterns: ['dist/**', 'node_modules/**', '*.js', '*.mjs', 'docs/**', '**/*.test.ts', '**/*.spec.ts', 'jest.config.js'],
 };

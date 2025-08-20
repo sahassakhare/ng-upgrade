@@ -504,17 +504,19 @@ export class AdvancedContentPreserver {
     let modifiedContent = content;
 
     switch (transform.templateType) {
-      case 'control-flow':
+      case 'control-flow': {
         const controlFlowResult = await this.migrateControlFlowSafely(modifiedContent, userCustomizations);
         modifiedContent = controlFlowResult.content;
         conflicts.push(...controlFlowResult.conflicts);
         break;
+      }
         
-      case 'directive-update':
+      case 'directive-update': {
         const directiveResult = await this.updateDirectivesSafely(modifiedContent, transform, userCustomizations);
         modifiedContent = directiveResult.content;
         conflicts.push(...directiveResult.conflicts);
         break;
+      }
     }
 
     return { content: modifiedContent, conflicts };
