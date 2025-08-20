@@ -58,18 +58,18 @@ export declare class Angular17Handler extends BaseVersionHandler {
      */
     private updateApplicationBootstrap;
     /**
-     * Migrates assets folder to public folder structure (Angular 17+)
+     * Prepares for Angular 18+ public folder structure (Angular 17 → 18 preparation)
      *
-     * Safely migrates from src/assets to public folder structure while maintaining
-     * backward compatibility. Creates new public folder, copies assets, and updates
-     * angular.json configuration to support both asset structures during transition.
+     * This creates a public folder and copies assets to prepare for Angular 18+ migration,
+     * while maintaining full backward compatibility with src/assets. The actual migration
+     * to public-only happens in Angular 18+ handlers.
      *
      * @param projectPath - The absolute path to the Angular project root
      * @private
      *
      * @example
      * Before: src/assets/images/logo.png
-     * After: public/images/logo.png (with src/assets still working)
+     * After: Both src/assets/images/logo.png AND public/images/logo.png work
      */
     private migrateAssetsToPublic;
     /**

@@ -65,6 +65,14 @@ export declare class Angular20Handler extends BaseVersionHandler {
      */
     private setupEnhancedDevTools;
     /**
+     * Migrate from webpack-dev-server to esbuild dev server (Angular 18+)
+     */
+    private migrateToEsbuildDevServer;
+    /**
+     * Configure esbuild dev server in angular.json
+     */
+    private configureEsbuildDevServer;
+    /**
      * Configure advanced build optimizations
      */
     private configureAdvancedBuildOptimizations;

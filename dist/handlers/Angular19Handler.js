@@ -108,7 +108,9 @@ class Angular19Handler extends BaseVersionHandler_1.BaseVersionHandler {
         await this.implementAdvancedBuildOptimizations(projectPath);
         // 9. Update build configurations for Angular 19
         await this.updateBuildConfigurations(projectPath);
-        // 10. Validate third-party compatibility
+        // 10. Migrate from webpack-dev-server to esbuild dev server (Angular 18+)
+        await this.migrateToEsbuildDevServer(projectPath);
+        // 11. Validate third-party compatibility
         await this.validateThirdPartyCompatibility(projectPath);
         this.progressReporter?.success('✓ Angular 19 transformations completed');
     }
@@ -1774,6 +1776,74 @@ export class PerformanceMonitorComponent implements OnInit, OnDestroy {
             'primeng'
         ];
         return ssrCompatibleLibraries.some(lib => libName.includes(lib));
+    }
+    /**
+     * Migrate from webpack-dev-server to esbuild dev server (Angular 18+)
+     */
+    async migrateToEsbuildDevServer(projectPath) {
+        const packageJsonPath = path.join(projectPath, 'package.json');
+        if (await fs.pathExists(packageJsonPath)) {
+            try {
+                const packageJson = await fs.readJson(packageJsonPath);
+                // Remove webpack-dev-server if present
+                if (packageJson.devDependencies?.['webpack-dev-server']) {
+                    delete packageJson.devDependencies['webpack-dev-server'];
+                    this.progressReporter?.info('✓ Removed webpack-dev-server (Angular 18+ uses esbuild dev server)');
+                }
+                // Remove any custom webpack configurations that might interfere
+                if (packageJson.devDependencies?.['@angular-builders/custom-webpack']) {
+                    this.progressReporter?.warn('⚠️ Custom webpack configuration detected - may need manual review for esbuild compatibility');
+                }
+                await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+                // Update angular.json to ensure esbuild dev server configuration
+                await this.configureEsbuildDevServer(projectPath);
+            }
+            catch (error) {
+                this.progressReporter?.warn(`Could not migrate dev server: ${error instanceof Error ? error.message : String(error)}`);
+            }
+        }
+    }
+    /**
+     * Configure esbuild dev server in angular.json
+     */
+    async configureEsbuildDevServer(projectPath) {
+        const angularJsonPath = path.join(projectPath, 'angular.json');
+        if (await fs.pathExists(angularJsonPath)) {
+            try {
+                const angularJson = await fs.readJson(angularJsonPath);
+                // Update serve configurations to use esbuild
+                for (const projectName in angularJson.projects) {
+                    const project = angularJson.projects[projectName];
+                    if (project.architect?.serve) {
+                        // Ensure serve uses the correct builder for esbuild
+                        project.architect.serve.builder = '@angular-devkit/build-angular:dev-server';
+                        // Remove any webpack-specific configurations
+                        if (project.architect.serve.options) {
+                            delete project.architect.serve.options.customWebpackConfig;
+                            delete project.architect.serve.options.webpackDevServerOptions;
+                            // Configure esbuild-optimized dev server options
+                            project.architect.serve.options = {
+                                ...project.architect.serve.options,
+                                buildTarget: `${projectName}:build`
+                            };
+                        }
+                    }
+                    // Update build configuration to use esbuild (use browser-esbuild for easier migration from existing projects)
+                    if (project.architect?.build) {
+                        // Check if it's still using the old webpack browser builder
+                        if (project.architect.build.builder === '@angular-devkit/build-angular:browser') {
+                            project.architect.build.builder = '@angular-devkit/build-angular:browser-esbuild';
+                            this.progressReporter?.info('✓ Migrated from webpack browser builder to esbuild browser-esbuild builder');
+                        }
+                    }
+                }
+                await fs.writeJson(angularJsonPath, angularJson, { spaces: 2 });
+                this.progressReporter?.info('✓ Configured angular.json for esbuild dev server');
+            }
+            catch (error) {
+                this.progressReporter?.warn(`Could not configure esbuild dev server: ${error instanceof Error ? error.message : String(error)}`);
+            }
+        }
     }
 }
 exports.Angular19Handler = Angular19Handler;

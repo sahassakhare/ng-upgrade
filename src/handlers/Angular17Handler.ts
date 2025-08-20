@@ -104,18 +104,18 @@ export class Angular17Handler extends BaseVersionHandler {
   }
 
   /**
-   * Migrates assets folder to public folder structure (Angular 17+)
+   * Prepares for Angular 18+ public folder structure (Angular 17 → 18 preparation)
    * 
-   * Safely migrates from src/assets to public folder structure while maintaining
-   * backward compatibility. Creates new public folder, copies assets, and updates
-   * angular.json configuration to support both asset structures during transition.
+   * This creates a public folder and copies assets to prepare for Angular 18+ migration,
+   * while maintaining full backward compatibility with src/assets. The actual migration
+   * to public-only happens in Angular 18+ handlers.
    * 
    * @param projectPath - The absolute path to the Angular project root
    * @private
    * 
    * @example
    * Before: src/assets/images/logo.png
-   * After: public/images/logo.png (with src/assets still working)
+   * After: Both src/assets/images/logo.png AND public/images/logo.png work
    */
   private async migrateAssetsToPublic(projectPath: string): Promise<void> {
     const assetsPath = path.join(projectPath, 'src', 'assets');
@@ -152,6 +152,18 @@ export class Angular17Handler extends BaseVersionHandler {
           // Add public folder to assets while keeping src/assets
           const assets = config.architect.build.options.assets;
           
+          // Ensure src/assets is preserved in the array
+          const hasSrcAssets = assets.some((asset: any) => 
+            (typeof asset === 'string' && asset.includes('src/assets')) ||
+            (typeof asset === 'object' && asset.input === 'src/assets')
+          );
+          
+          if (!hasSrcAssets) {
+            // Add src/assets back if it was somehow removed
+            assets.push("src/assets");
+            this.progressReporter?.info('✓ Preserved src/assets configuration for backward compatibility');
+          }
+          
           // Add public folder if not already present
           if (!assets.includes('public') && !assets.some((asset: any) => 
             typeof asset === 'object' && asset.input === 'public'
@@ -161,6 +173,7 @@ export class Angular17Handler extends BaseVersionHandler {
               "input": "public",
               "output": "."
             });
+            this.progressReporter?.info('✓ Added public folder to assets configuration');
           }
         }
       }
@@ -308,8 +321,8 @@ export class Angular17Handler extends BaseVersionHandler {
         'config',
         'low',
         'Assets folder migration to public',
-        'New public folder structure for better asset management',
-        'Assets are copied to public folder while maintaining backward compatibility'
+        'New public folder structure for better asset management. Both src/assets and public folders are maintained for dual compatibility.',
+        'Assets are copied to public folder while preserving src/assets for backward compatibility. Both paths work during transition.'
       ),
       this.createBreakingChange(
         'ng17-new-control-flow',

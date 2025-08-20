@@ -104,7 +104,11 @@ class Angular18Handler extends BaseVersionHandler_1.BaseVersionHandler {
         await this.optimizeChangeDetection(projectPath);
         // 8. Update build configurations for Angular 18
         await this.updateBuildConfigurations(projectPath);
-        // 9. Validate third-party compatibility
+        // 9. Complete public folder migration (Angular 18+ default structure)
+        await this.completePublicFolderMigration(projectPath);
+        // 10. Migrate from webpack-dev-server to esbuild dev server (Angular 18+)
+        await this.migrateToEsbuildDevServer(projectPath);
+        // 11. Validate third-party compatibility
         await this.validateThirdPartyCompatibility(projectPath);
         this.progressReporter?.success('✓ Angular 18 transformations completed');
     }
@@ -114,6 +118,8 @@ class Angular18Handler extends BaseVersionHandler_1.BaseVersionHandler {
             this.createBreakingChange('ng18-material3-support', 'dependency', 'medium', 'Material Design 3 support', 'Angular Material now supports Material Design 3 (M3) theming and components', 'Update Material themes and component usage for M3 compatibility'),
             // Built-in control flow stabilization
             this.createBreakingChange('ng18-control-flow-stable', 'template', 'low', 'Built-in control flow syntax stable', '@if, @for, @switch syntax is now stable and recommended over structural directives', 'Migration is optional - both syntaxes are supported'),
+            // Public folder structure (Angular 18+ default)
+            this.createBreakingChange('ng18-public-folder-structure', 'config', 'low', 'Public folder as default asset structure', 'Angular 18+ uses public folder as default for static assets. Existing src/assets continues to work with proper configuration.', 'Assets are copied to public folder while maintaining src/assets for backward compatibility. Both paths work during transition.'),
             // TypeScript version requirement
             this.createBreakingChange('ng18-typescript-version', 'dependency', 'medium', 'TypeScript 5.4+ required', 'Angular 18 requires TypeScript 5.4.0 or higher', 'Update TypeScript to version 5.4.0 or higher'),
             // Node.js version requirement
@@ -1902,6 +1908,152 @@ Change Detection Optimization Strategies in Angular 18:
             '@ngrx/store'
         ];
         return lifecycleCompatibleLibraries.some(lib => libName.includes(lib));
+    }
+    /**
+     * Complete public folder migration for Angular 18+ (official approach)
+     *
+     * Angular 18+ uses public folder as the default structure. This method:
+     * 1. Creates public folder if it doesn't exist
+     * 2. Offers to move assets from src/assets to public
+     * 3. Updates angular.json to use the modern public folder configuration
+     * 4. Provides backward compatibility during transition
+     */
+    async completePublicFolderMigration(projectPath) {
+        const assetsPath = path.join(projectPath, 'src', 'assets');
+        const publicPath = path.join(projectPath, 'public');
+        const angularJsonPath = path.join(projectPath, 'angular.json');
+        try {
+            // Step 1: Ensure public folder exists
+            if (!await fs.pathExists(publicPath)) {
+                await fs.ensureDir(publicPath);
+                this.progressReporter?.info('✓ Created public folder for Angular 18+ structure');
+            }
+            // Step 2: If assets exist and public is empty, copy assets to public
+            if (await fs.pathExists(assetsPath) && await this.isDirectoryEmpty(publicPath)) {
+                await fs.copy(assetsPath, publicPath);
+                this.progressReporter?.info('✓ Copied assets to public folder (Angular 18+ structure)');
+            }
+            // Step 3: Update angular.json to use Angular 18+ public folder configuration
+            if (await fs.pathExists(angularJsonPath)) {
+                const angularJson = await fs.readJson(angularJsonPath);
+                for (const projectName in angularJson.projects) {
+                    const project = angularJson.projects[projectName];
+                    if (project.architect?.build?.options?.assets) {
+                        const assets = project.architect.build.options.assets;
+                        // Update to Angular 18+ configuration: public folder first, assets as fallback
+                        const newAssetsConfig = [
+                            // Primary: public folder (Angular 18+ default)
+                            {
+                                "glob": "**/*",
+                                "input": "public"
+                            }
+                        ];
+                        // If assets folder still exists, add it for backward compatibility
+                        if (await fs.pathExists(assetsPath)) {
+                            newAssetsConfig.push({
+                                glob: "**/*",
+                                input: "src/assets/",
+                                output: "/assets/"
+                            });
+                        }
+                        // Preserve any custom asset configurations
+                        const customAssets = assets.filter((asset) => {
+                            if (typeof asset === 'string') {
+                                return !asset.includes('src/assets') && asset !== 'public';
+                            }
+                            return asset.input !== 'public' && asset.input !== 'src/assets' && asset.input !== 'src/assets/';
+                        });
+                        // Combine new config with custom assets
+                        project.architect.build.options.assets = [...newAssetsConfig, ...customAssets];
+                    }
+                }
+                await fs.writeJson(angularJsonPath, angularJson, { spaces: 2 });
+                this.progressReporter?.success('✓ Updated angular.json for Angular 18+ public folder structure');
+            }
+        }
+        catch (error) {
+            this.progressReporter?.warn(`Could not complete public folder migration: ${error instanceof Error ? error.message : String(error)}`);
+        }
+    }
+    /**
+     * Check if directory is empty
+     */
+    async isDirectoryEmpty(dirPath) {
+        try {
+            const files = await fs.readdir(dirPath);
+            return files.length === 0;
+        }
+        catch {
+            return true; // If directory doesn't exist, consider it empty
+        }
+    }
+    /**
+     * Migrate from webpack-dev-server to esbuild dev server (Angular 18+)
+     */
+    async migrateToEsbuildDevServer(projectPath) {
+        const packageJsonPath = path.join(projectPath, 'package.json');
+        if (await fs.pathExists(packageJsonPath)) {
+            try {
+                const packageJson = await fs.readJson(packageJsonPath);
+                // Remove webpack-dev-server if present
+                if (packageJson.devDependencies?.['webpack-dev-server']) {
+                    delete packageJson.devDependencies['webpack-dev-server'];
+                    this.progressReporter?.info('✓ Removed webpack-dev-server (Angular 18+ uses esbuild dev server)');
+                }
+                // Remove any custom webpack configurations that might interfere
+                if (packageJson.devDependencies?.['@angular-builders/custom-webpack']) {
+                    this.progressReporter?.warn('⚠️ Custom webpack configuration detected - may need manual review for esbuild compatibility');
+                }
+                await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+                // Update angular.json to ensure esbuild dev server configuration
+                await this.configureEsbuildDevServer(projectPath);
+            }
+            catch (error) {
+                this.progressReporter?.warn(`Could not migrate dev server: ${error instanceof Error ? error.message : String(error)}`);
+            }
+        }
+    }
+    /**
+     * Configure esbuild dev server in angular.json
+     */
+    async configureEsbuildDevServer(projectPath) {
+        const angularJsonPath = path.join(projectPath, 'angular.json');
+        if (await fs.pathExists(angularJsonPath)) {
+            try {
+                const angularJson = await fs.readJson(angularJsonPath);
+                // Update serve configurations to use esbuild
+                for (const projectName in angularJson.projects) {
+                    const project = angularJson.projects[projectName];
+                    if (project.architect?.serve) {
+                        // Ensure serve uses the correct builder for esbuild
+                        project.architect.serve.builder = '@angular-devkit/build-angular:dev-server';
+                        // Remove any webpack-specific configurations
+                        if (project.architect.serve.options) {
+                            delete project.architect.serve.options.customWebpackConfig;
+                            delete project.architect.serve.options.webpackDevServerOptions;
+                            // Configure esbuild-optimized dev server options
+                            project.architect.serve.options = {
+                                ...project.architect.serve.options,
+                                buildTarget: `${projectName}:build`
+                            };
+                        }
+                    }
+                    // Update build configuration to use esbuild (use browser-esbuild for easier migration from existing projects)
+                    if (project.architect?.build) {
+                        // Check if it's still using the old webpack browser builder
+                        if (project.architect.build.builder === '@angular-devkit/build-angular:browser') {
+                            project.architect.build.builder = '@angular-devkit/build-angular:browser-esbuild';
+                            this.progressReporter?.info('✓ Migrated from webpack browser builder to esbuild browser-esbuild builder');
+                        }
+                    }
+                }
+                await fs.writeJson(angularJsonPath, angularJson, { spaces: 2 });
+                this.progressReporter?.info('✓ Configured angular.json for esbuild dev server');
+            }
+            catch (error) {
+                this.progressReporter?.warn(`Could not configure esbuild dev server: ${error instanceof Error ? error.message : String(error)}`);
+            }
+        }
     }
 }
 exports.Angular18Handler = Angular18Handler;

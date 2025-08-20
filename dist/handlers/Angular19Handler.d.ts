@@ -71,5 +71,13 @@ export declare class Angular19Handler extends BaseVersionHandler {
      * Check if a library can benefit from SSR optimizations
      */
     private canBenefitFromSSROptimizations;
+    /**
+     * Migrate from webpack-dev-server to esbuild dev server (Angular 18+)
+     */
+    private migrateToEsbuildDevServer;
+    /**
+     * Configure esbuild dev server in angular.json
+     */
+    private configureEsbuildDevServer;
 }
 //# sourceMappingURL=Angular19Handler.d.ts.map

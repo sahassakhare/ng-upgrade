@@ -67,5 +67,27 @@ export declare class Angular18Handler extends BaseVersionHandler {
      * Check if a library can benefit from new lifecycle hooks
      */
     private canBenefitFromLifecycleHooks;
+    /**
+     * Complete public folder migration for Angular 18+ (official approach)
+     *
+     * Angular 18+ uses public folder as the default structure. This method:
+     * 1. Creates public folder if it doesn't exist
+     * 2. Offers to move assets from src/assets to public
+     * 3. Updates angular.json to use the modern public folder configuration
+     * 4. Provides backward compatibility during transition
+     */
+    private completePublicFolderMigration;
+    /**
+     * Check if directory is empty
+     */
+    private isDirectoryEmpty;
+    /**
+     * Migrate from webpack-dev-server to esbuild dev server (Angular 18+)
+     */
+    private migrateToEsbuildDevServer;
+    /**
+     * Configure esbuild dev server in angular.json
+     */
+    private configureEsbuildDevServer;
 }
 //# sourceMappingURL=Angular18Handler.d.ts.map
