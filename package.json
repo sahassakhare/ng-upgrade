@@ -9,7 +9,13 @@
     "ng-check-updates": "dist/commands/ng-check-updates.js"
   },
   "files": [
-    "dist/**/*",
+    "dist/**/*.js",
+    "dist/**/*.d.ts", 
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*",
+    "!dist/**/__tests__/**",
+    "!dist/**/*.js.map",
+    "!dist/**/*.d.ts.map",
     "README.md",
     "LICENSE",
     "examples/**/*"
