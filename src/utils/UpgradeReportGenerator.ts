@@ -2,10 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import chalk from 'chalk';
 import { 
-  UpgradeResult, 
-  DependencyUpdate,
   BreakingChange,
-  CodeTransformation,
   MigrationAction
 } from '../types';
 import { ValidationResult as BaseValidationResult } from '../core/ValidatorFramework';
@@ -153,6 +150,7 @@ export class UpgradeReportGenerator {
 
   private getNpmVersion(): string {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { execSync } = require('child_process');
       return execSync('npm --version').toString().trim();
     } catch {
@@ -266,14 +264,14 @@ export class UpgradeReportGenerator {
   /**
    * Track checkpoint creation
    */
-  public trackCheckpoint(checkpointId: string): void {
+  public trackCheckpoint(_checkpointId: string): void {
     this.report.summary.checkpointsCreated++;
   }
 
   /**
    * Track backup creation
    */
-  public trackBackup(backupPath: string): void {
+  public trackBackup(_backupPath: string): void {
     this.report.summary.backupsCreated++;
   }
 
