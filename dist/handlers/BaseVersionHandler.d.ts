@@ -1,6 +1,7 @@
 import { UpgradeStep, UpgradeOptions, BreakingChange, Migration } from '../types';
 import { VersionHandler } from '../core/VersionHandlerRegistry';
 import { DependencyInstaller } from '../utils/DependencyInstaller';
+import { AdvancedContentPreserver } from '../utils/AdvancedContentPreserver';
 import { ProgressReporter } from '../utils/ProgressReporter';
 /**
  * Base class for all Angular version handlers providing common upgrade functionality
@@ -32,6 +33,8 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
     abstract readonly version: string;
     /** Utility for managing dependency installations and updates */
     protected dependencyInstaller: DependencyInstaller;
+    /** Advanced content preservation system for intelligent code merging */
+    protected contentPreserver: AdvancedContentPreserver;
     /** Utility for reporting upgrade progress and status messages */
     protected progressReporter: ProgressReporter;
     /**
@@ -215,13 +218,17 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      */
     protected backupFile(filePath: string): Promise<void>;
     /**
-     * Update component files using FileContentPreserver
+     * Update component files using Advanced Content Preserver for intelligent merging
      */
     protected updateComponentFiles(projectPath: string, transformations: any[]): Promise<void>;
     /**
-     * Update template files using FileContentPreserver
+     * Update template files using Advanced Content Preserver for intelligent merging
      */
     protected updateTemplateFiles(projectPath: string): Promise<void>;
+    /**
+     * Get template transformations for specific Angular version
+     */
+    protected getTemplateTransformsForVersion(targetVersion: number): any[];
     /**
      * Find all component files in a directory
      */

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **AdvancedContentPreserver**: Intelligent TypeScript AST-based content preservation system using ts-morph
+- **Smart Conflict Resolution**: Configurable strategies for handling conflicts between user code and migrations
+- **Template Preservation**: Intelligent maintenance of custom directives and complex template logic
+- **Comprehensive Testing**: 26+ test cases covering all preservation scenarios
+- **Detailed Backups**: Timestamped backups with metadata for easy restoration
+
+### Enhanced
+- **Improved npm Installation**: Fixed chalk import issues and enhanced dependency installation
+- **Better Error Handling**: Graceful handling of missing tsconfig.json files
+- **User Code Protection**: Preserves custom methods, properties, imports, and business logic during migrations
+
 ## [1.0.0] - 2025-08-18
 
 ### Added

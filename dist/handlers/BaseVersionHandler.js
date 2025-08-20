@@ -39,6 +39,7 @@ const path = __importStar(require("path"));
 const child_process_1 = require("child_process");
 const DependencyInstaller_1 = require("../utils/DependencyInstaller");
 const FileContentPreserver_1 = require("../utils/FileContentPreserver");
+const AdvancedContentPreserver_1 = require("../utils/AdvancedContentPreserver");
 const ProgressReporter_1 = require("../utils/ProgressReporter");
 /**
  * Base class for all Angular version handlers providing common upgrade functionality
@@ -68,6 +69,8 @@ const ProgressReporter_1 = require("../utils/ProgressReporter");
 class BaseVersionHandler {
     /** Utility for managing dependency installations and updates */
     dependencyInstaller;
+    /** Advanced content preservation system for intelligent code merging */
+    contentPreserver;
     /** Utility for reporting upgrade progress and status messages */
     progressReporter;
     /**
@@ -96,6 +99,7 @@ class BaseVersionHandler {
      */
     async execute(projectPath, step, options) {
         this.dependencyInstaller = new DependencyInstaller_1.DependencyInstaller(projectPath);
+        this.contentPreserver = new AdvancedContentPreserver_1.AdvancedContentPreserver(projectPath);
         this.progressReporter = options.progressReporter || new ProgressReporter_1.ProgressReporter();
         this.progressReporter.startStep(`Angular ${this.version} Upgrade`, `Starting Angular ${this.version} upgrade...`);
         // Update Angular dependencies with automatic installation
@@ -733,23 +737,56 @@ class BaseVersionHandler {
         }
     }
     /**
-     * Update component files using FileContentPreserver
+     * Update component files using Advanced Content Preserver for intelligent merging
      */
     async updateComponentFiles(projectPath, transformations) {
         const componentsPath = path.join(projectPath, 'src', 'app');
         if (await fs.pathExists(componentsPath)) {
             // Find all component files
             const componentFiles = await this.findComponentFiles(componentsPath);
+            let totalConflicts = 0;
+            let filesWithConflicts = [];
             for (const file of componentFiles) {
-                await FileContentPreserver_1.FileContentPreserver.updateComponentFile(file, transformations);
+                try {
+                    // Use advanced content preserver for intelligent merging
+                    const result = await this.contentPreserver.preserveComponentFile(file, transformations, {
+                        preserveComments: true,
+                        preserveCustomMethods: true,
+                        preserveUserImports: true,
+                        preserveCustomProperties: true,
+                        preserveCustomLogic: true,
+                        createDetailedBackup: true,
+                        mergeConflictResolution: 'user' // Prioritize user code
+                    });
+                    if (result.conflicts.length > 0) {
+                        totalConflicts += result.conflicts.length;
+                        filesWithConflicts.push(path.basename(file));
+                        this.progressReporter?.warn(`${result.conflicts.length} conflicts detected in ${path.basename(file)}`);
+                    }
+                    if (result.warnings.length > 0) {
+                        result.warnings.forEach(warning => this.progressReporter?.warn(warning));
+                    }
+                }
+                catch (error) {
+                    // Fallback to legacy FileContentPreserver
+                    this.progressReporter?.warn(`Advanced preservation failed for ${path.basename(file)}, using fallback method`);
+                    await FileContentPreserver_1.FileContentPreserver.updateComponentFile(file, transformations);
+                }
             }
             if (componentFiles.length > 0) {
-                this.progressReporter?.success(`Updated ${componentFiles.length} component files while preserving custom code`);
+                this.progressReporter?.success(`Intelligently preserved ${componentFiles.length} component files`);
+                if (totalConflicts > 0) {
+                    this.progressReporter?.warn(`${totalConflicts} merge conflicts detected in: ${filesWithConflicts.join(', ')}`);
+                    this.progressReporter?.info('User customizations have been preserved. Review .conflicts files for manual resolution if needed.');
+                }
+                else {
+                    this.progressReporter?.success('✓ All user customizations preserved without conflicts');
+                }
             }
         }
     }
     /**
-     * Update template files using FileContentPreserver
+     * Update template files using Advanced Content Preserver for intelligent merging
      */
     async updateTemplateFiles(projectPath) {
         const targetVersion = parseInt(this.version);
@@ -757,13 +794,70 @@ class BaseVersionHandler {
         if (await fs.pathExists(templatesPath)) {
             // Find all template files
             const templateFiles = await this.findTemplateFiles(templatesPath);
+            let totalConflicts = 0;
+            let filesWithConflicts = [];
+            // Define template transformations based on Angular version
+            const templateTransforms = this.getTemplateTransformsForVersion(targetVersion);
             for (const file of templateFiles) {
-                await FileContentPreserver_1.FileContentPreserver.updateTemplateFile(file, targetVersion);
+                try {
+                    // Use advanced content preserver for intelligent template merging
+                    const result = await this.contentPreserver.preserveTemplateFile(file, templateTransforms, {
+                        preserveComments: true,
+                        preserveCustomMethods: true,
+                        preserveUserImports: true,
+                        preserveCustomProperties: true,
+                        preserveCustomLogic: true,
+                        createDetailedBackup: true,
+                        mergeConflictResolution: 'user' // Prioritize user template code
+                    });
+                    if (result.conflicts.length > 0) {
+                        totalConflicts += result.conflicts.length;
+                        filesWithConflicts.push(path.basename(file));
+                        this.progressReporter?.warn(`${result.conflicts.length} template conflicts in ${path.basename(file)}`);
+                    }
+                }
+                catch (error) {
+                    // Fallback to legacy FileContentPreserver
+                    this.progressReporter?.warn(`Advanced template preservation failed for ${path.basename(file)}, using fallback`);
+                    await FileContentPreserver_1.FileContentPreserver.updateTemplateFile(file, targetVersion);
+                }
             }
             if (templateFiles.length > 0) {
-                this.progressReporter?.info(`Template files preserved - migration to new syntax is optional`);
+                this.progressReporter?.success(`Intelligently preserved ${templateFiles.length} template files`);
+                if (totalConflicts > 0) {
+                    this.progressReporter?.warn(`${totalConflicts} template conflicts detected in: ${filesWithConflicts.join(', ')}`);
+                    this.progressReporter?.info('User template customizations preserved. Complex logic maintained as-is.');
+                }
+                else {
+                    this.progressReporter?.success('✓ All template customizations preserved without conflicts');
+                }
             }
         }
+    }
+    /**
+     * Get template transformations for specific Angular version
+     */
+    getTemplateTransformsForVersion(targetVersion) {
+        const transforms = [];
+        // Angular 17+ control flow migration
+        if (targetVersion >= 17) {
+            transforms.push({
+                type: 'template',
+                templateType: 'control-flow',
+                description: 'Migrate *ngIf, *ngFor to @if, @for syntax',
+                preserveComplexLogic: true
+            });
+        }
+        // Angular 16+ self-closing tags
+        if (targetVersion >= 16) {
+            transforms.push({
+                type: 'template',
+                templateType: 'directive-update',
+                description: 'Update to self-closing tags',
+                preserveUserDirectives: true
+            });
+        }
+        return transforms;
     }
     /**
      * Find all component files in a directory

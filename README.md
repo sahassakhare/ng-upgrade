@@ -49,11 +49,20 @@ An enterprise-grade, intelligent multi-step upgrade orchestrator that safely mig
 - **Cleanup Unused Imports**: Removes unused imports for cleaner code (All versions)
 
 ### Advanced Features
+- **Intelligent Content Preservation**: Advanced AST-based preservation of user customizations using ts-morph
 - **Checkpoint System**: Create restoration points at each upgrade milestone
 - **AST-Based Code Transformations**: Precise code modifications using TypeScript AST
 - **Multi-Layer Compatibility**: Allow old and new patterns to coexist during transitions
 - **Progressive Enhancement**: Opt-in modernization without breaking existing functionality
 - **Comprehensive Validation**: Build, test, and runtime validation at each step
+
+### Intelligent Content Preservation System
+- **User Code Protection**: Preserves custom methods, properties, imports, and logic during migrations
+- **Smart Conflict Resolution**: Configurable strategies for handling conflicts between user code and migration requirements
+- **Template Preservation**: Intelligently maintains custom directives and complex template logic
+- **Comment Retention**: Preserves important code comments and documentation
+- **Detailed Backups**: Creates timestamped backups with metadata for easy restoration
+- **TypeScript AST Analysis**: Uses ts-morph for precise code analysis and preservation
 
 ## Quick Start
 
@@ -146,6 +155,18 @@ Options:
   --cleanup                 Clean up old checkpoints
 ```
 
+### Content Preservation Example
+```bash
+# Upgrade with maximum user code preservation
+ng-upgrade upgrade --target 20 --preserve-all
+
+# Upgrade with custom preservation settings
+ng-upgrade upgrade --target 18 \
+  --preserve-comments \
+  --preserve-custom-methods \
+  --conflict-resolution user
+```
+
 ## Project Analysis
 
 The analyzer provides comprehensive insights:
@@ -224,6 +245,17 @@ interface UpgradeOptions {
   thirdPartyHandling: 'automatic' | 'manual' | 'prompt';
   rollbackPolicy: 'auto-on-failure' | 'manual' | 'never';
   parallelProcessing: boolean;
+  contentPreservation?: PreservationOptions;
+}
+
+interface PreservationOptions {
+  preserveComments: boolean;        // Keep code comments (default: true)
+  preserveCustomMethods: boolean;   // Preserve user-defined methods (default: true)
+  preserveUserImports: boolean;     // Keep custom imports (default: true)
+  preserveCustomProperties: boolean; // Preserve custom properties (default: true)
+  preserveCustomLogic: boolean;     // Keep custom business logic (default: true)
+  createDetailedBackup: boolean;    // Create backups with metadata (default: true)
+  mergeConflictResolution: 'user' | 'migration'; // Conflict preference (default: 'user')
 }
 ```
 
