@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpgradePathCalculator = void 0;
+const types_1 = require("../types");
 const VersionHandlerRegistry_1 = require("./VersionHandlerRegistry");
 class UpgradePathCalculator {
     versionHandlers;
-    supportedVersions = ['12', '13', '14', '15', '16', '17', '18', '19', '20'];
     constructor() {
         this.versionHandlers = new VersionHandlerRegistry_1.VersionHandlerRegistry();
     }
@@ -33,8 +33,9 @@ class UpgradePathCalculator {
         }
         const sequence = [];
         for (let version = fromMajor + 1; version <= toMajor; version++) {
-            if (this.supportedVersions.includes(version.toString())) {
-                sequence.push(version.toString());
+            const versionStr = version.toString();
+            if (types_1.SUPPORTED_ANGULAR_VERSIONS.includes(versionStr)) {
+                sequence.push(versionStr);
             }
             else {
                 throw new Error(`Angular version ${version} is not supported for upgrade`);
@@ -70,7 +71,7 @@ class UpgradePathCalculator {
         // Get validation steps
         const validations = this.getValidationSteps(toVersion, options);
         return {
-            fromVersion,
+            fromVersion: fromVersion,
             toVersion,
             required: true,
             handler: `Angular${toVersion}Handler`,
@@ -176,13 +177,13 @@ class UpgradePathCalculator {
             throw new Error(`Invalid upgrade path: Cannot upgrade from ${currentVersion.full} to ${targetVersion.full}. ` +
                 'Target version must be higher than current version.');
         }
-        if (!this.supportedVersions.includes(currentVersion.major.toString())) {
+        if (!types_1.SUPPORTED_ANGULAR_VERSIONS.includes(currentVersion.major.toString())) {
             throw new Error(`Current Angular version ${currentVersion.major} is not supported. ` +
-                `Supported versions: ${this.supportedVersions.join(', ')}`);
+                `Supported versions: ${types_1.SUPPORTED_ANGULAR_VERSIONS.join(', ')}`);
         }
-        if (!this.supportedVersions.includes(targetVersion.major.toString())) {
+        if (!types_1.SUPPORTED_ANGULAR_VERSIONS.includes(targetVersion.major.toString())) {
             throw new Error(`Target Angular version ${targetVersion.major} is not supported. ` +
-                `Supported versions: ${this.supportedVersions.join(', ')}`);
+                `Supported versions: ${types_1.SUPPORTED_ANGULAR_VERSIONS.join(', ')}`);
         }
         // Check for version gaps
         const versionGap = targetVersion.major - currentVersion.major;

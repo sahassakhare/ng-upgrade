@@ -8,4 +8,5 @@ export { Angular17Handler } from './Angular17Handler';
 export { Angular18Handler } from './Angular18Handler';
 export { Angular19Handler } from './Angular19Handler';
 export { Angular20Handler } from './Angular20Handler';
+export { Angular21Handler } from './Angular21Handler';
 export { BaseVersionHandler } from './BaseVersionHandler';

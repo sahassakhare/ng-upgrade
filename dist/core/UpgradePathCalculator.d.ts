@@ -1,7 +1,6 @@
 import { AngularVersion, UpgradePath, UpgradeOptions } from '../types';
 export declare class UpgradePathCalculator {
     private versionHandlers;
-    private supportedVersions;
     constructor();
     /**
      * Calculate optimal upgrade path from current to target version

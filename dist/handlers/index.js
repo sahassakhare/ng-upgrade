@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseVersionHandler = exports.Angular20Handler = exports.Angular19Handler = exports.Angular18Handler = exports.Angular17Handler = exports.Angular16Handler = exports.Angular15Handler = exports.Angular14Handler = exports.Angular13Handler = exports.Angular12Handler = void 0;
+exports.BaseVersionHandler = exports.Angular21Handler = exports.Angular20Handler = exports.Angular19Handler = exports.Angular18Handler = exports.Angular17Handler = exports.Angular16Handler = exports.Angular15Handler = exports.Angular14Handler = exports.Angular13Handler = exports.Angular12Handler = void 0;
 // Export all version handlers
 var Angular12Handler_1 = require("./Angular12Handler");
 Object.defineProperty(exports, "Angular12Handler", { enumerable: true, get: function () { return Angular12Handler_1.Angular12Handler; } });
@@ -20,6 +20,8 @@ var Angular19Handler_1 = require("./Angular19Handler");
 Object.defineProperty(exports, "Angular19Handler", { enumerable: true, get: function () { return Angular19Handler_1.Angular19Handler; } });
 var Angular20Handler_1 = require("./Angular20Handler");
 Object.defineProperty(exports, "Angular20Handler", { enumerable: true, get: function () { return Angular20Handler_1.Angular20Handler; } });
+var Angular21Handler_1 = require("./Angular21Handler");
+Object.defineProperty(exports, "Angular21Handler", { enumerable: true, get: function () { return Angular21Handler_1.Angular21Handler; } });
 var BaseVersionHandler_1 = require("./BaseVersionHandler");
 Object.defineProperty(exports, "BaseVersionHandler", { enumerable: true, get: function () { return BaseVersionHandler_1.BaseVersionHandler; } });
 //# sourceMappingURL=index.js.map

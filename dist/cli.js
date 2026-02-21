@@ -43,6 +43,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const ora = __importStar(require("ora"));
 const path = __importStar(require("path"));
 const EnhancedUpgradeOrchestrator_1 = require("./core/EnhancedUpgradeOrchestrator");
+const types_1 = require("./types");
 const program = new commander_1.Command();
 program
     .name('ng-upgrade')
@@ -108,7 +109,7 @@ async function runUpgrade(options) {
                 type: 'list',
                 name: 'targetVersion',
                 message: 'Select target Angular version:',
-                choices: ['13', '14', '15', '16', '17', '18', '19', '20']
+                choices: types_1.SUPPORTED_ANGULAR_VERSIONS.filter(v => parseInt(v) > 12)
             }
         ]);
         targetVersion = answers.targetVersion;

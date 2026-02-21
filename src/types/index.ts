@@ -15,13 +15,13 @@
 export interface AngularVersion {
   /** Major version number (e.g., 17) */
   major: number;
-  
+
   /** Minor version number (e.g., 1) */
   minor: number;
-  
+
   /** Patch version number (e.g., 3) */
   patch: number;
-  
+
   /** Full version string representation (e.g., "17.1.3") */
   full: string;
 }
@@ -49,17 +49,21 @@ export interface AngularVersion {
 export interface UpgradePath {
   /** Starting Angular version for the upgrade journey */
   from: AngularVersion;
-  
+
   /** Target Angular version for the upgrade journey */
   to: AngularVersion;
-  
+
   /** Ordered sequence of upgrade steps to execute */
   steps: UpgradeStep[];
 }
 
+export const SUPPORTED_ANGULAR_VERSIONS = ['12', '13', '14', '15', '16', '17', '18', '19', '20', '21'] as const;
+
+export type SupportedAngularVersion = typeof SUPPORTED_ANGULAR_VERSIONS[number];
+
 export interface UpgradeStep {
-  fromVersion: string;
-  toVersion: string;
+  fromVersion: SupportedAngularVersion | 'current';
+  toVersion: SupportedAngularVersion;
   required: boolean;
   handler: string;
   prerequisites: Prerequisite[];
@@ -161,11 +165,11 @@ export interface CheckpointMetadata {
  */
 export interface UpgradeOptions {
   /** 
-   * Target Angular version to upgrade to (e.g., '17', '18', '19', '20')
+   * Target Angular version to upgrade to (e.g., '17', '18', '19', '20', '21')
    * @example '17'
    */
-  targetVersion: string;
-  
+  targetVersion: SupportedAngularVersion;
+
   /** 
    * Upgrade strategy determining the balance between safety and feature adoption:
    * - `conservative`: Maximum safety, minimal changes, extensive validation
@@ -173,7 +177,7 @@ export interface UpgradeOptions {
    * - `progressive`: Latest features, higher risk, faster upgrade process
    */
   strategy: 'conservative' | 'balanced' | 'progressive';
-  
+
   /** 
    * Frequency of checkpoint creation for rollback purposes:
    * - `every-step`: Create checkpoint after each individual operation (safest)
@@ -181,14 +185,14 @@ export interface UpgradeOptions {
    * - `custom`: Create checkpoints based on custom logic (advanced)
    */
   checkpointFrequency: 'every-step' | 'major-versions' | 'custom';
-  
+
   /** 
    * Depth and thoroughness of validation testing:
    * - `basic`: Build verification only (fastest)
    * - `comprehensive`: Build + tests + linting + compatibility checks (thorough)
    */
   validationLevel: 'basic' | 'comprehensive';
-  
+
   /** 
    * How to handle third-party dependency updates:
    * - `automatic`: Update dependencies automatically without user intervention
@@ -196,7 +200,7 @@ export interface UpgradeOptions {
    * - `prompt`: Interactive prompts for each dependency decision
    */
   thirdPartyHandling: 'automatic' | 'manual' | 'prompt';
-  
+
   /** 
    * Behavior when upgrade steps fail:
    * - `auto-on-failure`: Automatically rollback to last checkpoint on any failure (safest)
@@ -204,26 +208,26 @@ export interface UpgradeOptions {
    * - `never`: Never automatically rollback, leave project in current state
    */
   rollbackPolicy: 'auto-on-failure' | 'manual' | 'never';
-  
+
   /** 
    * Enable parallel processing where safe to improve performance.
    * Note: Some operations must run sequentially for safety.
    */
   parallelProcessing: boolean;
-  
+
   /** 
    * Custom backup location for project snapshots.
    * If not provided, uses default `.ng-upgrade/backup` directory.
    * @example '/Users/dev/project-backups/my-app'
    */
   backupPath?: string;
-  
+
   /** 
    * Optional progress reporter instance for tracking upgrade progress.
    * If not provided, a default progress reporter will be created.
    */
   progressReporter?: any;
-  
+
   /** 
    * Enable experimental zoneless change detection (Angular 19+).
    * This is an opt-in feature for applications that want to use 

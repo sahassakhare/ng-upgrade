@@ -34,6 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseVersionHandler = void 0;
+const VersionHandlerRegistry_1 = require("../core/VersionHandlerRegistry");
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const child_process_1 = require("child_process");
@@ -122,6 +123,8 @@ class BaseVersionHandler {
         await this.ensureDependenciesInstalled(projectPath);
         // Apply version-specific transformations
         await this.applyVersionSpecificChanges(projectPath, options);
+        // Apply any configured automated migrations (e.g., test-migrate) based on breaking changes
+        await this.applyAutomatedMigrations(projectPath);
         // Update configuration files
         await this.updateConfigurationFiles(projectPath, options);
         // Run Angular update schematics
@@ -657,6 +660,44 @@ class BaseVersionHandler {
             }
         }
         this.progressReporter?.success(`Completed all migrations for Angular ${this.version}`);
+    }
+    /**
+     * Automatically execute any CodeTransformers or custom transformers
+     * attached to breaking changes for this Angular version.
+     */
+    async applyAutomatedMigrations(projectPath) {
+        const changes = this.getBreakingChanges();
+        const automatedChanges = changes.filter(c => c.migration && c.migration.type === 'automatic');
+        if (automatedChanges.length === 0)
+            return;
+        this.progressReporter?.updateMessage('Applying automated code and config migrations...');
+        // Use the statically imported VersionHandlerRegistry.
+        const registry = new VersionHandlerRegistry_1.VersionHandlerRegistry();
+        for (const change of automatedChanges) {
+            if (!change.type)
+                continue;
+            // Determine correct transformer type. E.g. test-migrate, api, config
+            // Note: If change.type is 'config' but we want 'test-migrate', we might need to rely on 
+            // the change id or a specific transform type inside change.migration.transform.type.
+            let transformType = change.type.toString();
+            // Special override for test framework migration
+            if (change.id.includes('karma-to-vitest-migration')) {
+                transformType = 'test-migrate';
+            }
+            else if (change.id.includes('jest-to-vitest-migration')) {
+                transformType = 'jest-to-vitest';
+            }
+            const transformer = registry.getTransformer(transformType);
+            if (transformer) {
+                try {
+                    await transformer.apply(projectPath, change);
+                    this.reportGenerator.addSuccessStory(`Automated migration applied: ${change.description}`);
+                }
+                catch (error) {
+                    this.progressReporter?.warn(`Automated migration failed for ${change.id}: ${error instanceof Error ? error.message : String(error)}`);
+                }
+            }
+        }
     }
     /**
      * Get available migrations for this Angular version

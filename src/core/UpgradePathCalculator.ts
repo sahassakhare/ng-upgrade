@@ -1,18 +1,19 @@
 import * as semver from 'semver';
-import { 
-  AngularVersion, 
-  UpgradePath, 
-  UpgradeStep, 
+import {
+  AngularVersion,
+  UpgradePath,
+  UpgradeStep,
   UpgradeOptions,
   Prerequisite,
   BreakingChange,
-  ValidationStep
+  ValidationStep,
+  SupportedAngularVersion,
+  SUPPORTED_ANGULAR_VERSIONS
 } from '../types';
 import { VersionHandlerRegistry } from './VersionHandlerRegistry';
 
 export class UpgradePathCalculator {
   private versionHandlers: VersionHandlerRegistry;
-  private supportedVersions: string[] = ['12', '13', '14', '15', '16', '17', '18', '19', '20'];
 
   constructor() {
     this.versionHandlers = new VersionHandlerRegistry();
@@ -45,15 +46,16 @@ export class UpgradePathCalculator {
   /**
    * Generate sequence of versions for upgrade path
    */
-  private generateVersionSequence(fromMajor: number, toMajor: number): string[] {
+  private generateVersionSequence(fromMajor: number, toMajor: number): SupportedAngularVersion[] {
     if (fromMajor >= toMajor) {
       throw new Error(`Cannot upgrade from version ${fromMajor} to ${toMajor}. Target version must be higher.`);
     }
 
-    const sequence: string[] = [];
+    const sequence: SupportedAngularVersion[] = [];
     for (let version = fromMajor + 1; version <= toMajor; version++) {
-      if (this.supportedVersions.includes(version.toString())) {
-        sequence.push(version.toString());
+      const versionStr = version.toString() as SupportedAngularVersion;
+      if (SUPPORTED_ANGULAR_VERSIONS.includes(versionStr)) {
+        sequence.push(versionStr);
       } else {
         throw new Error(`Angular version ${version} is not supported for upgrade`);
       }
@@ -65,14 +67,14 @@ export class UpgradePathCalculator {
   /**
    * Create upgrade steps for version sequence
    */
-  private async createUpgradeSteps(versionSequence: string[], options: UpgradeOptions): Promise<UpgradeStep[]> {
+  private async createUpgradeSteps(versionSequence: SupportedAngularVersion[], options: UpgradeOptions): Promise<UpgradeStep[]> {
     const steps: UpgradeStep[] = [];
-    
+
     for (let i = 0; i < versionSequence.length; i++) {
       const fromVersion = i === 0 ? 'current' : versionSequence[i - 1];
       const toVersion = versionSequence[i];
-      
-      const step = await this.createUpgradeStep(fromVersion, toVersion, options);
+
+      const step = await this.createUpgradeStep(fromVersion as any, toVersion, options);
       steps.push(step);
     }
 
@@ -83,8 +85,8 @@ export class UpgradePathCalculator {
    * Create individual upgrade step
    */
   private async createUpgradeStep(
-    fromVersion: string, 
-    toVersion: string, 
+    fromVersion: SupportedAngularVersion | 'current',
+    toVersion: SupportedAngularVersion,
     options: UpgradeOptions
   ): Promise<UpgradeStep> {
     const handler = this.versionHandlers.getHandler(toVersion);
@@ -102,7 +104,7 @@ export class UpgradePathCalculator {
     const validations = this.getValidationSteps(toVersion, options);
 
     return {
-      fromVersion,
+      fromVersion: fromVersion,
       toVersion,
       required: true,
       handler: `Angular${toVersion}Handler`,
@@ -225,17 +227,17 @@ export class UpgradePathCalculator {
       );
     }
 
-    if (!this.supportedVersions.includes(currentVersion.major.toString())) {
+    if (!SUPPORTED_ANGULAR_VERSIONS.includes(currentVersion.major.toString() as any)) {
       throw new Error(
         `Current Angular version ${currentVersion.major} is not supported. ` +
-        `Supported versions: ${this.supportedVersions.join(', ')}`
+        `Supported versions: ${SUPPORTED_ANGULAR_VERSIONS.join(', ')}`
       );
     }
 
-    if (!this.supportedVersions.includes(targetVersion.major.toString())) {
+    if (!SUPPORTED_ANGULAR_VERSIONS.includes(targetVersion.major.toString() as any)) {
       throw new Error(
         `Target Angular version ${targetVersion.major} is not supported. ` +
-        `Supported versions: ${this.supportedVersions.join(', ')}`
+        `Supported versions: ${SUPPORTED_ANGULAR_VERSIONS.join(', ')}`
       );
     }
 
@@ -287,7 +289,7 @@ export class UpgradePathCalculator {
     for (const step of path.steps) {
       const criticalChanges = step.breakingChanges.filter(bc => bc.severity === 'critical').length;
       const highChanges = step.breakingChanges.filter(bc => bc.severity === 'high').length;
-      
+
       score += criticalChanges * 20;
       score += highChanges * 10;
 
@@ -319,8 +321,8 @@ export class UpgradePathCalculator {
    * Optimize upgrade path based on project analysis
    */
   async optimizePath(
-    path: UpgradePath, 
-    projectAnalysis: any, 
+    path: UpgradePath,
+    projectAnalysis: any,
     options: UpgradeOptions
   ): Promise<UpgradePath> {
     // For now, return the original path

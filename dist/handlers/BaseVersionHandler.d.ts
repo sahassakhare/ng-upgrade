@@ -1,4 +1,4 @@
-import { UpgradeStep, UpgradeOptions, BreakingChange, Migration } from '../types';
+import { UpgradeStep, UpgradeOptions, BreakingChange, Migration, SupportedAngularVersion } from '../types';
 import { VersionHandler } from '../core/VersionHandlerRegistry';
 import { DependencyInstaller } from '../utils/DependencyInstaller';
 import { AdvancedContentPreserver } from '../utils/AdvancedContentPreserver';
@@ -31,7 +31,7 @@ import { UpgradeReportGenerator } from '../utils/UpgradeReportGenerator';
  */
 export declare abstract class BaseVersionHandler implements VersionHandler {
     /** The Angular version this handler manages - must be implemented by concrete classes */
-    abstract readonly version: string;
+    abstract readonly version: SupportedAngularVersion;
     /** Utility for managing dependency installations and updates */
     protected dependencyInstaller: DependencyInstaller;
     /** Advanced content preservation system for intelligent code merging */
@@ -200,6 +200,11 @@ export declare abstract class BaseVersionHandler implements VersionHandler {
      * Run version-specific official Angular migrations
      */
     protected runVersionSpecificMigrations(projectPath: string): Promise<void>;
+    /**
+     * Automatically execute any CodeTransformers or custom transformers
+     * attached to breaking changes for this Angular version.
+     */
+    protected applyAutomatedMigrations(projectPath: string): Promise<void>;
     /**
      * Get available migrations for this Angular version
      * Override in specific version handlers to provide version-specific migrations

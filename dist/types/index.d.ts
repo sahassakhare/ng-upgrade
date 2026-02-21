@@ -50,9 +50,11 @@ export interface UpgradePath {
     /** Ordered sequence of upgrade steps to execute */
     steps: UpgradeStep[];
 }
+export declare const SUPPORTED_ANGULAR_VERSIONS: readonly ["12", "13", "14", "15", "16", "17", "18", "19", "20", "21"];
+export type SupportedAngularVersion = typeof SUPPORTED_ANGULAR_VERSIONS[number];
 export interface UpgradeStep {
-    fromVersion: string;
-    toVersion: string;
+    fromVersion: SupportedAngularVersion | 'current';
+    toVersion: SupportedAngularVersion;
     required: boolean;
     handler: string;
     prerequisites: Prerequisite[];
@@ -146,10 +148,10 @@ export interface CheckpointMetadata {
  */
 export interface UpgradeOptions {
     /**
-     * Target Angular version to upgrade to (e.g., '17', '18', '19', '20')
+     * Target Angular version to upgrade to (e.g., '17', '18', '19', '20', '21')
      * @example '17'
      */
-    targetVersion: string;
+    targetVersion: SupportedAngularVersion;
     /**
      * Upgrade strategy determining the balance between safety and feature adoption:
      * - `conservative`: Maximum safety, minimal changes, extensive validation

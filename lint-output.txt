@@ -1,0 +1,123 @@
+
+> ng-upgrade-orchestrator@1.2.1 lint
+> eslint "src/**/*.ts" --max-warnings 80
+
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/cli.ts
+    9:26  warning  'ProgressReport' is defined but never used         @typescript-eslint/no-unused-vars
+  170:9   warning  'orchestrator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/core/EnhancedUpgradeOrchestrator.ts
+  222:5  warning  'analysis' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  245:5  warning  'options' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/core/ProjectAnalyzer.ts
+  246:55  warning  'currentVersion' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/core/RollbackEngine.ts
+  134:5   warning  'filesToRollback' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+  275:31  warning  'filePaths' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+  287:39  warning  'preservedFiles' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+  312:5   warning  'checkpointId' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+  313:5   warning  'validationCommand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/core/UpgradeOrchestrator.ts
+    2:13  warning  'fs' is defined but never used                                              @typescript-eslint/no-unused-vars
+    3:13  warning  'path' is defined but never used                                            @typescript-eslint/no-unused-vars
+  265:5   warning  'analysis' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  296:58  warning  'options' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  314:57  warning  'options' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  326:57  warning  'options' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  380:53  warning  'options' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/core/UpgradePathCalculator.ts
+    1:13  warning  'semver' is defined but never used                                                 @typescript-eslint/no-unused-vars
+    8:3   warning  'BreakingChange' is defined but never used                                         @typescript-eslint/no-unused-vars
+  325:5   warning  'projectAnalysis' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  326:5   warning  'options' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+  338:5   warning  'currentVersion' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  339:5   warning  'targetVersion' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/core/ValidatorFramework.ts
+  248:13  warning  'command' is assigned a value but never used                                  @typescript-eslint/no-unused-vars
+  249:13  warning  'timeout' is assigned a value but never used                                  @typescript-eslint/no-unused-vars
+  272:44  warning  'validation' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/core/VersionHandlerRegistry.ts
+  1:80  warning  'SUPPORTED_ANGULAR_VERSIONS' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular13Handler.ts
+  69:68  warning  'options' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular14Handler.ts
+  111:68  warning  'options' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular15Handler.ts
+  69:68  warning  'options' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular16Handler.ts
+  118:68  warning  'options' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular17Handler.ts
+  154:19  warning  '_projectName' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+  212:19  warning  '_projectName' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+  236:19  warning  '_projectName' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+  281:48  warning  'projectPath' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  304:17  warning  '_projectName' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular18Handler.ts
+  71:68  warning  'options' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular19Handler.ts
+  1816:43  warning  'projectPath' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/Angular21Handler.ts
+    6:10  warning  'SSRDetector' is defined but never used                                        @typescript-eslint/no-unused-vars
+  236:41  warning  'projectPath' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/BaseVersionHandler.ts
+     8:36  warning  'PreservationOptions' is defined but never used                @typescript-eslint/no-unused-vars
+   793:40  error    A `require()` style import is forbidden                        @typescript-eslint/no-require-imports
+  1070:11  warning  'filesWithConflicts' is never reassigned. Use 'const' instead  prefer-const
+  1127:11  warning  'filesWithConflicts' is never reassigned. Use 'const' instead  prefer-const
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/handlers/HybridVersionHandler.ts
+    2:39  warning  'BreakingChange' is defined but never used                                 @typescript-eslint/no-unused-vars
+  193:75  warning  'options' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/transformers/CodeTransformer.ts
+  122:40  warning  'projectPath' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  122:61  warning  'transform' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/utils/AdvancedContentPreserver.ts
+  558:5   warning  'classDecl' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+  559:5   warning  'userMethods' is defined but never used. Allowed unused args must match /^_/u         @typescript-eslint/no-unused-vars
+  560:5   warning  'userProperties' is defined but never used. Allowed unused args must match /^_/u      @typescript-eslint/no-unused-vars
+  561:5   warning  'conflicts' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+  562:5   warning  'options' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+  691:30  warning  'importDecl' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+  702:32  warning  'prop' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+  707:34  warning  'decorator' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+  707:50  warning  'userCustomizations' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  712:35  warning  'content' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+  717:35  warning  'content' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+  722:33  warning  'content' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+  733:49  warning  'userCustomizations' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  740:5   warning  'transform' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+  741:5   warning  'userCustomizations' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/utils/IntelligentMergeEngine.ts
+  387:68  warning  'options' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+  432:67  warning  'conflicts' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+  432:95  warning  'options' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+  652:30  warning  'providerArg' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  652:49  warning  'newProviders' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  652:73  warning  'options' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+
+/Volumes/Sahas_tutorials/my projects/ng-upgrade/src/utils/NgCompatibilityUpdater.ts
+  160:5   warning  'options' is defined but never used. Allowed unused args must match /^_/u      @typescript-eslint/no-unused-vars
+  445:32  warning  'packageName' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+✖ 71 problems (1 error, 70 warnings)
+  0 errors and 2 warnings potentially fixable with the `--fix` option.
+

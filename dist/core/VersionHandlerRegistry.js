@@ -10,7 +10,10 @@ const Angular17Handler_1 = require("../handlers/Angular17Handler");
 const Angular18Handler_1 = require("../handlers/Angular18Handler");
 const Angular19Handler_1 = require("../handlers/Angular19Handler");
 const Angular20Handler_1 = require("../handlers/Angular20Handler");
+const Angular21Handler_1 = require("../handlers/Angular21Handler");
 const CodeTransformer_1 = require("../transformers/CodeTransformer");
+const KarmaToVitestTransformer_1 = require("../transformers/KarmaToVitestTransformer");
+const JestToVitestTransformer_1 = require("../transformers/JestToVitestTransformer");
 /**
  * Registry for managing version-specific upgrade handlers and code transformers.
  *
@@ -56,18 +59,23 @@ class VersionHandlerRegistry {
         this.registerHandler('18', new Angular18Handler_1.Angular18Handler());
         this.registerHandler('19', new Angular19Handler_1.Angular19Handler());
         this.registerHandler('20', new Angular20Handler_1.Angular20Handler());
+        this.registerHandler('21', new Angular21Handler_1.Angular21Handler());
     }
     /**
      * Register default code transformers
      */
     registerDefaultTransformers() {
         const codeTransformer = new CodeTransformer_1.CodeTransformer();
+        const karmaToVitestTransformer = new KarmaToVitestTransformer_1.KarmaToVitestTransformer();
+        const jestToVitestTransformer = new JestToVitestTransformer_1.JestToVitestTransformer();
         this.registerTransformer('api', codeTransformer);
         this.registerTransformer('template', codeTransformer);
         this.registerTransformer('config', codeTransformer);
         this.registerTransformer('style', codeTransformer);
         this.registerTransformer('build', codeTransformer);
         this.registerTransformer('dependency', codeTransformer);
+        this.registerTransformer('test-migrate', karmaToVitestTransformer);
+        this.registerTransformer('jest-to-vitest', jestToVitestTransformer);
     }
     /**
      * Register a version-specific handler

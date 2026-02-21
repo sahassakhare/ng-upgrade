@@ -1,4 +1,4 @@
-import { UpgradeStep, UpgradeOptions, BreakingChange } from '../types';
+import { UpgradeStep, UpgradeOptions, BreakingChange, SupportedAngularVersion, SUPPORTED_ANGULAR_VERSIONS } from '../types';
 import { Angular12Handler } from '../handlers/Angular12Handler';
 import { Angular13Handler } from '../handlers/Angular13Handler';
 import { Angular14Handler } from '../handlers/Angular14Handler';
@@ -8,7 +8,10 @@ import { Angular17Handler } from '../handlers/Angular17Handler';
 import { Angular18Handler } from '../handlers/Angular18Handler';
 import { Angular19Handler } from '../handlers/Angular19Handler';
 import { Angular20Handler } from '../handlers/Angular20Handler';
+import { Angular21Handler } from '../handlers/Angular21Handler';
 import { CodeTransformer } from '../transformers/CodeTransformer';
+import { KarmaToVitestTransformer } from '../transformers/KarmaToVitestTransformer';
+import { JestToVitestTransformer } from '../transformers/JestToVitestTransformer';
 
 /**
  * Interface for version-specific upgrade handlers.
@@ -19,8 +22,8 @@ import { CodeTransformer } from '../transformers/CodeTransformer';
  */
 export interface VersionHandler {
   /** Angular version this handler manages (e.g., '17', '18') */
-  version: string;
-  
+  version: SupportedAngularVersion;
+
   /**
    * Execute the version-specific upgrade logic.
    * @param projectPath - Path to the Angular project
@@ -28,14 +31,14 @@ export interface VersionHandler {
    * @param options - Overall upgrade options
    */
   execute(projectPath: string, step: UpgradeStep, options: UpgradeOptions): Promise<void>;
-  
+
   /**
    * Validate that all prerequisites are met for this version upgrade.
    * @param projectPath - Path to the Angular project
    * @returns Promise resolving to true if prerequisites are met
    */
   validatePrerequisites(projectPath: string): Promise<boolean>;
-  
+
   /**
    * Get list of breaking changes introduced in this version.
    * @returns Array of breaking changes for this version
@@ -52,7 +55,7 @@ export interface VersionHandler {
 export interface TransformationHandler {
   /** Type of transformation this handler manages */
   type: string;
-  
+
   /**
    * Apply the transformation for a specific breaking change.
    * @param projectPath - Path to the Angular project
@@ -87,7 +90,7 @@ export interface TransformationHandler {
  * ```
  */
 export class VersionHandlerRegistry {
-  private handlers = new Map<string, VersionHandler>();
+  private handlers = new Map<SupportedAngularVersion, VersionHandler>();
   private transformers = new Map<string, TransformationHandler>();
 
   constructor() {
@@ -108,6 +111,7 @@ export class VersionHandlerRegistry {
     this.registerHandler('18', new Angular18Handler());
     this.registerHandler('19', new Angular19Handler());
     this.registerHandler('20', new Angular20Handler());
+    this.registerHandler('21', new Angular21Handler());
   }
 
   /**
@@ -115,19 +119,23 @@ export class VersionHandlerRegistry {
    */
   private registerDefaultTransformers(): void {
     const codeTransformer = new CodeTransformer();
-    
+    const karmaToVitestTransformer = new KarmaToVitestTransformer();
+    const jestToVitestTransformer = new JestToVitestTransformer();
+
     this.registerTransformer('api', codeTransformer);
     this.registerTransformer('template', codeTransformer);
     this.registerTransformer('config', codeTransformer);
     this.registerTransformer('style', codeTransformer);
     this.registerTransformer('build', codeTransformer);
     this.registerTransformer('dependency', codeTransformer);
+    this.registerTransformer('test-migrate', karmaToVitestTransformer);
+    this.registerTransformer('jest-to-vitest', jestToVitestTransformer);
   }
 
   /**
    * Register a version-specific handler
    */
-  registerHandler(version: string, handler: VersionHandler): void {
+  registerHandler(version: SupportedAngularVersion, handler: VersionHandler): void {
     this.handlers.set(version, handler);
   }
 
@@ -155,7 +163,7 @@ export class VersionHandlerRegistry {
    */
   getHandler(version: string): VersionHandler | undefined {
     const majorVersion = version.split('.')[0];
-    return this.handlers.get(majorVersion);
+    return this.handlers.get(majorVersion as SupportedAngularVersion);
   }
 
   /**
@@ -180,7 +188,7 @@ export class VersionHandlerRegistry {
   /**
    * Get all registered version handlers
    */
-  getAllHandlers(): Map<string, VersionHandler> {
+  getAllHandlers(): Map<SupportedAngularVersion, VersionHandler> {
     return new Map(this.handlers);
   }
 
@@ -196,13 +204,13 @@ export class VersionHandlerRegistry {
    */
   hasHandler(version: string): boolean {
     const majorVersion = version.split('.')[0];
-    return this.handlers.has(majorVersion);
+    return this.handlers.has(majorVersion as SupportedAngularVersion);
   }
 
   /**
    * Get supported versions
    */
-  getSupportedVersions(): string[] {
+  getSupportedVersions(): SupportedAngularVersion[] {
     return Array.from(this.handlers.keys()).sort((a, b) => Number(a) - Number(b));
   }
 
@@ -235,21 +243,21 @@ export class VersionHandlerRegistry {
    */
   async validateHandlers(): Promise<{ valid: boolean; errors: string[] }> {
     const errors: string[] = [];
-    
+
     for (const [version, handler] of this.handlers) {
       try {
         if (!handler.version) {
           errors.push(`Handler for version ${version} missing version property`);
         }
-        
+
         if (typeof handler.execute !== 'function') {
           errors.push(`Handler for version ${version} missing execute method`);
         }
-        
+
         if (typeof handler.validatePrerequisites !== 'function') {
           errors.push(`Handler for version ${version} missing validatePrerequisites method`);
         }
-        
+
         if (typeof handler.getBreakingChanges !== 'function') {
           errors.push(`Handler for version ${version} missing getBreakingChanges method`);
         }

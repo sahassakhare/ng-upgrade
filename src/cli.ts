@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import * as ora from 'ora';
 import * as path from 'path';
 import { EnhancedUpgradeOrchestrator } from './core/EnhancedUpgradeOrchestrator';
-import { UpgradeOptions, ProgressReport } from './types';
+import { UpgradeOptions, ProgressReport, SUPPORTED_ANGULAR_VERSIONS } from './types';
 
 const program = new Command();
 
@@ -77,7 +77,7 @@ async function runUpgrade(options: any) {
         type: 'list',
         name: 'targetVersion',
         message: 'Select target Angular version:',
-        choices: ['13', '14', '15', '16', '17', '18', '19', '20']
+        choices: SUPPORTED_ANGULAR_VERSIONS.filter(v => parseInt(v) > 12)
       }
     ]);
     targetVersion = answers.targetVersion;
@@ -121,19 +121,19 @@ async function runUpgrade(options: any) {
 
   // Execute upgrade
   const spinner = ora.default('Starting upgrade...').start();
-  
+
   try {
     const result = await orchestrator.orchestrateUpgrade(upgradeOptions);
-    
+
     spinner.stop();
-    
+
     if (result.success) {
       console.log(chalk.green.bold('Upgrade completed successfully!\n'));
       console.log(chalk.white(`Upgraded from ${result.fromVersion} to ${result.toVersion}`));
       console.log(chalk.white(`Duration: ${Math.round(result.duration / 1000)}s`));
       console.log(chalk.white(`Completed steps: ${result.completedSteps.length}`));
       console.log(chalk.white(`Checkpoints created: ${result.checkpoints.length}`));
-      
+
       if (result.warnings && result.warnings.length > 0) {
         console.log(chalk.yellow('\nWarnings:'));
         result.warnings.forEach(warning => console.log(chalk.yellow(`  - ${warning}`)));
@@ -141,7 +141,7 @@ async function runUpgrade(options: any) {
     } else {
       console.log(chalk.red.bold('Upgrade failed\n'));
       console.log(chalk.red(result.error?.message || 'Unknown error'));
-      
+
       if (result.rollbackAvailable) {
         const { rollback } = await inquirer.prompt([
           {
@@ -151,7 +151,7 @@ async function runUpgrade(options: any) {
             default: true
           }
         ]);
-        
+
         if (rollback && result.checkpoints.length > 0) {
           await orchestrator.rollbackToCheckpoint(result.checkpoints[result.checkpoints.length - 1].id);
           console.log(chalk.green('Rollback completed'));
@@ -166,28 +166,28 @@ async function runUpgrade(options: any) {
 
 async function analyzeProject(projectPath: string) {
   console.log(chalk.blue.bold('Analyzing Angular project\n'));
-  
+
   const orchestrator = new EnhancedUpgradeOrchestrator(projectPath);
   const spinner = ora.default('Analyzing project...').start();
-  
+
   try {
     // This would call the project analyzer
     spinner.text = 'Detecting Angular version...';
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     spinner.text = 'Analyzing dependencies...';
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     spinner.text = 'Calculating code metrics...';
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     spinner.text = 'Assessing risks...';
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     spinner.stop();
-    
+
     console.log(chalk.green('Analysis completed\n'));
-    
+
     // Display analysis results (placeholder)
     console.log(chalk.white.bold('Project Analysis Results:'));
     console.log(chalk.white('Current Angular version: 12.2.0'));
@@ -198,12 +198,12 @@ async function analyzeProject(projectPath: string) {
     console.log(chalk.white('Components: 28'));
     console.log(chalk.white('Services: 12'));
     console.log(chalk.white('Risk level: Medium'));
-    
+
     console.log(chalk.yellow('\nUpgrade Recommendations:'));
     console.log(chalk.yellow('  - Update deprecated dependencies before upgrade'));
     console.log(chalk.yellow('  - Increase test coverage for better validation'));
     console.log(chalk.yellow('  - Consider incremental upgrade strategy'));
-    
+
   } catch (error) {
     spinner.stop();
     throw error;
@@ -213,17 +213,17 @@ async function analyzeProject(projectPath: string) {
 async function manageCheckpoints(options: any) {
   const projectPath = path.resolve(options.path);
   const orchestrator = new EnhancedUpgradeOrchestrator(projectPath);
-  
+
   if (options.list) {
     console.log(chalk.blue.bold('Available Checkpoints\n'));
-    
+
     const checkpoints = await orchestrator.getCheckpoints();
-    
+
     if (checkpoints.length === 0) {
       console.log(chalk.yellow('No checkpoints found'));
       return;
     }
-    
+
     checkpoints.forEach((checkpoint: any, index: number) => {
       console.log(chalk.white(`${index + 1}. ${checkpoint.id}`));
       console.log(chalk.gray(`   Version: ${checkpoint.version}`));
@@ -231,7 +231,7 @@ async function manageCheckpoints(options: any) {
       console.log(chalk.gray(`   Description: ${checkpoint.description}\n`));
     });
   }
-  
+
   if (options.rollback) {
     const { confirm } = await inquirer.prompt([
       {
@@ -241,10 +241,10 @@ async function manageCheckpoints(options: any) {
         default: false
       }
     ]);
-    
+
     if (confirm) {
       const spinner = ora.default('Rolling back...').start();
-      
+
       try {
         await orchestrator.rollbackToCheckpoint(options.rollback);
         spinner.stop();
@@ -255,10 +255,10 @@ async function manageCheckpoints(options: any) {
       }
     }
   }
-  
+
   if (options.create) {
     const spinner = ora.default('Creating checkpoint...').start();
-    
+
     try {
       // This would create a new checkpoint
       spinner.stop();
@@ -268,7 +268,7 @@ async function manageCheckpoints(options: any) {
       throw error;
     }
   }
-  
+
   if (options.cleanup) {
     const { confirm } = await inquirer.prompt([
       {
@@ -278,10 +278,10 @@ async function manageCheckpoints(options: any) {
         default: false
       }
     ]);
-    
+
     if (confirm) {
       const spinner = ora.default('Cleaning up checkpoints...').start();
-      
+
       try {
         // This would cleanup old checkpoints
         spinner.stop();
@@ -296,22 +296,22 @@ async function manageCheckpoints(options: any) {
 
 async function showUpgradePlan(orchestrator: EnhancedUpgradeOrchestrator, options: UpgradeOptions) {
   console.log(chalk.blue.bold('Upgrade Plan (Dry Run)\n'));
-  
+
   // This would show the calculated upgrade path
   console.log(chalk.white.bold('Upgrade Strategy:'), chalk.cyan(options.strategy));
   console.log(chalk.white.bold('Target Version:'), chalk.cyan(options.targetVersion));
   console.log(chalk.white.bold('Validation Level:'), chalk.cyan(options.validationLevel));
-  
+
   console.log(chalk.white.bold('\nUpgrade Path:'));
   console.log(chalk.white('  Current → Angular 13 → Angular 14 → Angular 15 → Angular 16 → Angular 17'));
-  
+
   console.log(chalk.white.bold('\nMajor Changes:'));
   console.log(chalk.white('  - Angular 13: View Engine removal, Angular Package Format'));
   console.log(chalk.white('  - Angular 14: Standalone components, optional injectors'));
   console.log(chalk.white('  - Angular 15: Standalone APIs stable, Image directive'));
   console.log(chalk.white('  - Angular 16: Required inputs, new router features'));
   console.log(chalk.white('  - Angular 17: New application bootstrap, control flow'));
-  
+
   console.log(chalk.white.bold('\nEstimated Duration:'), chalk.cyan('45-60 minutes'));
   console.log(chalk.white.bold('Checkpoints:'), chalk.cyan('5 (one per major version)'));
   console.log(chalk.white.bold('Rollback:'), chalk.cyan('Available at each checkpoint'));
@@ -321,20 +321,20 @@ function setupProgressReporting(orchestrator: EnhancedUpgradeOrchestrator) {
   orchestrator.on('progress', (report: any) => {
     console.log(chalk.blue(`${report.message}`));
   });
-  
+
   orchestrator.on('step-start', (step: any) => {
     console.log(chalk.yellow(`Starting: ${step.fromVersion} → ${step.toVersion}`));
   });
-  
+
   orchestrator.on('step-complete', (step: any) => {
     console.log(chalk.green(`Completed: ${step.fromVersion} → ${step.toVersion}`));
   });
-  
+
   orchestrator.on('step-failed', ({ step, error }: any) => {
     console.log(chalk.red(`Failed: ${step.fromVersion} → ${step.toVersion}`));
     console.log(chalk.red(`   Error: ${error.message}`));
   });
-  
+
   orchestrator.on('manual-intervention', ({ change, instructions }: any) => {
     console.log(chalk.magenta(`Manual intervention required:`));
     console.log(chalk.magenta(`   ${change.description}`));

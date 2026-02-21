@@ -1,5 +1,5 @@
-import { UpgradeStep, UpgradeOptions, BreakingChange, Migration } from '../types';
-import { VersionHandler } from '../core/VersionHandlerRegistry';
+import { UpgradeStep, UpgradeOptions, BreakingChange, Migration, SupportedAngularVersion } from '../types';
+import { VersionHandler, VersionHandlerRegistry } from '../core/VersionHandlerRegistry';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { execSync } from 'child_process';
@@ -38,17 +38,17 @@ import { NgCompatibilityUpdater } from '../utils/NgCompatibilityUpdater';
  */
 export abstract class BaseVersionHandler implements VersionHandler {
   /** The Angular version this handler manages - must be implemented by concrete classes */
-  abstract readonly version: string;
-  
+  abstract readonly version: SupportedAngularVersion;
+
   /** Utility for managing dependency installations and updates */
   protected dependencyInstaller!: DependencyInstaller;
-  
+
   /** Advanced content preservation system for intelligent code merging */
   protected contentPreserver!: AdvancedContentPreserver;
-  
+
   /** Detailed upgrade report generator for tracking all changes */
   protected reportGenerator!: UpgradeReportGenerator;
-  
+
   /** Utility for reporting upgrade progress and status messages */
   protected progressReporter!: ProgressReporter;
 
@@ -80,7 +80,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
     this.dependencyInstaller = new DependencyInstaller(projectPath);
     this.contentPreserver = new AdvancedContentPreserver(projectPath);
     this.progressReporter = options.progressReporter || new ProgressReporter();
-    
+
     // Initialize report generator
     const projectName = path.basename(projectPath);
     this.reportGenerator = new UpgradeReportGenerator(
@@ -90,7 +90,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
       step.toVersion,
       options.strategy || 'balanced'
     );
-    
+
     this.progressReporter.startStep(`Angular ${this.version} Upgrade`, `Starting Angular ${this.version} upgrade...`);
 
     // Update Angular dependencies with automatic installation
@@ -109,6 +109,9 @@ export abstract class BaseVersionHandler implements VersionHandler {
 
     // Apply version-specific transformations
     await this.applyVersionSpecificChanges(projectPath, options);
+
+    // Apply any configured automated migrations (e.g., test-migrate) based on breaking changes
+    await this.applyAutomatedMigrations(projectPath);
 
     // Update configuration files
     await this.updateConfigurationFiles(projectPath, options);
@@ -206,8 +209,8 @@ export abstract class BaseVersionHandler implements VersionHandler {
    * @abstract
    */
   protected abstract getRequiredNodeVersion(): string;
-  
-  
+
+
   /**
    * Applies version-specific changes and transformations to the project
    * 
@@ -231,14 +234,14 @@ export abstract class BaseVersionHandler implements VersionHandler {
       // Track Angular package dependencies before update
       const packageJsonPath = path.join(projectPath, 'package.json');
       const packageJson = await fs.readJson(packageJsonPath);
-      
+
       // Use the DependencyInstaller for automatic installation
       const success = await this.dependencyInstaller.updateAngularPackages(this.version);
-      
+
       // Track dependency changes
       const updatedPackageJson = await fs.readJson(packageJsonPath);
       this.trackDependencyUpdates(packageJson, updatedPackageJson, '@angular/');
-      
+
       if (!success) {
         this.progressReporter.warn('Angular dependencies updated in package.json. Dependencies will be verified later.');
         this.reportGenerator.addWarning('Angular dependency installation required manual verification');
@@ -261,10 +264,10 @@ export abstract class BaseVersionHandler implements VersionHandler {
   protected async updateThirdPartyDependencies(projectPath: string): Promise<void> {
     try {
       this.progressReporter.updateMessage(`Checking Angular ${this.version} compatibility...`);
-      
+
       // Use NgCompatibilityUpdater for comprehensive checking
       const updater = new NgCompatibilityUpdater(this.version);
-      
+
       const result = await updater.checkAndUpdate(projectPath, {
         dryRun: false, // Apply updates automatically during upgrade
         includeDevDependencies: true,
@@ -275,7 +278,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
       // Report results
       if (result.totalUpdates > 0) {
         this.progressReporter.success(`✓ Updated ${result.totalUpdates} dependencies for Angular ${this.version} compatibility`);
-        
+
         // Log individual updates
         result.updates.forEach(update => {
           if (update.updateType === 'deprecated') {
@@ -315,11 +318,11 @@ export abstract class BaseVersionHandler implements VersionHandler {
 
       // Fallback to legacy method for packages not covered by NgCompatibilityUpdater
       await this.updateRemainingDependencies(projectPath);
-      
+
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
       this.progressReporter.warn(`Advanced dependency update failed, falling back to basic update: ${errorMsg}`);
-      
+
       // Fallback to original method
       await this.updateRemainingDependencies(projectPath);
     }
@@ -332,22 +335,22 @@ export abstract class BaseVersionHandler implements VersionHandler {
     try {
       const packageJsonPath = path.join(projectPath, 'package.json');
       const packageJson = await fs.readJson(packageJsonPath);
-      
+
       // Get compatible versions for this Angular version
       const compatibleDependencies = DependencyCompatibilityMatrix.getCompatibleDependencies(this.version);
-      
+
       let updated = false;
       const updates: string[] = [];
-      
+
       // Update existing third-party packages to compatible versions (legacy method)
       for (const dep of compatibleDependencies) {
-        const existingVersion = packageJson.dependencies?.[dep.name] || 
-                               packageJson.devDependencies?.[dep.name];
-        
+        const existingVersion = packageJson.dependencies?.[dep.name] ||
+          packageJson.devDependencies?.[dep.name];
+
         if (existingVersion && existingVersion !== dep.version) {
           // Only update if NgCompatibilityUpdater didn't handle it
           const currentInPackageJson = packageJson.dependencies?.[dep.name] || packageJson.devDependencies?.[dep.name];
-          
+
           if (currentInPackageJson === existingVersion) { // Still the old version, wasn't updated
             if (dep.type === 'dependencies') {
               packageJson.dependencies[dep.name] = dep.version;
@@ -355,19 +358,19 @@ export abstract class BaseVersionHandler implements VersionHandler {
               packageJson.devDependencies = packageJson.devDependencies || {};
               packageJson.devDependencies[dep.name] = dep.version;
             }
-            
+
             updates.push(`${dep.name}: ${existingVersion} → ${dep.version}`);
             updated = true;
           }
         }
       }
-      
+
       if (updated) {
         await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
         this.progressReporter.info(`✓ Updated ${updates.length} additional dependencies`);
         this.reportGenerator.addSuccessStory(`Additional dependencies updated: ${updates.join(', ')}`);
       }
-      
+
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
       this.progressReporter.warn(`Fallback dependency update failed: ${errorMsg}`);
@@ -380,10 +383,10 @@ export abstract class BaseVersionHandler implements VersionHandler {
    */
   protected async updateTypeScript(_projectPath: string): Promise<void> {
     const requiredTsVersion = this.getRequiredTypeScriptVersion();
-    
+
     this.progressReporter.updateMessage(`Installing TypeScript ${requiredTsVersion}...`);
     const success = await this.dependencyInstaller.updateTypeScript(requiredTsVersion);
-    
+
     if (!success) {
       this.progressReporter.warn('TypeScript version updated in package.json. Manual npm install may be required.');
     } else {
@@ -414,13 +417,13 @@ export abstract class BaseVersionHandler implements VersionHandler {
         this.progressReporter?.success('Updated main.ts while preserving custom code');
       }
     }
-    
+
     await this.updateAngularJson(projectPath);
     await this.updateTsConfig(projectPath);
-    
+
     if (options.strategy !== 'conservative') {
       await this.updateOptionalConfigs(projectPath);
-      
+
       // Update template files for Angular 17+ (optional)
       if (parseInt(this.version) >= 17) {
         await this.updateTemplateFiles(projectPath);
@@ -433,13 +436,13 @@ export abstract class BaseVersionHandler implements VersionHandler {
    */
   protected async updateAngularJson(projectPath: string): Promise<void> {
     const angularJsonPath = path.join(projectPath, 'angular.json');
-    
+
     if (await fs.pathExists(angularJsonPath)) {
       const angularJson = await fs.readJson(angularJsonPath);
-      
+
       // Update builder versions and configurations
       this.updateBuilderConfigurations(angularJson);
-      
+
       await fs.writeJson(angularJsonPath, angularJson, { spaces: 2 });
     }
   }
@@ -460,28 +463,28 @@ export abstract class BaseVersionHandler implements VersionHandler {
       '19': './node_modules/@angular/cli/lib/config/schema.json',
       '20': './node_modules/@angular/cli/lib/config/schema.json'
     };
-    
+
     if (schemaMap[this.version]) {
       angularJson.$schema = schemaMap[this.version];
     }
-    
+
     // Update version field
     angularJson.version = 1;
-    
+
     // Handle browserTarget to buildTarget migration (Angular 15+)
     const versionNum = parseInt(this.version);
     if (versionNum >= 15) {
       this.migrateBrowserTargetToBuildTarget(angularJson);
     }
   }
-  
+
   /**
    * Migrate browserTarget to buildTarget in angular.json (Angular 15+)
    */
   protected migrateBrowserTargetToBuildTarget(angularJson: any): void {
     for (const projectName in angularJson.projects) {
       const project = angularJson.projects[projectName];
-      
+
       // Update serve configuration
       if (project.architect?.serve?.configurations) {
         for (const config of Object.values(project.architect.serve.configurations)) {
@@ -492,7 +495,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
           }
         }
       }
-      
+
       // Update serve options
       if (project.architect?.serve?.options) {
         if (project.architect.serve.options.browserTarget && !project.architect.serve.options.buildTarget) {
@@ -500,7 +503,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
           delete project.architect.serve.options.browserTarget;
         }
       }
-      
+
       // Update extract-i18n configuration
       if (project.architect?.['extract-i18n']?.options) {
         const extractConfig = project.architect['extract-i18n'].options;
@@ -509,7 +512,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
           delete extractConfig.browserTarget;
         }
       }
-      
+
       // Update test configuration
       if (project.architect?.test?.options) {
         const testConfig = project.architect.test.options;
@@ -526,13 +529,13 @@ export abstract class BaseVersionHandler implements VersionHandler {
    */
   protected async updateTsConfig(projectPath: string): Promise<void> {
     const tsconfigPath = path.join(projectPath, 'tsconfig.json');
-    
+
     if (await fs.pathExists(tsconfigPath)) {
       const tsconfig = await fs.readJson(tsconfigPath);
-      
+
       // Update TypeScript configuration for this Angular version
       this.updateTypeScriptConfig(tsconfig);
-      
+
       await fs.writeJson(tsconfigPath, tsconfig, { spaces: 2 });
     }
   }
@@ -545,10 +548,10 @@ export abstract class BaseVersionHandler implements VersionHandler {
     if (!tsconfig.compilerOptions) {
       tsconfig.compilerOptions = {};
     }
-    
+
     // Handle strict mode - set to false for safer migration
     tsconfig.compilerOptions.strict = false;
-    
+
     // Set individual strict flags to false for migration
     tsconfig.compilerOptions.strictNullChecks = false;
     tsconfig.compilerOptions.strictPropertyInitialization = false;
@@ -557,7 +560,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
     tsconfig.compilerOptions.noImplicitAny = false;
     tsconfig.compilerOptions.noImplicitThis = false;
     tsconfig.compilerOptions.alwaysStrict = false;
-    
+
     // Set target and module based on Angular version
     const versionNum = parseInt(this.version);
     if (versionNum >= 16) {
@@ -577,40 +580,40 @@ export abstract class BaseVersionHandler implements VersionHandler {
       tsconfig.compilerOptions.module = 'ES2020';
       tsconfig.compilerOptions.lib = ['ES2018', 'dom'];
     }
-    
+
     // Enable experimental decorators for older versions
     if (versionNum < 16) {
       tsconfig.compilerOptions.experimentalDecorators = true;
     }
-    
+
     // Set module resolution
     tsconfig.compilerOptions.moduleResolution = 'node';
-    
+
     // Enable source maps for development
     tsconfig.compilerOptions.sourceMap = true;
-    
+
     // Set output directory
     tsconfig.compilerOptions.outDir = './dist/out-tsc';
-    
+
     // Enable declaration files
     tsconfig.compilerOptions.declaration = false;
-    
+
     // Set base URL
     tsconfig.compilerOptions.baseUrl = './';
-    
+
     // Enable incremental compilation
     tsconfig.compilerOptions.incremental = true;
-    
+
     // Import helpers from tslib
     tsconfig.compilerOptions.importHelpers = true;
-    
+
     // Skip lib check for faster builds
     tsconfig.compilerOptions.skipLibCheck = true;
-    
+
     // Enable ES module interop
     tsconfig.compilerOptions.esModuleInterop = true;
   }
-  
+
   /**
    * Get required TypeScript version for this Angular version
    */
@@ -626,7 +629,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
       '19': '~5.6.0',
       '20': '>=5.8.0 <5.9.0'
     };
-    
+
     return tsVersionMap[this.version] || '~5.8.0';
   }
 
@@ -636,7 +639,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
   protected async updateOptionalConfigs(projectPath: string): Promise<void> {
     // Update browserslist if it exists
     await this.updateBrowsersList(projectPath);
-    
+
     // Update karma.conf.js if it exists
     await this.updateKarmaConfig(projectPath);
   }
@@ -646,7 +649,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
    */
   protected async updateBrowsersList(projectPath: string): Promise<void> {
     const browserslistPath = path.join(projectPath, '.browserslistrc');
-    
+
     if (await fs.pathExists(browserslistPath)) {
       // Update browser support configuration
       // This would contain version-specific browser requirements
@@ -658,7 +661,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
    */
   protected async updateKarmaConfig(projectPath: string): Promise<void> {
     const karmaConfigPath = path.join(projectPath, 'karma.conf.js');
-    
+
     if (await fs.pathExists(karmaConfigPath)) {
       // Update Karma configuration for new Angular version
       // This would contain version-specific Karma updates
@@ -671,7 +674,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
   protected async runAngularUpdateSchematics(projectPath: string): Promise<void> {
     try {
       this.progressReporter?.updateMessage('Running Angular update schematics...');
-      
+
       // Run ng update for Angular core
       execSync(`npx ng update @angular/core@${this.version} --migrate-only --allow-dirty`, {
         cwd: projectPath,
@@ -683,10 +686,10 @@ export abstract class BaseVersionHandler implements VersionHandler {
         cwd: projectPath,
         stdio: 'inherit'
       });
-      
+
       // Run version-specific official migrations
       await this.runVersionSpecificMigrations(projectPath);
-      
+
       this.progressReporter?.success('✓ Angular update schematics completed');
     } catch (error) {
       this.progressReporter?.warn('Angular schematics migration completed with warnings');
@@ -702,13 +705,13 @@ export abstract class BaseVersionHandler implements VersionHandler {
     if (!await fs.pathExists(angularJsonPath)) {
       throw new Error('angular.json not found. This does not appear to be an Angular project.');
     }
-    
+
     // Check if package.json exists
     const packageJsonPath = path.join(projectPath, 'package.json');
     if (!await fs.pathExists(packageJsonPath)) {
       throw new Error('package.json not found. Invalid Angular project structure.');
     }
-    
+
     // Ensure node_modules exists
     const nodeModulesPath = path.join(projectPath, 'node_modules');
     if (!await fs.pathExists(nodeModulesPath)) {
@@ -720,7 +723,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
         throw new Error('Failed to install dependencies. Please run npm install manually.');
       }
     }
-    
+
     // Check if Angular CLI is available globally or locally
     try {
       await this.runCommand('npx ng version', projectPath);
@@ -735,33 +738,33 @@ export abstract class BaseVersionHandler implements VersionHandler {
   protected async runVersionSpecificMigrations(projectPath: string): Promise<void> {
     // Ensure the project is ready for migrations
     await this.ensureAngularProjectReady(projectPath);
-    
+
     const migrations = this.getAvailableMigrations();
-    
+
     if (migrations.length === 0) {
       this.progressReporter?.info('No version-specific migrations available for this Angular version');
       return;
     }
-    
+
     this.progressReporter?.info(`Running ${migrations.length} migration(s) for Angular ${this.version}...`);
-    
+
     for (const migration of migrations) {
       try {
         this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
         this.progressReporter?.info(`Command: ${migration.command}`);
-        
+
         const output = await this.runCommand(migration.command, projectPath);
-        
+
         this.progressReporter?.success(`✓ ${migration.name} migration completed successfully`);
-        
+
         // Log migration output for debugging
         if (output && output.trim()) {
           this.progressReporter?.info(`Migration output: ${output.trim()}`);
         }
-        
+
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        
+
         if (migration.optional) {
           this.progressReporter?.warn(`⚠ ${migration.name} migration skipped: ${errorMessage}`);
         } else {
@@ -770,8 +773,51 @@ export abstract class BaseVersionHandler implements VersionHandler {
         }
       }
     }
-    
+
     this.progressReporter?.success(`Completed all migrations for Angular ${this.version}`);
+  }
+
+  /**
+   * Automatically execute any CodeTransformers or custom transformers 
+   * attached to breaking changes for this Angular version.
+   */
+  protected async applyAutomatedMigrations(projectPath: string): Promise<void> {
+    const changes = this.getBreakingChanges();
+    const automatedChanges = changes.filter(c => c.migration && c.migration.type === 'automatic');
+    if (automatedChanges.length === 0) return;
+
+    this.progressReporter?.updateMessage('Applying automated code and config migrations...');
+
+    // Use the statically imported VersionHandlerRegistry.
+    const registry = new VersionHandlerRegistry();
+
+    for (const change of automatedChanges) {
+      if (!change.type) continue;
+
+      // Determine correct transformer type. E.g. test-migrate, api, config
+      // Note: If change.type is 'config' but we want 'test-migrate', we might need to rely on 
+      // the change id or a specific transform type inside change.migration.transform.type.
+
+      let transformType = change.type.toString();
+
+      // Special override for test framework migration
+      if (change.id.includes('karma-to-vitest-migration')) {
+        transformType = 'test-migrate';
+      } else if (change.id.includes('jest-to-vitest-migration')) {
+        transformType = 'jest-to-vitest';
+      }
+
+      const transformer = registry.getTransformer(transformType);
+
+      if (transformer) {
+        try {
+          await transformer.apply(projectPath, change);
+          this.reportGenerator.addSuccessStory(`Automated migration applied: ${change.description}`);
+        } catch (error) {
+          this.progressReporter?.warn(`Automated migration failed for ${change.id}: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+    }
   }
 
   /**
@@ -793,7 +839,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
     }
 
     // Official Angular Migration Schematics - Integrated Seamlessly
-    
+
     // 1. Standalone Components Migration (Angular 14+)
     if (version >= 14) {
       migrations.push({
@@ -892,21 +938,21 @@ export abstract class BaseVersionHandler implements VersionHandler {
   protected async runSpecificMigration(projectPath: string, migrationName: string, interactive: boolean = false): Promise<void> {
     const migrations = this.getAvailableMigrations();
     const migration = migrations.find(m => m.name === migrationName);
-    
+
     if (!migration) {
       throw new Error(`Migration '${migrationName}' not found for Angular ${this.version}`);
     }
 
     try {
       this.progressReporter?.updateMessage(`Running ${migration.name} migration...`);
-      
+
       let command = migration.command;
       if (!interactive) {
         command += ' --interactive=false --defaults';
       }
-      
+
       await this.runCommand(command, projectPath);
-      
+
       this.progressReporter?.success(`✓ ${migration.name} migration completed`);
     } catch (error) {
       this.progressReporter?.warn(`${migration.name} migration failed: ${error instanceof Error ? error.message : String(error)}`);
@@ -922,7 +968,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
       // Check if node_modules exists and is not empty
       const nodeModulesPath = path.join(projectPath, 'node_modules');
       const nodeModulesExists = await fs.pathExists(nodeModulesPath);
-      
+
       if (!nodeModulesExists) {
         this.progressReporter?.warn('node_modules not found. Running npm install...');
         const success = await this.dependencyInstaller.runNpmInstall();
@@ -932,7 +978,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
       } else {
         // Verify key Angular packages are installed
         const angularCore = path.join(nodeModulesPath, '@angular', 'core');
-        
+
         if (!await fs.pathExists(angularCore)) {
           this.progressReporter?.warn('Angular core packages missing. Running npm install...');
           const success = await this.dependencyInstaller.runNpmInstall();
@@ -941,7 +987,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
           }
         }
       }
-      
+
       this.progressReporter?.success('✓ Dependencies verified');
     } catch (error) {
       this.progressReporter?.warn(`Dependency verification failed: ${error instanceof Error ? error.message : String(error)}`);
@@ -971,18 +1017,18 @@ export abstract class BaseVersionHandler implements VersionHandler {
     // Simple version comparison - in production this would use semver
     const current = currentVersion.replace(/[^\d.]/g, '');
     const required = requiredVersion.replace(/[^\d.]/g, '');
-    
+
     const currentParts = current.split('.').map(Number);
     const requiredParts = required.split('.').map(Number);
-    
+
     for (let i = 0; i < Math.max(currentParts.length, requiredParts.length); i++) {
       const currentPart = currentParts[i] || 0;
       const requiredPart = requiredParts[i] || 0;
-      
+
       if (currentPart > requiredPart) return true;
       if (currentPart < requiredPart) return false;
     }
-    
+
     return true;
   }
 
@@ -1009,20 +1055,20 @@ export abstract class BaseVersionHandler implements VersionHandler {
       await fs.copy(filePath, `${filePath}.backup`);
     }
   }
-  
+
   /**
    * Update component files using Advanced Content Preserver for intelligent merging
    */
   protected async updateComponentFiles(projectPath: string, transformations: any[]): Promise<void> {
     const componentsPath = path.join(projectPath, 'src', 'app');
-    
+
     if (await fs.pathExists(componentsPath)) {
       // Find all component files
       const componentFiles = await this.findComponentFiles(componentsPath);
-      
+
       let totalConflicts = 0;
       let filesWithConflicts: string[] = [];
-      
+
       for (const file of componentFiles) {
         try {
           // Use advanced content preserver for intelligent merging
@@ -1035,27 +1081,27 @@ export abstract class BaseVersionHandler implements VersionHandler {
             createDetailedBackup: true,
             mergeConflictResolution: 'user' // Prioritize user code
           });
-          
+
           if (result.conflicts.length > 0) {
             totalConflicts += result.conflicts.length;
             filesWithConflicts.push(path.basename(file));
             this.progressReporter?.warn(`${result.conflicts.length} conflicts detected in ${path.basename(file)}`);
           }
-          
+
           if (result.warnings.length > 0) {
             result.warnings.forEach(warning => this.progressReporter?.warn(warning));
           }
-          
+
         } catch (error) {
           // Fallback to legacy FileContentPreserver
           this.progressReporter?.warn(`Advanced preservation failed for ${path.basename(file)}, using fallback method`);
           await FileContentPreserver.updateComponentFile(file, transformations);
         }
       }
-      
+
       if (componentFiles.length > 0) {
         this.progressReporter?.success(`Intelligently preserved ${componentFiles.length} component files`);
-        
+
         if (totalConflicts > 0) {
           this.progressReporter?.warn(`${totalConflicts} merge conflicts detected in: ${filesWithConflicts.join(', ')}`);
           this.progressReporter?.info('User customizations have been preserved. Review .conflicts files for manual resolution if needed.');
@@ -1065,24 +1111,24 @@ export abstract class BaseVersionHandler implements VersionHandler {
       }
     }
   }
-  
+
   /**
    * Update template files using Advanced Content Preserver for intelligent merging
    */
   protected async updateTemplateFiles(projectPath: string): Promise<void> {
     const targetVersion = parseInt(this.version);
     const templatesPath = path.join(projectPath, 'src', 'app');
-    
+
     if (await fs.pathExists(templatesPath)) {
       // Find all template files
       const templateFiles = await this.findTemplateFiles(templatesPath);
-      
+
       let totalConflicts = 0;
       let filesWithConflicts: string[] = [];
-      
+
       // Define template transformations based on Angular version
       const templateTransforms = this.getTemplateTransformsForVersion(targetVersion);
-      
+
       for (const file of templateFiles) {
         try {
           // Use advanced content preserver for intelligent template merging
@@ -1095,23 +1141,23 @@ export abstract class BaseVersionHandler implements VersionHandler {
             createDetailedBackup: true,
             mergeConflictResolution: 'user' // Prioritize user template code
           });
-          
+
           if (result.conflicts.length > 0) {
             totalConflicts += result.conflicts.length;
             filesWithConflicts.push(path.basename(file));
             this.progressReporter?.warn(`${result.conflicts.length} template conflicts in ${path.basename(file)}`);
           }
-          
+
         } catch (error) {
           // Fallback to legacy FileContentPreserver
           this.progressReporter?.warn(`Advanced template preservation failed for ${path.basename(file)}, using fallback`);
           await FileContentPreserver.updateTemplateFile(file, targetVersion);
         }
       }
-      
+
       if (templateFiles.length > 0) {
         this.progressReporter?.success(`Intelligently preserved ${templateFiles.length} template files`);
-        
+
         if (totalConflicts > 0) {
           this.progressReporter?.warn(`${totalConflicts} template conflicts detected in: ${filesWithConflicts.join(', ')}`);
           this.progressReporter?.info('User template customizations preserved. Complex logic maintained as-is.');
@@ -1121,13 +1167,13 @@ export abstract class BaseVersionHandler implements VersionHandler {
       }
     }
   }
-  
+
   /**
    * Get template transformations for specific Angular version
    */
   protected getTemplateTransformsForVersion(targetVersion: number): any[] {
     const transforms: any[] = [];
-    
+
     // Angular 17+ control flow migration
     if (targetVersion >= 17) {
       transforms.push({
@@ -1137,7 +1183,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
         preserveComplexLogic: true
       });
     }
-    
+
     // Angular 16+ self-closing tags
     if (targetVersion >= 16) {
       transforms.push({
@@ -1147,7 +1193,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
         preserveUserDirectives: true
       });
     }
-    
+
     return transforms;
   }
 
@@ -1157,7 +1203,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
   private async findComponentFiles(dir: string): Promise<string[]> {
     const files: string[] = [];
     const entries = await fs.readdir(dir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
@@ -1166,17 +1212,17 @@ export abstract class BaseVersionHandler implements VersionHandler {
         files.push(fullPath);
       }
     }
-    
+
     return files;
   }
-  
+
   /**
    * Find all template files in a directory
    */
   private async findTemplateFiles(dir: string): Promise<string[]> {
     const files: string[] = [];
     const entries = await fs.readdir(dir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
@@ -1185,7 +1231,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
         files.push(fullPath);
       }
     }
-    
+
     return files;
   }
 
@@ -1218,22 +1264,22 @@ export abstract class BaseVersionHandler implements VersionHandler {
    * Track dependency updates by comparing package.json before and after
    */
   private trackDependencyUpdates(
-    beforePackageJson: any, 
-    afterPackageJson: any, 
+    beforePackageJson: any,
+    afterPackageJson: any,
     filterPrefix?: string
   ): void {
-    const before = { 
-      ...beforePackageJson.dependencies, 
-      ...beforePackageJson.devDependencies 
+    const before = {
+      ...beforePackageJson.dependencies,
+      ...beforePackageJson.devDependencies
     };
-    const after = { 
-      ...afterPackageJson.dependencies, 
-      ...afterPackageJson.devDependencies 
+    const after = {
+      ...afterPackageJson.dependencies,
+      ...afterPackageJson.devDependencies
     };
 
     for (const [name, newVersion] of Object.entries(after)) {
       if (filterPrefix && !name.startsWith(filterPrefix)) continue;
-      
+
       const oldVersion = before[name];
       if (oldVersion && oldVersion !== newVersion) {
         const dependencyChange: DependencyChange = {
@@ -1243,7 +1289,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
           type: afterPackageJson.dependencies?.[name] ? 'production' : 'development',
           breaking: this.isBreakingDependencyChange(name, oldVersion as string, newVersion as string)
         };
-        
+
         this.reportGenerator.trackDependencyChange(dependencyChange);
       }
     }
@@ -1259,7 +1305,7 @@ export abstract class BaseVersionHandler implements VersionHandler {
       const newMajor = parseInt(newVersion.replace(/[^\d].*/, ''));
       return newMajor > oldMajor;
     }
-    
+
     // For other packages, assume major version changes are breaking
     try {
       const oldMajor = parseInt(oldVersion.replace(/[^\d].*/, ''));

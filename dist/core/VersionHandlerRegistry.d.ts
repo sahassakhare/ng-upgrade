@@ -1,4 +1,4 @@
-import { UpgradeStep, UpgradeOptions, BreakingChange } from '../types';
+import { UpgradeStep, UpgradeOptions, BreakingChange, SupportedAngularVersion } from '../types';
 /**
  * Interface for version-specific upgrade handlers.
  *
@@ -8,7 +8,7 @@ import { UpgradeStep, UpgradeOptions, BreakingChange } from '../types';
  */
 export interface VersionHandler {
     /** Angular version this handler manages (e.g., '17', '18') */
-    version: string;
+    version: SupportedAngularVersion;
     /**
      * Execute the version-specific upgrade logic.
      * @param projectPath - Path to the Angular project
@@ -84,7 +84,7 @@ export declare class VersionHandlerRegistry {
     /**
      * Register a version-specific handler
      */
-    registerHandler(version: string, handler: VersionHandler): void;
+    registerHandler(version: SupportedAngularVersion, handler: VersionHandler): void;
     /**
      * Register a transformation handler
      */
@@ -124,7 +124,7 @@ export declare class VersionHandlerRegistry {
     /**
      * Get all registered version handlers
      */
-    getAllHandlers(): Map<string, VersionHandler>;
+    getAllHandlers(): Map<SupportedAngularVersion, VersionHandler>;
     /**
      * Get all registered transformers
      */
@@ -136,7 +136,7 @@ export declare class VersionHandlerRegistry {
     /**
      * Get supported versions
      */
-    getSupportedVersions(): string[];
+    getSupportedVersions(): SupportedAngularVersion[];
     /**
      * Get breaking changes for specific version
      */

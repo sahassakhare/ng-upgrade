@@ -43,7 +43,7 @@ export class NgCompatibilityUpdater {
     updateStrategy?: 'conservative' | 'aggressive';
   } = {}): Promise<UpdateResult> {
     const packageJsonPath = path.join(projectPath, 'package.json');
-    
+
     if (!await fs.pathExists(packageJsonPath)) {
       throw new Error('package.json not found');
     }
@@ -60,7 +60,7 @@ export class NgCompatibilityUpdater {
     // Check dependencies
     if (packageJson.dependencies) {
       const depUpdates = await this.checkDependencies(
-        packageJson.dependencies, 
+        packageJson.dependencies,
         'dependencies',
         options
       );
@@ -73,7 +73,7 @@ export class NgCompatibilityUpdater {
     if (options.includeDevDependencies && packageJson.devDependencies) {
       const devDepUpdates = await this.checkDependencies(
         packageJson.devDependencies,
-        'devDependencies', 
+        'devDependencies',
         options
       );
       result.updates.push(...devDepUpdates.updates);
@@ -107,7 +107,7 @@ export class NgCompatibilityUpdater {
     for (const [name, currentVersion] of Object.entries(dependencies)) {
       try {
         const updateInfo = await this.checkPackageUpdate(name, currentVersion, options);
-        
+
         if (updateInfo) {
           updates.push({
             ...updateInfo,
@@ -130,7 +130,7 @@ export class NgCompatibilityUpdater {
    * Check individual package for Angular compatibility
    */
   private async checkPackageUpdate(
-    packageName: string, 
+    packageName: string,
     currentVersion: string,
     options: any
   ): Promise<Omit<DependencyUpdate, 'name'> | null> {
@@ -141,7 +141,7 @@ export class NgCompatibilityUpdater {
 
     // Check if package is in our compatibility matrix
     const compatibilityInfo = this.compatibilityMatrix.get(packageName);
-    
+
     if (compatibilityInfo) {
       return this.getCompatibilityUpdate(packageName, currentVersion, compatibilityInfo, options);
     }
@@ -160,7 +160,7 @@ export class NgCompatibilityUpdater {
     options: any
   ): Omit<DependencyUpdate, 'name'> | null {
     const targetVersionInfo = compatibilityInfo[this.angularVersion];
-    
+
     if (!targetVersionInfo) {
       return null;
     }
@@ -185,7 +185,7 @@ export class NgCompatibilityUpdater {
     }
 
     const updateType = this.determineUpdateType(cleanCurrent, cleanCompatible);
-    
+
     return {
       currentVersion,
       compatibleVersion,
@@ -206,14 +206,14 @@ export class NgCompatibilityUpdater {
     try {
       // Get package info from npm
       const packageInfo = await this.getPackageInfo(packageName);
-      
+
       if (!packageInfo) {
         return null;
       }
 
       // Find best compatible version based on Angular peer dependencies
       const compatibleVersion = await this.findAngularCompatibleVersion(packageInfo);
-      
+
       if (!compatibleVersion) {
         return null;
       }
@@ -226,7 +226,7 @@ export class NgCompatibilityUpdater {
       }
 
       const updateType = this.determineUpdateType(cleanCurrent, cleanCompatible);
-      
+
       // Only suggest updates for conservative strategy if they're minor/patch
       if (options.updateStrategy === 'conservative' && updateType === 'major') {
         return null;
@@ -250,9 +250,9 @@ export class NgCompatibilityUpdater {
    */
   private async getPackageInfo(packageName: string): Promise<any> {
     try {
-      const result = execSync(`npm view ${packageName} --json`, { 
+      const result = execSync(`npm view ${packageName} --json`, {
         encoding: 'utf8',
-        timeout: 5000 
+        timeout: 5000
       });
       return JSON.parse(result);
     } catch (error) {
@@ -270,14 +270,14 @@ export class NgCompatibilityUpdater {
     for (const version of versions) {
       const versionInfo = packageInfo.versions[version];
       const peerDeps = versionInfo.peerDependencies || {};
-      
+
       // Check if this version supports our Angular version
       const angularPeerDep = peerDeps['@angular/core'] || peerDeps['@angular/common'];
-      
+
       if (angularPeerDep) {
         // Parse the peer dependency range
         const supportedAngularVersions = this.parseVersionRange(angularPeerDep);
-        
+
         if (supportedAngularVersions.includes(majorAngularVersion)) {
           return version;
         }
@@ -293,16 +293,16 @@ export class NgCompatibilityUpdater {
    */
   private parseVersionRange(range: string): number[] {
     const versions: number[] = [];
-    
+
     // Handle ranges like "^16.0.0 || ^17.0.0" or ">=16.0.0 <19.0.0"
     const cleanRange = range.replace(/[\^~]/g, '').replace(/\|\|/g, ' ');
     const versionMatches = cleanRange.match(/\d+/g);
-    
+
     if (versionMatches) {
       const uniqueVersions = [...new Set(versionMatches.map(v => parseInt(v)))];
       versions.push(...uniqueVersions.filter(v => v >= 12 && v <= 25)); // Reasonable Angular version range
     }
-    
+
     return versions;
   }
 
@@ -365,7 +365,8 @@ export class NgCompatibilityUpdater {
       '17': { version: '^17.0.0' },
       '18': { version: '^18.0.0' },
       '19': { version: '^19.0.0' },
-      '20': { version: '^20.0.0' }
+      '20': { version: '^20.0.0' },
+      '21': { version: '^21.0.0' }
     });
 
     matrix.set('@ngrx/effects', {
@@ -377,7 +378,8 @@ export class NgCompatibilityUpdater {
       '17': { version: '^17.0.0' },
       '18': { version: '^18.0.0' },
       '19': { version: '^19.0.0' },
-      '20': { version: '^20.0.0' }
+      '20': { version: '^20.0.0' },
+      '21': { version: '^21.0.0' }
     });
 
     matrix.set('primeng', {
@@ -389,7 +391,8 @@ export class NgCompatibilityUpdater {
       '17': { version: '^17.0.0' },
       '18': { version: '^18.0.0' },
       '19': { version: '^19.0.0' },
-      '20': { version: '^20.0.0' }
+      '20': { version: '^20.0.0' },
+      '21': { version: '^21.0.0' }
     });
 
     matrix.set('@ng-bootstrap/ng-bootstrap', {
@@ -401,7 +404,8 @@ export class NgCompatibilityUpdater {
       '17': { version: '^16.0.0' },
       '18': { version: '^17.0.0' },
       '19': { version: '^18.0.0' },
-      '20': { version: '^19.0.0' }
+      '20': { version: '^19.0.0' },
+      '21': { version: '^20.0.0' }
     });
 
     // Deprecated packages
@@ -414,7 +418,8 @@ export class NgCompatibilityUpdater {
       '17': { deprecated: true, deprecationMessage: 'Angular Flex Layout is no longer maintained. Use CSS Grid and Flexbox.' },
       '18': { deprecated: true, deprecationMessage: 'Angular Flex Layout is no longer maintained. Use CSS Grid and Flexbox.' },
       '19': { deprecated: true, deprecationMessage: 'Angular Flex Layout is no longer maintained. Use CSS Grid and Flexbox.' },
-      '20': { deprecated: true, deprecationMessage: 'Angular Flex Layout is no longer maintained. Use CSS Grid and Flexbox.' }
+      '20': { deprecated: true, deprecationMessage: 'Angular Flex Layout is no longer maintained. Use CSS Grid and Flexbox.' },
+      '21': { deprecated: true, deprecationMessage: 'Angular Flex Layout is no longer maintained. Use CSS Grid and Flexbox.' }
     });
 
     // TypeScript compatibility
@@ -427,7 +432,8 @@ export class NgCompatibilityUpdater {
       '17': { version: '~5.2.0' },
       '18': { version: '~5.4.0' },
       '19': { version: '~5.5.0' },
-      '20': { version: '~5.6.0' }
+      '20': { version: '~5.6.0' },
+      '21': { version: '~5.7.0' }
     });
 
     return matrix;
@@ -438,14 +444,14 @@ export class NgCompatibilityUpdater {
    */
   private getAngularVersionMap(packageName: string): any {
     const baseMap: any = {};
-    
-    for (let version = 12; version <= 20; version++) {
+
+    for (let version = 12; version <= 21; version++) {
       baseMap[version.toString()] = {
         version: `^${version}.0.0`,
         required: true
       };
     }
-    
+
     return baseMap;
   }
 
@@ -538,7 +544,7 @@ export class NgCompatibilityUpdater {
     const icons = {
       critical: '🚨',
       major: '🔴',
-      minor: '🟡', 
+      minor: '🟡',
       patch: '🟢',
       deprecated: '🗑️'
     };
